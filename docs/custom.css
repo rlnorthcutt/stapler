@@ -1,0 +1,97 @@
+/*!
+ * stapled-pages-steel.css — Ivy.css custom palette theme
+ *
+ * Light palette:  #1A1A2E (Navy) · #40405E (Muted) · #80CAFF (Sky) · #F3F4F6 (Steel)
+ * Dark palette:   #1A1A2E (Deep) · #2D3748 (Slate) · #60A5FA (Blue) · #E5E7EB (Silver)
+ *
+ * Mapping strategy:
+ * 1st  → primary (the dark navy backbone)
+ * 2nd  → secondary (muted professional tones)
+ * 3rd  → links & interactive accents (the "highlight" blue)
+ * 4th  → borders & surfaces (metallic silver/steel)
+ */
+
+/* =============================================================================
+   LIGHT PALETTE (Navy · Muted · Sky · Steel)
+   ============================================================================= */
+:root {
+
+  /* — Primary: Stapled Navy — 
+     The foundational color of the brand. Professional and heavy. */
+  --color-primary-light:        #1A1A2E;
+  --color-primary-text-light:   #ffffff;
+
+  /* — Secondary: Muted Slate — 
+     Softens the navy for UI components that shouldn't shout. */
+  --color-secondary-light:      #40405E;
+  --color-secondary-text-light: #ffffff;
+
+  /* — Links: Sky Blue — 
+     Matches the "sheets" in the logo. Passes AA contrast on white. */
+  --color-link-light:           #1D70B8; /* Slightly darkened Sky for accessibility */
+
+  /* — Muted: Steel Blue Blend — 
+     Helper text that feels like technical drafting notes. */
+  --color-muted-light:          color-mix(in oklab, #1A1A2E 40%, #6b7280);
+
+  /* — Border: Metallic Silver — 
+     Mimics the staple itself. Clean, thin lines. */
+  --color-border-light:          color-mix(in oklab, #1A1A2E 15%, #d1d5db);
+
+  /* — Surface: Blueprint Wash — 
+     A very faint cool-grey tint for cards and code blocks. */
+  --color-surface-light:        color-mix(in oklab, #80CAFF 6%, #ffffff);
+
+  /* — Surface 2 & 3: Elevation Tiers — */
+  --surface-2-light:            color-mix(in oklab, #80CAFF 12%, #ffffff);
+  --surface-3-light:            color-mix(in oklab, #1A1A2E 5%, #f3f4f6);
+}
+
+/* =============================================================================
+   DARK PALETTE (Deep Navy · Slate · Bright Blue · Silver)
+   ============================================================================= */
+:root {
+
+  /* — Primary: Deep Navy — 
+     The darkest brand color as the primary surface anchor. */
+  --color-primary-dark:          #1A1A2E;
+  --color-primary-text-dark:     #E5E7EB; /* Silver text */
+
+  /* — Secondary: Blueprint Blue — 
+     Used for buttons and active states in dark mode. */
+  --color-secondary-dark:        #2563EB;
+  --color-secondary-text-dark:   #ffffff;
+
+  /* — Links: Electric Blue — 
+     High visibility against the dark navy background. */
+  --color-link-dark:             #60A5FA;
+
+  /* — Muted: Desaturated Navy — */
+  --color-muted-dark:            color-mix(in oklab, #60A5FA 30%, #94a3b8);
+
+  /* — Border: Silver Staple — 
+     Low-opacity metallic borders for a "contained" feel. */
+  --color-border-dark:           color-mix(in oklab, #E5E7EB 20%, transparent);
+
+  /* — Surface: Midnight Blue Floor — 
+     The Ivy dark base mixed with our brand navy. */
+  --color-surface-dark:          color-mix(in oklab, #1A1A2E 25%, #0f172a);
+
+  /* — Surface 2 & 3: Progressive Depth — */
+  --surface-2-dark:              color-mix(in oklab, #1A1A2E 40%, #1e293b);
+  --surface-3-dark:              color-mix(in oklab, #60A5FA 10%, #1e293b);
+}
+
+/* =============================================================================
+   SEMANTIC STATE OVERRIDES
+   ============================================================================= */
+:root {
+  /* Info: Matches the Sky Blue "Pages" color */
+  --info:    #80CAFF;
+  /* Success: Forest green with a hint of navy */
+  --success: color-mix(in oklab, #1A1A2E 15%, #10b981);
+  /* Warn: Bright "Warning Tape" yellow */
+  --warn:    #facc15;
+  /* Danger: Industrial red */
+  --danger:  color-mix(in oklab, #1A1A2E 10%, #ef4444);
+}
