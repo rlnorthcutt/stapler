@@ -1,4 +1,4 @@
-![](stapled-pages-header.png)
+![](header.png)
 
 # Stapled-Pages
 
