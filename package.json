@@ -1,0 +1,19 @@
+{
+  "name": "stapled-pages",
+  "version": "0.1.0",
+  "description": "Zero-dependency web component library for print-accurate multi-page documents",
+  "scripts": {
+    "build": "esbuild src/stapled-pages.ts --bundle --format=iife --outfile=dist/stapled-pages.js && esbuild src/stapled-pages.ts --bundle --format=iife --outfile=dist/stapled-pages.min.js --minify",
+    "dev": "esbuild src/stapled-pages.ts --bundle --format=iife --outfile=dist/stapled-pages.js --watch --sourcemap=inline",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^2.0.0",
+    "esbuild": "^0.24.0",
+    "happy-dom": "^15.0.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.0.0"
+  }
+}
