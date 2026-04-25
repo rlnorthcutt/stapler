@@ -1,10 +1,11 @@
 {
-  "name": "stapled-pages",
+  "name": "stapler-js",
   "version": "0.1.0",
   "description": "Zero-dependency web component library for print-accurate multi-page documents",
   "scripts": {
-    "build": "esbuild src/stapled-pages.ts --bundle --format=iife --outfile=dist/stapled-pages.js && esbuild src/stapled-pages.ts --bundle --format=iife --outfile=dist/stapled-pages.min.js --minify",
-    "dev": "esbuild src/stapled-pages.ts --bundle --format=iife --outfile=dist/stapled-pages.js --watch --sourcemap=inline",
+    "build": "esbuild src/stapler.ts --bundle --format=iife --outfile=dist/stapler.js && esbuild src/stapler.ts --bundle --format=iife --outfile=dist/stapler.min.js --minify",
+    "postbuild": "cp dist/stapler.min.js docs/stapler.min.js",
+    "dev": "esbuild src/stapler.ts --bundle --format=iife --outfile=dist/stapler.js --watch --sourcemap=inline",
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit"

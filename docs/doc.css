@@ -1,0 +1,52 @@
+/* =============================================================================
+   DOCUMENT FRAME STYLES
+   Loaded only inside demo iframes — not on the main site.
+   ============================================================================= */
+
+/* Print dimensions — must match page-width × page-height on <stapled-doc> */
+@page {
+  size: 7in 9in;
+  margin: 0;
+}
+
+/* Force light mode — document frames always look like printed paper */
+:root {
+  color-scheme: light;
+}
+
+/* Grey surround so white pages read as pages */
+body {
+  margin: 0;
+  padding: 2rem 0;
+  background: #e5e7eb;
+  color: #111827;
+}
+
+/* ── Explicit mode ─────────────────────────────────────────────────────────── */
+
+/* Stronger shadow on each hard-clipped page */
+.sample-staple {
+  --sp-frame-shadow: 0 4px 24px rgba(0, 0, 0, 0.18), 0 0 0 1px rgba(0, 0, 0, 0.06);
+}
+
+.sample-staple s-page {
+  background: white;
+}
+
+/* ── Flow modes ────────────────────────────────────────────────────────────── */
+
+/* Entire document as one bordered white block */
+.sample-papyrus,
+.sample-flatland {
+  background: white;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.18), 0 0 0 1px rgba(0, 0, 0, 0.06);
+}
+
+/* ── Print overrides ───────────────────────────────────────────────────────── */
+
+@media print {
+  body {
+    background: white !important;
+    padding: 0 !important;
+  }
+}

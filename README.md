@@ -1,6 +1,6 @@
-![](header.png)
+![](stapler-header.png)
 
-# Stapled-Pages
+# Stapler
 
 Zero-dependency web components for print-accurate multi-page documents in the browser.
 Drop in one script tag. Write pages with HTML. Print to PDF.
@@ -12,11 +12,11 @@ predictable, explicit markup matters more than clever inference.
 
 ## Installation
 
-No npm. No build step. Copy `dist/stapled-pages.js` (or `dist/stapled-pages.min.js`) into your project
+No npm. No build step. Copy `dist/stapler.js` (or `dist/stapler.min.js`) into your project
 and reference it:
 
 ```html
-<script src="stapled-pages.js"></script>
+<script src="stapler.js"></script>
 ```
 
 Both files are self-registering. All six custom elements are available immediately after
@@ -32,7 +32,7 @@ Each `<s-page>` is a fixed-size, hard-clipped container. You control the layout.
 Content that overflows is hidden. Best for documents where you know exactly what goes on each page.
 
 ```html
-<stapled-pages mode="explicit" page-width="8.5in" page-height="11in" page-gap="2rem">
+<stapled-doc mode="explicit" page-width="8.5in" page-height="11in" page-gap="2rem">
 
   <page-header height="40px" skip-first>
     <div class="header">My Document · <page-number format="n of total"></page-number></div>
@@ -54,17 +54,17 @@ Content that overflows is hidden. Best for documents where you know exactly what
     <!-- Page 3 -->
   </s-page>
 
-</stapled-pages>
+</stapled-doc>
 ```
 
 ### Mode 2 — Flow with page breaks
 
-Content flows in a single column. `<page-break>` elements bridge the current position
+Content flows in a single column. `<page-spacer>` elements bridge the current position
 to the next page's content area — accounting for header, footer, and gap zones.
 Headers and footers are overlaid via an absolutely-positioned frame layer.
 
 ```html
-<stapled-pages mode="flow" page-width="8.5in" page-height="11in" page-gap="2rem">
+<stapled-doc mode="flow" page-width="8.5in" page-height="11in" page-gap="2rem">
 
   <page-header height="36px">
     <div class="header">My Report · Page <page-number format="n"></page-number></div>
@@ -78,22 +78,22 @@ Headers and footers are overlaid via an absolutely-positioned frame layer.
   <p>...</p>
   <p>...</p>
 
-  <page-break></page-break>
+  <page-spacer></page-spacer>
 
   <h1>Section 2</h1>
   <p>...</p>
 
-</stapled-pages>
+</stapled-doc>
 ```
 
 ### Mode 3 — Pure flow
 
-No `<page-break>` elements. The library measures your content, computes page boundaries,
+No `<page-spacer>` elements. The library measures your content, computes page boundaries,
 and injects spacer elements to push content out of header/footer/gap zones automatically.
 Best for long-form content where you don't control where page breaks fall.
 
 ```html
-<stapled-pages mode="flow" page-width="8.5in" page-height="11in" page-gap="2rem">
+<stapled-doc mode="flow" page-width="8.5in" page-height="11in" page-gap="2rem">
 
   <page-header height="36px">
     <div class="header">Checklist · <page-number format="n of total"></page-number></div>
@@ -106,14 +106,14 @@ Best for long-form content where you don't control where page breaks fall.
     <!-- ...many items... -->
   </ul>
 
-</stapled-pages>
+</stapled-doc>
 ```
 
 ---
 
 ## Component reference
 
-### `<stapled-pages>`
+### `<stapled-doc>`
 
 | Attribute    | Type                    | Default  | Description |
 |--------------|-------------------------|----------|-------------|
@@ -123,13 +123,13 @@ Best for long-form content where you don't control where page breaks fall.
 | `page-gap`   | CSS length              | `2rem`   | Gap between pages |
 
 Auto-detection fallback (for hand-authored HTML only): `<s-page>` children → explicit;
-`<page-break>` present → flow-breaks; neither → pure flow.
+`<page-spacer>` present → flow-breaks; neither → pure flow.
 
 ---
 
 ### `<page-header>` and `<page-footer>`
 
-Defined **once** as direct children of `<stapled-pages>`. The library clones them into every
+Defined **once** as direct children of `<stapled-doc>`. The library clones them into every
 page automatically, then removes the originals from the DOM. Style them with your own CSS —
 the library adds no colors, fonts, or padding to header/footer content.
 
@@ -143,19 +143,19 @@ the library adds no colors, fonts, or padding to header/footer content.
 
 ### `<s-page>` *(explicit mode only)*
 
-A hard-clipped page container. The library sets `width` and `height` from `<stapled-pages>` attributes
+A hard-clipped page container. The library sets `width` and `height` from `<stapled-doc>` attributes
 and wraps existing children in a flex-column layout.
 
 | Attribute     | Type       | Default                  | Description |
 |---------------|------------|--------------------------|-------------|
 | `skip-header` | boolean    | false                    | Suppress header on this page |
 | `skip-footer` | boolean    | false                    | Suppress footer on this page |
-| `page-width`  | CSS length | from `<stapled-pages>`   | Per-page override (e.g. landscape insert) |
-| `page-height` | CSS length | from `<stapled-pages>`   | Per-page override |
+| `page-width`  | CSS length | from `<stapled-doc>`   | Per-page override (e.g. landscape insert) |
+| `page-height` | CSS length | from `<stapled-doc>`   | Per-page override |
 
 ---
 
-### `<page-break>` *(flow mode only)*
+### `<page-spacer>` *(flow mode only)*
 
 Forces subsequent content to start at the next page's content area. Renders a faint
 dashed border as an authoring aid; hidden in print. No attributes.
@@ -166,7 +166,7 @@ dashed border as an authoring aid; hidden in print. No attributes.
 
 Inline placeholder for use inside `<page-header>` or `<page-footer>` templates.
 Resolved automatically when the template is stamped. Renders `?` as a fallback
-when used outside a `<stapled-pages>`.
+when used outside a `<stapled-doc>`.
 
 | `format` value | Output example |
 |----------------|---------------|
@@ -179,7 +179,7 @@ when used outside a `<stapled-pages>`.
 
 ## CSS custom properties
 
-Set these on the `<stapled-pages>` element to tune the visual chrome:
+Set these on the `<stapled-doc>` element to tune the visual chrome:
 
 | Property             | Default                        | Description |
 |----------------------|--------------------------------|-------------|
@@ -235,7 +235,7 @@ Add this to your document's `<style>` to pin the page size:
 
 ```css
 @page {
-  size: 8.5in 11in;   /* match page-width × page-height on <stapled-pages> */
+  size: 8.5in 11in;   /* match page-width × page-height on <stapled-doc> */
   margin: 0;
 }
 ```
@@ -249,15 +249,15 @@ Add this to your document's `<style>` to pin the page size:
 Re-runs the full build sequence. Call after any meaningful DOM change.
 
 ```js
-document.querySelector('stapled-pages').refresh()
+document.querySelector('stapled-doc').refresh()
 ```
 
 ### `sp:ready` event
 
-Fired on `<stapled-pages>` after each build (including after `refresh()`). Bubbles.
+Fired on `<stapled-doc>` after each build (including after `refresh()`). Bubbles.
 
 ```js
-document.querySelector('stapled-pages').addEventListener('sp:ready', (e) => {
+document.querySelector('stapled-doc').addEventListener('sp:ready', (e) => {
   console.log(e.detail)
   // { pageCount: 3, mode: 'explicit', pageWidth: 816, pageHeight: 1056 }
 })
@@ -276,13 +276,13 @@ document.querySelector('stapled-pages').addEventListener('sp:ready', (e) => {
 
 ```bash
 npm install
-npm run build        # → dist/stapled-pages.js + dist/stapled-pages.min.js
+npm run build        # → dist/stapler.js + dist/stapler.min.js
 npm run dev          # watch mode with inline sourcemaps
 npm run test         # run all tests
 npm run typecheck    # type-check without compiling
 ```
 
-Source is TypeScript in `src/`. Entry point is `src/stapled-pages.ts`. Output is a single
+Source is TypeScript in `src/`. Entry point is `src/stapler.ts`. Output is a single
 IIFE with no exports and no runtime dependencies.
 
 ---

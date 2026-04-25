@@ -13,7 +13,7 @@ export function parseToPx(value: string, element?: Element): number {
   const match = /^(-?[\d.]+)\s*([a-z%]*)$/.exec(trimmed)
 
   if (!match) {
-    throw new Error(`stapled-pages: cannot parse CSS length "${value}"`)
+    throw new Error(`Staple Jam: cannot parse CSS length "${value}"`)
   }
 
   const num = parseFloat(match[1] ?? '0')
@@ -42,6 +42,6 @@ export function parseToPx(value: string, element?: Element): number {
       return num * fontSize
     }
     default:
-      throw new Error(`stapled-pages: unsupported CSS unit "${unit}" in "${value}"`)
+      throw new Error(`Staple Jam: unsupported CSS unit "${unit}" in "${value}"`)
   }
 }

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demo: The Papyrus Protocol — Stapler</title>
+  <meta name="description" content="Flow mode demo: a multi-chapter whitepaper with page-spacer elements forcing chapter breaks.">
+  <link rel="stylesheet" href="ivy.full.min.css">
+  <link rel="stylesheet" href="lattice.full.min.css">
+  <link rel="stylesheet" href="custom.css">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="logo-32x32.png">
+  <link rel="apple-touch-icon" href="logo-192x192.png">
+  <script src="dark-mode-toggle.min.js" defer></script>
+  <script src="demo.js" defer></script>
+</head>
+<body>
+
+  <header class="site-header">
+    <nav>
+      <a href="index.html" class="nav-brand">
+        <img src="logo-32x32.png" alt="" aria-hidden="true">
+        Stapler
+      </a>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="docs.html">Docs</a></li>
+        <li><a href="demos.html" aria-current="page">Demos</a></li>
+        <li><a href="about.html">About</a></li>
+      </ul>
+      <dark-mode-toggle></dark-mode-toggle>
+    </nav>
+  </header>
+
+  <div class="demo-header">
+    <p class="demo-breadcrumb"><a href="demos.html">← Demos</a></p>
+    <p class="kicker">Demo 2 · Flow Mode</p>
+    <h1>The Papyrus Protocol: A History of Binding</h1>
+    <p>A five-chapter whitepaper using <code>mode="flow"</code> with <code>&lt;page-spacer&gt;</code> elements. Each spacer bridges its current position to the next page's content area, guaranteeing every chapter starts fresh.</p>
+  </div>
+
+  <div class="demo-controls">
+    <a href="#" class="print-btn" role="button" data-variant="primary">Print / Save as PDF</a>
+  </div>
+
+  <div class="demo-stage">
+    <iframe class="demo-iframe" src="doc-flow.html" title="Flow mode document — The Papyrus Protocol"></iframe>
+  </div>
+
+  <footer class="site-footer">
+    <p>Built with logic in Vermont. No trees were harmed in the rendering of these PDFs.</p>
+    <p><a href="https://github.com/rlnorthcutt/stapled-pages">GitHub</a> · MIT License</p>
+  </footer>
+
+</body>
+</html>

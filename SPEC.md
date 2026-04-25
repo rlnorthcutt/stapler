@@ -1,4 +1,4 @@
-# stapled-pages — Technical Specification
+# Stapler — Technical Specification
 
 A zero-dependency, vanilla web component library for rendering print-accurate multi-page
 documents in the browser. Brand-agnostic: the library provides layout structure only;
@@ -34,15 +34,15 @@ all visual styling belongs to the author.
 
 - Render multi-page documents in the browser at print-accurate dimensions (8.5×11in, A4, etc.)
 - Stamp a single header/footer template onto every page automatically, with per-page skip control
-- Support three content models: hard-clipped explicit pages, flow with page-break hints, and pure free flow
+- Support three content models: hard-clipped explicit pages, flow with page-spacer hints, and pure free flow
 - All three modes support headers, footers, page numbers, page gaps, and print output
 - Be completely brand-agnostic — the library adds no colors, fonts, or visual opinions
-- Work as a drop-in `<script src="stapled-pages.js">` with no build step, no npm, no runtime dependencies
+- Work as a drop-in `<script src="stapler.js">` with no build step, no npm, no runtime dependencies
 - Optimized for reliable AI-generated HTML — explicit, unambiguous attribute contracts
 
 ### Non-Goals
 
-- Mixing explicit and flow modes in a single `<stapled-pages>` instance
+- Mixing explicit and flow modes in a single `<stapled-doc>` instance
 - Server-side rendering or PDF export (use headless Chrome / browser Print to PDF)
 - Auto-reflowing text at the word or character level across pages (block-level flow only)
 - Mid-paragraph splitting — content moves as whole blocks
@@ -58,15 +58,15 @@ all visual styling belongs to the author.
 
 ```
 dist/
-  stapled-pages.js      — unminified build (readable, for debugging)
-  stapled-pages.min.js  — minified build (for production use)
+  stapler.js      — unminified build (readable, for debugging)
+  stapler.min.js  — minified build (for production use)
 ```
 
 Both files are committed to the repo. Authors reference whichever suits them:
 
 ```html
-<script src="stapled-pages.js"></script>       <!-- development / readable -->
-<script src="stapled-pages.min.js"></script>   <!-- production -->
+<script src="stapler.js"></script>       <!-- development / readable -->
+<script src="stapler.min.js"></script>   <!-- production -->
 ```
 
 The compiled output is a self-registering IIFE with no exports and no external dependencies.
@@ -76,22 +76,22 @@ The compiled output is a self-registering IIFE with no exports and no external d
 | Tool | Purpose |
 |------|---------|
 | TypeScript | Type safety, strict mode |
-| esbuild | Compiles `src/stapled-pages.ts` → IIFE, no exports |
+| esbuild | Compiles `src/stapler.ts` → IIFE, no exports |
 | Vitest + happy-dom | Unit tests against a simulated DOM |
 
 ### Source layout
 
 ```
 src/
-  stapled-pages.ts        — entry point: injects CSS, registers all custom elements
+  stapler.ts        — entry point: injects CSS, registers all custom elements
   css.ts                  — injected structural styles as a template literal
   components/
-    StapledPages.ts       — <stapled-pages> — orchestrator, public API
+    StapledPages.ts  — <stapled-doc> — orchestrator, public API
     SPage.ts              — <s-page>        — explicit page container
     PageHeader.ts         — <page-header>   — header template element
     PageFooter.ts         — <page-footer>   — footer template element
     PageSlot.ts           — shared base class for PageHeader / PageFooter
-    PageBreak.ts          — <page-break>    — flow-mode bridging spacer
+    PageSpacer.ts         — <page-spacer>    — flow-mode bridging spacer
     PageNumber.ts         — <page-number>   — inline page-number placeholder
   utils/
     parseToPx.ts          — CSS length → px conversion (pure function)
@@ -106,8 +106,8 @@ tests/
   buildExplicit.test.ts
   buildFlow.test.ts
 dist/
-  stapled-pages.js        — unminified compiled output (committed)
-  stapled-pages.min.js    — minified compiled output (committed)
+  stapler.js        — unminified compiled output (committed)
+  stapler.min.js    — minified compiled output (committed)
 ebook-demo.html           — reference demo, all three modes
 ebook-sample.html         — HAProxy brand sample (explicit mode, 3 pages)
 ```
@@ -115,7 +115,7 @@ ebook-sample.html         — HAProxy brand sample (explicit mode, 3 pages)
 ### Build commands
 
 ```bash
-npm run build        # → dist/stapled-pages.js + dist/stapled-pages.min.js
+npm run build        # → dist/stapler.js + dist/stapler.min.js
 npm run dev          # watch mode with inline sourcemaps
 npm run test         # run all tests once
 npm run test:watch   # watch mode tests
@@ -126,7 +126,7 @@ npm run typecheck    # type-check without compiling
 
 ## 3. Component API
 
-### `<stapled-pages>`
+### `<stapled-doc>`
 
 Parent wrapper. Detects or reads rendering mode, orchestrates all child processing,
 builds the final DOM structure, and manages refresh lifecycle.
@@ -139,11 +139,11 @@ builds the final DOM structure, and manages refresh lifecycle.
 | `page-gap`    | CSS length                          | `2rem`      | Visual gap between pages |
 
 Auto-detection fallback (human-authored HTML only): `<s-page>` children → explicit;
-`<page-break>` present → flow-breaks; neither → pure flow.
+`<page-spacer>` present → flow-breaks; neither → pure flow.
 
 ### `<page-header>` and `<page-footer>`
 
-Defined **once** as direct children of `<stapled-pages>`. Treated as templates —
+Defined **once** as direct children of `<stapled-doc>`. Treated as templates —
 cloned into every page, then removed from the DOM. Authors style them freely.
 
 Both share the same attribute API via the `PageSlot` base class:
@@ -163,10 +163,10 @@ responsible for content fitting within `page-height − header-height − footer
 |---------------|------------|------------------------|-------------|
 | `skip-header` | Boolean    | false                  | Suppress header on this specific page |
 | `skip-footer` | Boolean    | false                  | Suppress footer on this specific page |
-| `page-width`  | CSS length | from `<stapled-pages>` | Per-page override (e.g. landscape inserts) |
-| `page-height` | CSS length | from `<stapled-pages>` | Per-page override |
+| `page-width`  | CSS length | from `<stapled-doc>` | Per-page override (e.g. landscape inserts) |
+| `page-height` | CSS length | from `<stapled-doc>` | Per-page override |
 
-### `<page-break>` *(flow mode only)*
+### `<page-spacer>` *(flow mode only)*
 
 Forces subsequent content to start at the next page's content area. Its height is
 computed at build time to bridge from the current position to the start of the next
@@ -177,7 +177,7 @@ Renders a faint dashed top border as an authoring aid; hidden in print. No attri
 ### `<page-number>`
 
 Inline placeholder used inside `<page-header>` or `<page-footer>` templates. Resolved
-per-clone when stamped. Renders `?` as a fallback outside a `<stapled-pages>` context.
+per-clone when stamped. Renders `?` as a fallback outside a `<stapled-doc>` context.
 
 | `format` value | Output |
 |----------------|--------|
@@ -192,9 +192,9 @@ per-clone when stamped. Renders `?` as a fallback outside a `<stapled-pages>` co
 
 ### Mode detection
 
-Mode is determined by the `mode` attribute on `<stapled-pages>`. If omitted:
+Mode is determined by the `mode` attribute on `<stapled-doc>`. If omitted:
 - `<s-page>` children present → `explicit`
-- `<page-break>` anywhere in subtree → `flow-breaks`
+- `<page-spacer>` anywhere in subtree → `flow-breaks`
 - Neither → `flow`
 
 **AI-generated documents must always set `mode` explicitly.**
@@ -210,9 +210,9 @@ layout precisely and knows content fits within each page.
 
 **Print behavior:** `break-after: page` on each `<s-page>`.
 
-### Mode 2 — Flow with Page Breaks (`mode="flow"`, `<page-break>` elements present)
+### Mode 2 — Flow with Page Breaks (`mode="flow"`, `<page-spacer>` elements present)
 
-Content flows in a single continuous column. Each `<page-break>` element's height is
+Content flows in a single continuous column. Each `<page-spacer>` element's height is
 computed to bridge from the current position to the next page's content area start —
 physically filling the footer zone, gap zone, and header zone so no content is masked.
 
@@ -221,9 +221,9 @@ zones. No content is ever hidden.
 
 **Best for:** technical guides, articles with explicit chapter separations.
 
-**Print behavior:** `break-after: page` on each `<page-break>` element.
+**Print behavior:** `break-after: page` on each `<page-spacer>` element.
 
-### Mode 3 — Pure Flow (`mode="flow"`, no `<page-break>` elements)
+### Mode 3 — Pure Flow (`mode="flow"`, no `<page-spacer>` elements)
 
 Content flows freely. The library walks block-level children, identifies which ones
 cross a page boundary, and inserts invisible spacer divs before them to push them into
@@ -265,21 +265,21 @@ Guarded by ID check to prevent double-injection when multiple instances exist.
 
 | Selector | Key properties | Purpose |
 |----------|----------------|---------|
-| `stapled-pages` | `display: block; position: relative` | Host element |
+| `stapled-doc` | `display: block; position: relative` | Host element |
 | `s-page` | `display: flex; flex-direction: column; overflow: hidden; position: relative; margin: var(--sp-page-gap) auto; box-shadow: var(--sp-frame-shadow)` | Explicit mode page. `position: relative` allows author content to use `position: absolute` inside the page. |
 | `.sp-page-content` | `flex: 1; min-height: 0; overflow: hidden; position: relative` | Content area between header/footer in explicit mode |
 | `s-page > page-header, s-page > page-footer` | `display: block; flex-shrink: 0; width: 100%` | Header/footer inside explicit `<s-page>` |
-| `stapled-pages > page-header, stapled-pages > page-footer` | `display: none` | Hides templates until JS processes them |
+| `stapled-doc > page-header, stapled-doc > page-footer` | `display: none` | Hides templates until JS processes them |
 | `.sp-flow-wrapper` | `position: relative; width: 100%` | Flow mode content wrapper |
 | `.sp-page-spacer` | `display: block; width: 100%` | Physical spacer injected at page boundaries |
 | `.sp-frame-layer` | `position: absolute; inset: 0; pointer-events: none` | Absolutely-positioned header/footer layer in flow modes |
 | `.sp-page-frame` | `position: absolute; left: 0; right: 0` | Per-page container in frame layer |
 | `.sp-frame-header, .sp-frame-footer` | `position: absolute; left: 0; right: 0; pointer-events: all` | Header/footer wrappers in frame layer |
-| `page-break` | `display: block; border-top: 1.5px dashed rgba(0,0,0,.18); overflow: hidden` | Page break indicator (height set by JS) |
+| `page-spacer` | `display: block; border-top: 1.5px dashed rgba(0,0,0,.18); overflow: hidden` | Page break indicator (height set by JS) |
 | `page-number` | `display: inline` | Inline placeholder |
 | `@media print` | See §10 | Print overrides |
 
-### CSS custom properties (on `<stapled-pages>`)
+### CSS custom properties (on `<stapled-doc>`)
 
 | Property | Default | Description |
 |----------|---------|-------------|
@@ -293,7 +293,7 @@ Guarded by ID check to prevent double-injection when multiple instances exist.
 ### Explicit Mode
 
 ```
-<stapled-pages>  (display: block)
+<stapled-doc>  (display: block)
   <s-page>  (flex column, width × height, overflow: hidden, position: relative, margin: gap auto)
     <page-header>   flex-shrink: 0  — cloned from template
     <div class="sp-page-content">   flex: 1; overflow: hidden; position: relative
@@ -311,12 +311,12 @@ to safely use `position: absolute` (e.g. a corner watermark or absolute-position
 ### Flow Modes
 
 ```
-<stapled-pages>  (position: relative, width: pageW, margin: auto)
+<stapled-doc>  (position: relative, width: pageW, margin: auto)
 
   .sp-flow-wrapper  (position: relative)
     [padding-top: headerH]                 ← reserves first page's header zone
     [user content as direct children]
-    [<page-break> elements]                ← flow-with-breaks: heights set by JS
+    [<page-spacer> elements]                ← flow-with-breaks: heights set by JS
     [<div class="sp-page-spacer"> ...]     ← pure flow: injected by _injectPageSpacers
     [padding-bottom: fill]                 ← pads last page to N×slotH − gapH boundary
 
@@ -331,7 +331,7 @@ to safely use `position: absolute` (e.g. a corner watermark or absolute-position
 
 Where `slotH = pageH + gapH`.
 
-No masking. Spacers and `<page-break>` elements physically occupy footer/gap/header
+No masking. Spacers and `<page-spacer>` elements physically occupy footer/gap/header
 zones, so no user content is ever positioned behind an overlay.
 
 ---
@@ -352,12 +352,12 @@ layout pass.
 ### Explicit Mode Build
 
 1. Read `page-width`, `page-height`, `page-gap`; convert to px via `parseToPx`
-2. Set `--sp-page-gap` CSS custom property on `<stapled-pages>`
+2. Set `--sp-page-gap` CSS custom property on `<stapled-doc>`
 3. Find `<page-header>` and `<page-footer>` direct children; store references
 4. Measure `headerH` and `footerH` via `measureHeight()` (see §9)
 5. Collect all `<s-page>` direct children
 6. For each `<s-page>` (1-indexed):
-   a. Compute width/height: per-page attribute override or fall back to `<stapled-pages>` value
+   a. Compute width/height: per-page attribute override or fall back to `<stapled-doc>` value
    b. Set `width` and `height` as inline styles
    c. Wrap all existing children in `<div class="sp-page-content">` (the flex:1 content area)
    d. If header not skipped (`skip-header` absent and `isVisibleOnPage` true): clone template, strip control attributes (`height`, `skip-first`, `skip-pages`), set inline height, resolve `<page-number>` elements, `prepend` to `<s-page>`
@@ -371,26 +371,26 @@ layout pass.
 2. Compute `slotH = pageH + gapH`
 3. Find `<page-header>` and `<page-footer>` direct children; store references; `remove()` them from DOM
 4. Measure `headerH` and `footerH` via `measureHeight()` (measurements taken before removal)
-5. Wrap all remaining `<stapled-pages>` children in `<div class="sp-flow-wrapper">`
-6. Set `<stapled-pages>` to `position: relative; width: pageW; margin: auto`
+5. Wrap all remaining `<stapled-doc>` children in `<div class="sp-flow-wrapper">`
+6. Set `<stapled-doc>` to `position: relative; width: pageW; margin: auto`
 7. Set `wrapper.style.paddingTop = headerH` (reserves first page's header zone)
-8. Detect sub-mode: `<page-break>` anywhere in subtree → `flow-breaks`; else → `flow`
+8. Detect sub-mode: `<page-spacer>` anywhere in subtree → `flow-breaks`; else → `flow`
 9. **If `flow-breaks`:** call `_processPageBreaks(wrapper, slotH, pageH, headerH, footerH)` — see below
-10. Wait one `requestAnimationFrame` for layout to settle after page-break heights are set
+10. Wait one `requestAnimationFrame` for layout to settle after page-spacer heights are set
 11. In `_finaliseFlow()`:
     a. **If pure `flow`:** call `_injectPageSpacers(wrapper, slotH, headerH, footerH, gapH)` — see below
     b. Measure `wrapper.offsetHeight` (reflects final state, post-spacer-injection for pure flow)
     c. Compute `numPages = max(1, ceil(rawH / slotH))`
     d. Compute `padBottom = numPages × slotH − gapH − wrapper.offsetHeight`; apply if > 0
-    e. Set `<stapled-pages>` height to `numPages × slotH − gapH`
+    e. Set `<stapled-doc>` height to `numPages × slotH − gapH`
     f. Call `_buildFrameLayer(numPages, slotH, pageH, headerH, footerH)`
     g. Dispatch `sp:ready`
 
 ### Page Break Processing (`_processPageBreaks`)
 
-Processes `<page-break>` elements in DOM order, **sequentially — never batched**:
+Processes `<page-spacer>` elements in DOM order, **sequentially — never batched**:
 
-For each `<page-break>` element:
+For each `<page-spacer>` element:
 1. Set `pb.style.height = '0'` (reset so the next read is unaffected by a prior value)
 2. Call `pb.getBoundingClientRect()` to read current position (forces synchronous layout)
 3. `flowY = pb.top − wrapper.top`
@@ -468,7 +468,7 @@ Slot N  [N×slotH … (N+1)×slotH):
   [N×slotH + pageH,         (N+1)×slotH)                → gap zone (absent on last page)
 ```
 
-Spacers and `<page-break>` elements physically occupy header/footer/gap zones.
+Spacers and `<page-spacer>` elements physically occupy header/footer/gap zones.
 The content zone is always unobstructed.
 
 ---
@@ -496,7 +496,7 @@ and print with the content. Injected print CSS:
 
 ### Flow Modes
 
-Physical spacers and `<page-break>` elements provide `break-after: page` points that
+Physical spacers and `<page-spacer>` elements provide `break-after: page` points that
 the browser's print engine respects natively. The frame layer is hidden in print
 (headers/footers are physically in the spacer zones via `padding-top` and the flow).
 
@@ -507,12 +507,12 @@ the browser's print engine respects natively. The frame layer is hidden in print
     break-after: page;
     visibility: hidden;
   }
-  page-break {
+  page-spacer {
     break-after: page;
     visibility: hidden;
   }
   .sp-frame-layer { display: none !important; }
-  page-break { border-top: none; }
+  page-spacer { border-top: none; }
 }
 ```
 
@@ -523,7 +523,7 @@ Authors must add this to their stylesheet for correct print dimensions:
 
 ```css
 @page {
-  size: 8.5in 11in;   /* match page-width × page-height on <stapled-pages> */
+  size: 8.5in 11in;   /* match page-width × page-height on <stapled-doc> */
   margin: 0;
 }
 ```
@@ -546,14 +546,14 @@ Re-runs the full build sequence. Tears down prior output cleanly before rebuildi
 **Flow mode teardown:**
 - Remove `.sp-frame-layer`
 - Re-insert stored template references into the flow wrapper
-- Remove `.sp-page-spacer` elements; reset `<page-break>` heights
-- Unwrap `.sp-flow-wrapper` (restore children to `<stapled-pages>`)
-- Reset inline styles on `<stapled-pages>` (`width`, `height`, `margin`, `position`)
+- Remove `.sp-page-spacer` elements; reset `<page-spacer>` heights
+- Unwrap `.sp-flow-wrapper` (restore children to `<stapled-doc>`)
+- Reset inline styles on `<stapled-doc>` (`width`, `height`, `margin`, `position`)
 - Run `_build()`
 
 ### `sp:ready` event
 
-Fired on `<stapled-pages>` after each successful build (including after `refresh()`). Bubbles.
+Fired on `<stapled-doc>` after each successful build (including after `refresh()`). Bubbles.
 
 ```ts
 detail: {
@@ -574,7 +574,7 @@ Spacers are injected before the first block-level child whose bottom edge crosse
 boundary. A block taller than the available content area on its page is moved to the next
 page in its entirety, leaving whitespace at the bottom of the previous page. Mid-block
 splitting is not supported. Authors who need precise control should use explicit mode or
-add `<page-break>` elements.
+add `<page-spacer>` elements.
 
 ### Dynamic content after build
 
@@ -605,12 +605,12 @@ area). Lets AI-generation pipelines detect when a page was overfilled and trigge
 a retry or reflow. Implementation: compare `scrollHeight` vs `clientHeight` on
 `.sp-page-content` after build.
 
-**Auto-refresh on resize** — Attach a `ResizeObserver` to `<stapled-pages>` and call
+**Auto-refresh on resize** — Attach a `ResizeObserver` to `<stapled-doc>` and call
 `refresh()` automatically when the container width changes. Currently authors must call
 `refresh()` manually. Opt-in via an `auto-refresh` attribute to avoid unnecessary work
 in static documents.
 
-**Paper size presets** — `<stapled-pages size="letter|a4|a5|half-letter|legal">` as a
+**Paper size presets** — `<stapled-doc size="letter|a4|a5|half-letter|legal">` as a
 convenience shorthand. Translates to the equivalent `page-width` + `page-height` values.
 `page-width` / `page-height` always take precedence if present.
 
@@ -621,7 +621,7 @@ in the flow, resolved when building each page's frame.
 
 ### Longer-term
 
-**Multi-column flow** — `<stapled-pages columns="2">` for two-column layout per page.
+**Multi-column flow** — `<stapled-doc columns="2">` for two-column layout per page.
 Requires column-aware boundary detection in `_injectPageSpacers` and a two-column frame
 structure. Significant complexity — revisit once the single-column model is fully stable.
 

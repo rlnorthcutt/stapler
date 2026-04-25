@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About — Stapler</title>
+  <meta name="description" content="We take the code seriously, so you can take your margins for granted.">
+  <link rel="stylesheet" href="ivy.full.min.css">
+  <link rel="stylesheet" href="lattice.full.min.css">
+  <link rel="stylesheet" href="custom.css">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="logo-32x32.png">
+  <link rel="apple-touch-icon" href="logo-192x192.png">
+  <script src="dark-mode-toggle.min.js" defer></script>
+</head>
+<body>
+
+  <header class="site-header">
+    <nav>
+      <a href="index.html" class="nav-brand">
+        <img src="logo-32x32.png" alt="" aria-hidden="true">
+        Stapler
+      </a>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="docs.html">Docs</a></li>
+        <li><a href="demos.html">Demos</a></li>
+        <li><a href="about.html" aria-current="page">About</a></li>
+      </ul>
+      <dark-mode-toggle></dark-mode-toggle>
+    </nav>
+  </header>
+
+  <div class="about-hero">
+
+    <figure>
+      <svg class="stapler-display" viewBox="0 0 280 200" xmlns="http://www.w3.org/2000/svg" aria-label="A stapler on a pedestal" role="img">
+        <!-- Upper body -->
+        <path d="M32,104 Q32,60 58,60 L212,60 Q248,60 248,85 L248,104 Z"/>
+        <!-- Hinge point -->
+        <circle cx="240" cy="88" r="9"/>
+        <!-- Throat / lower body -->
+        <rect x="32" y="104" width="200" height="27" rx="4" opacity="0.72"/>
+        <!-- Base plate -->
+        <rect x="32" y="129" width="200" height="18" rx="6"/>
+        <!-- Magazine slot detail -->
+        <rect x="44" y="116" width="168" height="6" rx="3" opacity="0.28"/>
+        <!-- Pedestal column -->
+        <rect x="108" y="147" width="64" height="26" rx="3" opacity="0.55"/>
+        <!-- Pedestal base -->
+        <rect x="82" y="171" width="116" height="14" rx="5" opacity="0.45"/>
+      </svg>
+      <figcaption>The Model S-2. Our spiritual ancestor.</figcaption>
+    </figure>
+
+    <p class="kicker">Est. 2024</p>
+    <h1>We take the code seriously,<br>so you can take your margins for granted.</h1>
+
+  </div>
+
+  <div class="about-content">
+
+    <h2>What this is</h2>
+    <p>Stapler is a zero-dependency web component library for rendering print-accurate, multi-page documents in the browser. Authors drop in one <code>&lt;script&gt;</code> tag. The library registers six custom elements. Pages appear.</p>
+    <p>There is no npm package to install. There is no build step to configure. There is no configuration file to misread at 11pm before a client presentation. There is a <code>.js</code> file. You include it. You write HTML. It works.</p>
+
+    <h2>Why it exists</h2>
+    <p>The problem it solves is old and well understood: web browsers render content into an infinite vertical scroll, but business documents — reports, proposals, invoices, briefs — are structured around the page. The CSS <code>@media print</code> rules intended to bridge this gap are browser-dependent, poorly documented, and reliably inconsistent across operating systems.</p>
+    <p>Several solutions exist. Most of them involve server-side PDF generation, which requires a runtime, a dependency, a deployment, and eventually a security audit. Others involve JavaScript libraries that recreate the browser's layout engine in JavaScript, a project whose ambition exceeds its accuracy.</p>
+    <p>Stapler takes a different position: it does not try to replicate PDF generation. It renders the document in the browser, in HTML, with full CSS support, in the same environment where the content was created. When you are ready for a PDF, you print it. The browser's print engine — which is excellent at its job — does the conversion.</p>
+
+    <h2>Design principles</h2>
+    <p><strong>Light DOM only.</strong> Authors must be able to style headers and footers with their own CSS. Shadow DOM breaks that. Every component uses Light DOM.</p>
+    <p><strong>Spacers, not masking.</strong> In flow mode, invisible spacer elements are injected at page boundaries to physically push content clear of header and footer zones. Nothing is hidden with an overlay. Everything in the DOM stays accessible.</p>
+    <p><strong>Print via CSS only.</strong> Page breaks are handled with <code>break-after: page</code> on spacer elements. There is no <code>beforeprint</code> or <code>afterprint</code> DOM surgery. What you see in the browser is what prints.</p>
+    <p><strong>Zero runtime dependencies.</strong> The compiled output is a standalone IIFE. It will run in any browser that supports custom elements. It does not phone home. It does not require a CDN. It does not have opinions about your build toolchain because it does not know you have one.</p>
+
+    <h2>On the subject of AI</h2>
+    <p>A substantial motivation for this library is the emerging use of large language models to generate structured documents. An LLM asked to produce a business report will write coherent, well-organized content. It will not reliably produce correct CSS <code>@media print</code> rules, accurate pixel calculations for header heights, or consistent behavior across browsers.</p>
+    <p>Stapler is designed to be the layout layer that AI-generated content drops into. The model writes the words. The library handles the pages. The combination produces a document that looks like it was designed, even when it was generated.</p>
+
+    <h2>License and source</h2>
+    <p>MIT License. Source available on <a href="https://github.com/rlnorthcutt/stapled-pages">GitHub</a>. Contributions welcome. Bug reports appreciated. Feature requests considered in the order in which they can be implemented without adding runtime dependencies.</p>
+
+  </div>
+
+  <footer class="site-footer">
+    <p>Built with logic in Vermont. No trees were harmed in the rendering of these PDFs.</p>
+    <p><a href="https://github.com/rlnorthcutt/stapled-pages">GitHub</a> · MIT License</p>
+  </footer>
+
+</body>
+</html>

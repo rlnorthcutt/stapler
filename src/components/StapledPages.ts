@@ -8,7 +8,7 @@ import { PageNumber } from './PageNumber.js'
 
 type RenderMode = 'explicit' | 'flow-breaks' | 'flow'
 
-interface StapledPagesReadyDetail {
+interface StaplerReadyDetail {
   pageCount: number
   mode: RenderMode
   pageWidth: number
@@ -16,7 +16,7 @@ interface StapledPagesReadyDetail {
 }
 
 /**
- * <stapled-pages>
+ * <stapled-doc>
  *
  * Parent wrapper. Reads mode, orchestrates all child processing, builds
  * the final DOM structure, and manages refresh lifecycle.
@@ -27,8 +27,8 @@ interface StapledPagesReadyDetail {
  *   page-height  CSS length           default: 11in
  *   page-gap     CSS length           default: 2rem
  */
-export class StapledPages extends HTMLElement {
-  static readonly TAG = 'stapled-pages'
+export class Stapler extends HTMLElement {
+  static readonly TAG = 'stapled-doc'
 
   // Stored template references for use during refresh()
   private _headerTemplate: PageHeader | null = null
@@ -71,12 +71,12 @@ export class StapledPages extends HTMLElement {
     const attr = this.getAttribute('mode')
     if (attr === 'explicit') return 'explicit'
     if (attr === 'flow') {
-      const hasBreaks = this.querySelector('page-break') !== null
+      const hasBreaks = this.querySelector('page-spacer') !== null
       return hasBreaks ? 'flow-breaks' : 'flow'
     }
     // Auto-detect fallback (human-authored documents)
     if (this._directChildren('s-page').length > 0) return 'explicit'
-    const hasBreaks = this.querySelector('page-break') !== null
+    const hasBreaks = this.querySelector('page-spacer') !== null
     return hasBreaks ? 'flow-breaks' : 'flow'
   }
 
@@ -264,7 +264,7 @@ export class StapledPages extends HTMLElement {
   }
 
   /**
-   * Process <page-break> elements sequentially (not batched).
+   * Process <page-spacer> elements sequentially (not batched).
    * Each element's height is set to bridge its current position to the
    * start of the next page's content area.
    *
@@ -278,7 +278,7 @@ export class StapledPages extends HTMLElement {
     headerH: number,
     footerH: number,
   ): void {
-    const breaks = Array.from(wrapper.querySelectorAll<HTMLElement>('page-break'))
+    const breaks = Array.from(wrapper.querySelectorAll<HTMLElement>('page-spacer'))
     const wrapperTop = wrapper.getBoundingClientRect().top
 
     for (const pb of breaks) {
@@ -498,7 +498,7 @@ export class StapledPages extends HTMLElement {
       wrapper.querySelectorAll('.sp-page-spacer').forEach((s) => s.remove())
 
       // Reset page-break heights
-      wrapper.querySelectorAll<HTMLElement>('page-break').forEach((pb) => {
+      wrapper.querySelectorAll<HTMLElement>('page-spacer').forEach((pb) => {
         pb.style.height = ''
       })
 
@@ -524,9 +524,9 @@ export class StapledPages extends HTMLElement {
     pageWidth: number,
     pageHeight: number,
   ): void {
-    const detail: StapledPagesReadyDetail = { pageCount, mode, pageWidth, pageHeight }
+    const detail: StaplerReadyDetail = { pageCount, mode, pageWidth, pageHeight }
     this.dispatchEvent(
-      new CustomEvent<StapledPagesReadyDetail>('sp:ready', { detail, bubbles: true })
+      new CustomEvent<StaplerReadyDetail>('sp:ready', { detail, bubbles: true })
     )
   }
 }

@@ -1,16 +1,16 @@
 import { describe, it, expect, beforeAll, afterEach, vi } from 'vitest'
-import { StapledPages } from '../src/components/StapledPages.js'
+import { Stapler } from '../src/components/StapledPages.js'
 import { PageHeader } from '../src/components/PageHeader.js'
 import { PageFooter } from '../src/components/PageFooter.js'
-import { PageBreak } from '../src/components/PageBreak.js'
+import { PageSpacer } from '../src/components/PageSpacer.js'
 import { PageNumber } from '../src/components/PageNumber.js'
 
 beforeAll(() => {
-  if (!customElements.get('stapled-pages')) customElements.define('stapled-pages', StapledPages)
-  if (!customElements.get('page-header'))   customElements.define('page-header', PageHeader)
-  if (!customElements.get('page-footer'))   customElements.define('page-footer', PageFooter)
-  if (!customElements.get('page-break'))    customElements.define('page-break', PageBreak)
-  if (!customElements.get('page-number'))   customElements.define('page-number', PageNumber)
+  if (!customElements.get('stapled-doc'))  customElements.define('stapled-doc', Stapler)
+  if (!customElements.get('page-header'))  customElements.define('page-header', PageHeader)
+  if (!customElements.get('page-footer'))  customElements.define('page-footer', PageFooter)
+  if (!customElements.get('page-spacer'))  customElements.define('page-spacer', PageSpacer)
+  if (!customElements.get('page-number'))  customElements.define('page-number', PageNumber)
 })
 
 afterEach(() => {
@@ -36,7 +36,7 @@ describe('_processPageBreaks', () => {
     const breaks: HTMLElement[] = []
 
     breakPositions.forEach((pos) => {
-      const pb = document.createElement('page-break') as HTMLElement
+      const pb = document.createElement('page-spacer') as HTMLElement
       wrapper.appendChild(pb)
       breaks.push(pb)
     })
@@ -49,7 +49,7 @@ describe('_processPageBreaks', () => {
     const { wrapper, breaks } = makeWrapper([500])
     const pb = breaks[0]!
 
-    // Stub: wrapper top = 0, page-break top = 500
+    // Stub: wrapper top = 0, page-spacer top = 500
     vi.spyOn(wrapper, 'getBoundingClientRect').mockReturnValue(
       { top: 0, bottom: 0, left: 0, right: 0, width: 0, height: 0, x: 0, y: 0, toJSON: () => ({}) }
     )
@@ -58,7 +58,7 @@ describe('_processPageBreaks', () => {
     )
 
     // Access private method
-    const sp = document.createElement('stapled-pages') as StapledPages
+    const sp = document.createElement('stapled-doc') as Stapler
     ;(sp as unknown as {
       _processPageBreaks(w: HTMLElement, slotH: number, pageH: number, hH: number, fH: number): void
     })._processPageBreaks(wrapper, slotH, pageH, headerH, footerH)
@@ -80,7 +80,7 @@ describe('_processPageBreaks', () => {
       { top: 1200, bottom: 1200, left: 0, right: 0, width: 0, height: 0, x: 0, y: 1200, toJSON: () => ({}) }
     )
 
-    const sp = document.createElement('stapled-pages') as StapledPages
+    const sp = document.createElement('stapled-doc') as Stapler
     ;(sp as unknown as {
       _processPageBreaks(w: HTMLElement, slotH: number, pageH: number, hH: number, fH: number): void
     })._processPageBreaks(wrapper, slotH, pageH, headerH, footerH)
@@ -106,7 +106,7 @@ describe('_processPageBreaks', () => {
       return { top: 500, bottom: 500, left: 0, right: 0, width: 0, height: 0, x: 0, y: 500, toJSON: () => ({}) }
     })
 
-    const sp = document.createElement('stapled-pages') as StapledPages
+    const sp = document.createElement('stapled-doc') as Stapler
     ;(sp as unknown as {
       _processPageBreaks(w: HTMLElement, slotH: number, pageH: number, hH: number, fH: number): void
     })._processPageBreaks(wrapper, slotH, pageH, headerH, footerH)
@@ -129,7 +129,7 @@ describe('_processPageBreaks', () => {
       { top: 900, bottom: 900, left: 0, right: 0, width: 0, height: 0, x: 0, y: 900, toJSON: () => ({}) }
     )
 
-    const sp = document.createElement('stapled-pages') as StapledPages
+    const sp = document.createElement('stapled-doc') as Stapler
     ;(sp as unknown as {
       _processPageBreaks(w: HTMLElement, slotH: number, pageH: number, hH: number, fH: number): void
     })._processPageBreaks(wrapper, slotH, pageH, headerH, footerH)
@@ -153,7 +153,7 @@ describe('_processPageBreaks', () => {
       { top: 1136, bottom: 1136, left: 0, right: 0, width: 0, height: 0, x: 0, y: 1136, toJSON: () => ({}) }
     )
 
-    const sp = document.createElement('stapled-pages') as StapledPages
+    const sp = document.createElement('stapled-doc') as Stapler
     ;(sp as unknown as {
       _processPageBreaks(w: HTMLElement, slotH: number, pageH: number, hH: number, fH: number): void
     })._processPageBreaks(wrapper, slotH, pageH, headerH, footerH)

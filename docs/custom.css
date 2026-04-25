@@ -1,5 +1,5 @@
 /*!
- * stapled-pages-steel.css — Ivy.css custom palette theme
+ * stapled-doc-steel.css — Ivy.css custom palette theme
  *
  * Light palette:  #1A1A2E (Navy) · #40405E (Muted) · #80CAFF (Sky) · #F3F4F6 (Steel)
  * Dark palette:   #1A1A2E (Deep) · #2D3748 (Slate) · #60A5FA (Blue) · #E5E7EB (Silver)
@@ -94,4 +94,646 @@
   --warn:    #facc15;
   /* Danger: Industrial red */
   --danger:  color-mix(in oklab, #1A1A2E 10%, #ef4444);
+}
+
+/* =============================================================================
+   SITE CHROME — sticky nav header
+   ============================================================================= */
+
+body > header.site-header {
+  padding: 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: color-mix(in oklab, var(--color-bg) 94%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.site-header nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 0.65rem 1.5rem;
+  margin-bottom: 0;
+}
+
+.site-header nav ul {
+  gap: 0.25rem;
+}
+
+.nav-brand {
+  font-weight: 700;
+  font-size: 1rem;
+  text-decoration: none;
+  color: var(--color-text);
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.nav-brand:hover {
+  text-decoration: none;
+}
+
+.nav-brand img {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
+}
+
+/* =============================================================================
+   SITE MAIN — remove ivy's max-width on the homepage wrapper
+   ============================================================================= */
+
+body > main.site-main {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* =============================================================================
+   HERO
+   ============================================================================= */
+
+.hero {
+  padding: 6rem 1.5rem 5rem;
+  text-align: center;
+  background: var(--color-primary);
+  color: var(--color-primary-text);
+}
+
+.hero h1,
+.hero h2,
+.hero h3 {
+  color: var(--color-primary-text);
+}
+
+.hero-sub {
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
+  max-width: 44rem;
+  margin: 0 auto var(--space-xl);
+  opacity: 0.85;
+}
+
+.hero .btn-group {
+  justify-content: center;
+  margin-bottom: 0;
+}
+
+.hero [data-variant="outline"] {
+  color: var(--color-primary-text);
+  border-color: color-mix(in oklab, var(--color-primary-text) 50%, transparent);
+}
+
+.hero [data-variant="outline"]:hover {
+  background: color-mix(in oklab, var(--color-primary-text) 12%, transparent);
+  border-color: color-mix(in oklab, var(--color-primary-text) 70%, transparent);
+}
+
+/* =============================================================================
+   FULL-BLEED CONTENT SECTIONS
+   ============================================================================= */
+
+.section-full {
+  padding: 5rem 1.5rem;
+}
+
+.section-inner {
+  max-width: 72rem;
+  margin: 0 auto;
+}
+
+.section-header {
+  text-align: center;
+  max-width: 44rem;
+  margin: 0 auto 3rem;
+}
+
+.section-header h2 {
+  margin-top: 0;
+}
+
+.section-header p {
+  color: var(--color-muted);
+  font-size: 1.05rem;
+}
+
+/* =============================================================================
+   PROBLEM SECTION — the hook
+   ============================================================================= */
+
+.problem-statement {
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  line-height: 1.7;
+  max-width: 42rem;
+  margin: 0 auto;
+  text-align: center;
+  color: var(--color-text);
+  border-left: none;
+  padding-left: 0;
+  font-style: normal;
+}
+
+/* =============================================================================
+   THREE PILLARS
+   ============================================================================= */
+
+.pillar-icon {
+  display: block;
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
+  line-height: 1;
+  color: var(--color-primary);
+}
+
+/* =============================================================================
+   CTA SECTION
+   ============================================================================= */
+
+.cta-section {
+  background: var(--color-primary);
+  color: var(--color-primary-text);
+  text-align: center;
+}
+
+.cta-section h2 {
+  color: var(--color-primary-text);
+  margin-top: 0;
+}
+
+.cta-section p {
+  opacity: 0.8;
+  max-width: 36rem;
+  margin: 0 auto var(--space-xl);
+}
+
+.cta-section .btn-group {
+  justify-content: center;
+  margin-bottom: 0;
+}
+
+.cta-section [data-variant="outline"] {
+  color: var(--color-primary-text);
+  border-color: color-mix(in oklab, var(--color-primary-text) 50%, transparent);
+}
+
+.cta-section [data-variant="outline"]:hover {
+  background: color-mix(in oklab, var(--color-primary-text) 12%, transparent);
+  border-color: color-mix(in oklab, var(--color-primary-text) 70%, transparent);
+}
+
+/* =============================================================================
+   SITE FOOTER
+   ============================================================================= */
+
+body > footer.site-footer {
+  border-top: 1px solid var(--color-border);
+  text-align: center;
+  color: var(--color-muted);
+  font-size: var(--fs-sm);
+}
+
+body > footer.site-footer p {
+  margin: 0;
+}
+
+/* =============================================================================
+   DOCS PAGE — sidebar layout
+   ============================================================================= */
+
+.docs-layout {
+  display: grid;
+  grid-template-columns: 14rem 1fr;
+  gap: 3rem;
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem;
+  align-items: start;
+}
+
+@media (max-width: 48rem) {
+  .docs-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .docs-sidebar {
+    display: none;
+  }
+}
+
+.docs-sidebar {
+  position: sticky;
+  top: 4.5rem;
+}
+
+.docs-sidebar nav {
+  margin: 0;
+}
+
+.docs-sidebar nav ul {
+  flex-direction: column;
+  gap: 0;
+}
+
+.docs-sidebar nav a {
+  display: block;
+  padding: 0.3rem 0.6rem;
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-sm);
+  color: var(--color-text);
+}
+
+.docs-sidebar nav a:hover {
+  background: var(--surface-2);
+  text-decoration: none;
+}
+
+.docs-sidebar .sidebar-label {
+  display: block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-muted);
+  padding: 0.85rem 0.6rem 0.2rem;
+}
+
+.docs-content {
+  min-width: 0;
+}
+
+.docs-content h2 {
+  padding-top: 2.5rem;
+  margin-top: 2.5rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.docs-content h2:first-child {
+  padding-top: 0;
+  margin-top: 0;
+  border-top: none;
+}
+
+/* =============================================================================
+   HERO LOGO
+   ============================================================================= */
+
+.hero-logo {
+  width: 120px;
+  height: 120px;
+  margin-bottom: 2rem;
+}
+
+/* =============================================================================
+   DEMOS LISTING PAGE
+   ============================================================================= */
+
+.demo-card-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0 0;
+}
+
+.demo-card-list li {
+  padding: 0.2rem 0;
+  font-size: 0.875rem;
+}
+
+/* =============================================================================
+   INDIVIDUAL DEMO PAGE
+   ============================================================================= */
+
+.demo-header {
+  max-width: 52rem;
+  margin: 0 auto;
+  padding: 3rem 2rem 1.5rem;
+}
+
+.demo-breadcrumb {
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+}
+
+.demo-controls {
+  display: flex;
+  justify-content: flex-end;
+  max-width: 52rem;
+  margin: 0 auto;
+  padding: 0 2rem 1rem;
+}
+
+.demo-stage {
+  background: var(--surface-2);
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  padding: 2rem 1rem 3rem;
+  overflow-x: auto;
+}
+
+.demo-iframe {
+  display: block;
+  width: 100%;
+  max-width: 52rem;
+  margin: 0 auto;
+  border: none;
+  min-height: 900px;
+}
+
+/* =============================================================================
+   SAMPLES PAGE
+   ============================================================================= */
+
+.sample-wrapper {
+  padding-bottom: 4rem;
+  margin-bottom: 4rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.sample-wrapper:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.sample-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.sample-meta h2 {
+  margin: 0;
+}
+
+.sample-meta p {
+  margin: 0.25rem 0 0;
+}
+
+.sample-preview {
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+}
+
+.sample-blueprint {
+  display: none;
+}
+
+.sample-wrapper.show-blueprint .sample-blueprint {
+  display: block;
+}
+
+.sample-wrapper.show-blueprint .sample-preview {
+  display: none;
+}
+
+.sample-blueprint pre {
+  max-height: 40rem;
+  overflow-y: auto;
+  font-size: 0.78rem;
+}
+
+/* =============================================================================
+   STAPLED-PAGES DEMO DOCUMENTS
+   These styles are for the documents rendered inside the sample previews.
+   Uses hard-coded values (not CSS vars) so the documents always look like
+   printed paper regardless of the site's dark/light mode.
+   ============================================================================= */
+
+/* Default header/footer for all demo docs */
+stapled-doc page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1.75rem;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 11px;
+  color: #9ca3af;
+  letter-spacing: 0.03em;
+  font-family: ui-monospace, monospace;
+}
+
+stapled-doc page-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1.75rem;
+  border-top: 1px solid #e5e7eb;
+  font-size: 11px;
+  color: #9ca3af;
+}
+
+/* Sample 1: Staple History — dark header/footer, formal look */
+
+.sample-staple page-header {
+  background: #1a1a2e;
+  color: #80caff;
+  border-bottom-color: #2d3748;
+}
+
+.sample-staple page-footer {
+  background: #1a1a2e;
+  color: rgba(128, 202, 255, 0.55);
+  border-top-color: #2d3748;
+}
+
+.sample-staple s-page {
+  padding: 2.5rem;
+  font-size: 13px;
+  line-height: 1.65;
+  background: #ffffff;
+  color: #111827;
+  font-family: Georgia, 'Times New Roman', serif;
+}
+
+.staple-cover {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: #1a1a2e;
+  color: #ffffff;
+  padding: 3rem;
+}
+
+.staple-cover h1 {
+  color: #80caff;
+  font-size: 2rem;
+  line-height: 1.2;
+  margin: 1.5rem 0 0.5rem;
+  font-family: Georgia, serif;
+}
+
+.staple-cover .cover-subtitle {
+  color: rgba(255, 255, 255, 0.65);
+  font-style: italic;
+  font-size: 0.95rem;
+  margin: 0 0 2.5rem;
+}
+
+.staple-cover .cover-year {
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(128, 202, 255, 0.5);
+  font-family: ui-monospace, monospace;
+}
+
+.staple-icon-wrap {
+  width: 5rem;
+  height: 5rem;
+  border: 2px solid rgba(128, 202, 255, 0.3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.sample-staple s-page h2 {
+  font-size: 1.1rem;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 0.4rem;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  color: #1a1a2e;
+}
+
+.sample-staple s-page p {
+  margin-bottom: 0.85rem;
+}
+
+/* Sample 2: Papyrus Protocol — clean whitepaper look */
+
+.sample-papyrus s-page {
+  padding: 2.5rem;
+  font-size: 13px;
+  line-height: 1.7;
+  background: #ffffff;
+  color: #1f2937;
+  font-family: 'Georgia', serif;
+}
+
+.sample-papyrus page-header {
+  background: #f9fafb;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+}
+
+.sample-papyrus page-footer {
+  background: #f9fafb;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+}
+
+.sample-papyrus h1 {
+  font-size: 1.5rem;
+  color: #111827;
+  line-height: 1.25;
+  margin-top: 0;
+}
+
+.sample-papyrus h2 {
+  font-size: 1rem;
+  color: #374151;
+  margin-top: 1.5rem;
+  margin-bottom: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.8rem;
+}
+
+.sample-papyrus p {
+  margin-bottom: 0.85rem;
+}
+
+/* Sample 3: Flatland — classic typeset look */
+
+.sample-flatland s-page {
+  padding: 2.5rem 3rem;
+  font-size: 13px;
+  line-height: 1.8;
+  background: #fdfcf8;
+  color: #1a1a1a;
+  font-family: 'Georgia', serif;
+}
+
+.sample-flatland page-header {
+  background: #fdfcf8;
+}
+
+.sample-flatland page-footer {
+  background: #fdfcf8;
+}
+
+.sample-flatland h1 {
+  font-size: 1.6rem;
+  text-align: center;
+  margin: 0 0 0.25rem;
+  font-style: italic;
+}
+
+.sample-flatland h2 {
+  font-size: 0.75rem;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: #6b7280;
+  margin: 0 0 2rem;
+}
+
+.sample-flatland h3 {
+  font-size: 1rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.sample-flatland p {
+  margin-bottom: 0.85rem;
+  text-indent: 1.5em;
+}
+
+.sample-flatland p:first-of-type {
+  text-indent: 0;
+}
+
+/* =============================================================================
+   ABOUT PAGE
+   ============================================================================= */
+
+.about-hero {
+  padding: 5rem 1.5rem 4rem;
+  text-align: center;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.stapler-display {
+  width: 14rem;
+  height: auto;
+  margin: 0 auto 1.5rem;
+  color: var(--color-text);
+  opacity: 0.8;
+}
+
+.about-content {
+  max-width: 42rem;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+}
+
+.about-content h2 {
+  margin-top: 2rem;
+}
+
+.about-content h2:first-child {
+  margin-top: 0;
 }

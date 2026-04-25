@@ -1,17 +1,17 @@
 import { describe, it, expect, beforeAll, beforeEach, afterEach, vi } from 'vitest'
-import { StapledPages } from '../src/components/StapledPages.js'
+import { Stapler } from '../src/components/StapledPages.js'
 import { PageHeader } from '../src/components/PageHeader.js'
 import { PageFooter } from '../src/components/PageFooter.js'
-import { PageBreak } from '../src/components/PageBreak.js'
+import { PageSpacer } from '../src/components/PageSpacer.js'
 import { PageNumber } from '../src/components/PageNumber.js'
 
 // ── Register custom elements once ────────────────────────────────────────────
 beforeAll(() => {
-  if (!customElements.get('stapled-pages')) customElements.define('stapled-pages', StapledPages)
-  if (!customElements.get('page-header'))   customElements.define('page-header', PageHeader)
-  if (!customElements.get('page-footer'))   customElements.define('page-footer', PageFooter)
-  if (!customElements.get('page-break'))    customElements.define('page-break', PageBreak)
-  if (!customElements.get('page-number'))   customElements.define('page-number', PageNumber)
+  if (!customElements.get('stapled-doc'))  customElements.define('stapled-doc', Stapler)
+  if (!customElements.get('page-header'))  customElements.define('page-header', PageHeader)
+  if (!customElements.get('page-footer'))  customElements.define('page-footer', PageFooter)
+  if (!customElements.get('page-spacer'))  customElements.define('page-spacer', PageSpacer)
+  if (!customElements.get('page-number'))  customElements.define('page-number', PageNumber)
 })
 
 afterEach(() => {
@@ -49,7 +49,7 @@ describe('_injectPageSpacers', () => {
   ) => void
 
   function callInject(wrapper: HTMLElement): void {
-    const sp = document.createElement('stapled-pages') as StapledPages
+    const sp = document.createElement('stapled-doc') as Stapler
     ;(sp as unknown as { _injectPageSpacers: InjectFn })
       ._injectPageSpacers(wrapper, slotH, headerH, footerH, gapH)
   }
@@ -153,22 +153,22 @@ describe('_buildFrameLayer', () => {
     footerH: number,
   ) => void
 
-  function callBuildFrame(sp: StapledPages, numPages: number): void {
+  function callBuildFrame(sp: Stapler, numPages: number): void {
     ;(sp as unknown as { _buildFrameLayer: BuildFrameFn })
       ._buildFrameLayer(numPages, slotH, pageH, headerH, footerH)
   }
 
   beforeEach(() => stubComputedStyle())
 
-  function makeStapledPages(html: string): StapledPages {
+  function makeStapler(html: string): Stapler {
     const container = document.createElement('div')
     container.innerHTML = html
     document.body.appendChild(container)
-    return container.querySelector('stapled-pages') as StapledPages
+    return container.querySelector('stapled-doc') as Stapler
   }
 
   it('appends a .sp-frame-layer with one .sp-page-frame per page', () => {
-    const sp = makeStapledPages(`<stapled-pages mode="flow" page-width="816px" page-height="1056px" page-gap="32px"></stapled-pages>`)
+    const sp = makeStapler(`<stapled-doc mode="flow" page-width="816px" page-height="1056px" page-gap="32px"></stapled-doc>`)
     callBuildFrame(sp, 3)
 
     expect(sp.querySelector('.sp-frame-layer')).not.toBeNull()
@@ -176,7 +176,7 @@ describe('_buildFrameLayer', () => {
   })
 
   it('sets correct top offset for each frame (i * slotH)', () => {
-    const sp = makeStapledPages(`<stapled-pages mode="flow" page-width="816px" page-height="1056px" page-gap="32px"></stapled-pages>`)
+    const sp = makeStapler(`<stapled-doc mode="flow" page-width="816px" page-height="1056px" page-gap="32px"></stapled-doc>`)
     callBuildFrame(sp, 3)
 
     const frames = Array.from(sp.querySelectorAll<HTMLElement>('.sp-page-frame'))
@@ -186,7 +186,7 @@ describe('_buildFrameLayer', () => {
   })
 
   it('sets frame height to pageH', () => {
-    const sp = makeStapledPages(`<stapled-pages mode="flow" page-width="816px" page-height="1056px" page-gap="32px"></stapled-pages>`)
+    const sp = makeStapler(`<stapled-doc mode="flow" page-width="816px" page-height="1056px" page-gap="32px"></stapled-doc>`)
     callBuildFrame(sp, 2)
 
     sp.querySelectorAll<HTMLElement>('.sp-page-frame').forEach((frame) => {
@@ -195,11 +195,11 @@ describe('_buildFrameLayer', () => {
   })
 
   it('stamps header and footer clones into each frame when templates are set', () => {
-    const sp = makeStapledPages(`
-      <stapled-pages mode="flow" page-width="816px" page-height="1056px" page-gap="32px">
+    const sp = makeStapler(`
+      <stapled-doc mode="flow" page-width="816px" page-height="1056px" page-gap="32px">
         <page-header height="48px"><span>H</span></page-header>
         <page-footer height="32px"><span>F</span></page-footer>
-      </stapled-pages>
+      </stapled-doc>
     `)
     ;(sp as unknown as { _headerTemplate: PageHeader | null })._headerTemplate =
       sp.querySelector('page-header') as PageHeader
@@ -215,10 +215,10 @@ describe('_buildFrameLayer', () => {
   })
 
   it('header wrapper height matches headerH', () => {
-    const sp = makeStapledPages(`
-      <stapled-pages mode="flow" page-width="816px" page-height="1056px" page-gap="32px">
+    const sp = makeStapler(`
+      <stapled-doc mode="flow" page-width="816px" page-height="1056px" page-gap="32px">
         <page-header height="48px"><span>H</span></page-header>
-      </stapled-pages>
+      </stapled-doc>
     `)
     ;(sp as unknown as { _headerTemplate: PageHeader | null })._headerTemplate =
       sp.querySelector('page-header') as PageHeader
@@ -230,10 +230,10 @@ describe('_buildFrameLayer', () => {
   })
 
   it('skip-first on header — page 1 frame has no header, pages 2+ do', () => {
-    const sp = makeStapledPages(`
-      <stapled-pages mode="flow" page-width="816px" page-height="1056px" page-gap="32px">
+    const sp = makeStapler(`
+      <stapled-doc mode="flow" page-width="816px" page-height="1056px" page-gap="32px">
         <page-header height="48px" skip-first><span>H</span></page-header>
-      </stapled-pages>
+      </stapled-doc>
     `)
     ;(sp as unknown as { _headerTemplate: PageHeader | null })._headerTemplate =
       sp.querySelector('page-header') as PageHeader
@@ -247,10 +247,10 @@ describe('_buildFrameLayer', () => {
   })
 
   it('skip-pages on footer — specified page frame has no footer', () => {
-    const sp = makeStapledPages(`
-      <stapled-pages mode="flow" page-width="816px" page-height="1056px" page-gap="32px">
+    const sp = makeStapler(`
+      <stapled-doc mode="flow" page-width="816px" page-height="1056px" page-gap="32px">
         <page-footer height="32px" skip-pages="2"><span>F</span></page-footer>
-      </stapled-pages>
+      </stapled-doc>
     `)
     ;(sp as unknown as { _footerTemplate: PageFooter | null })._footerTemplate =
       sp.querySelector('page-footer') as PageFooter
@@ -264,10 +264,10 @@ describe('_buildFrameLayer', () => {
   })
 
   it('header clone does not retain control attributes', () => {
-    const sp = makeStapledPages(`
-      <stapled-pages mode="flow" page-width="816px" page-height="1056px" page-gap="32px">
+    const sp = makeStapler(`
+      <stapled-doc mode="flow" page-width="816px" page-height="1056px" page-gap="32px">
         <page-header height="48px" skip-first skip-pages="3"><span>H</span></page-header>
-      </stapled-pages>
+      </stapled-doc>
     `)
     ;(sp as unknown as { _headerTemplate: PageHeader | null })._headerTemplate =
       sp.querySelector('page-header') as PageHeader
@@ -300,15 +300,15 @@ describe('sp:ready event — flow mode', () => {
 
   beforeEach(() => stubComputedStyle())
 
-  function makeStapledPages(html: string): StapledPages {
+  function makeStapler(html: string): Stapler {
     const container = document.createElement('div')
     container.innerHTML = html
     document.body.appendChild(container)
-    return container.querySelector('stapled-pages') as StapledPages
+    return container.querySelector('stapled-doc') as Stapler
   }
 
   function callFinalise(
-    sp: StapledPages,
+    sp: Stapler,
     wrapper: HTMLElement,
     opts: { isFlowBreaks?: boolean; wrapperHeight?: number } = {},
   ): void {
@@ -323,7 +323,7 @@ describe('sp:ready event — flow mode', () => {
 
   it('dispatches sp:ready with mode="flow"', () => {
     const events: CustomEvent[] = []
-    const sp = makeStapledPages(`<stapled-pages mode="flow" page-width="816px" page-height="1056px" page-gap="32px"></stapled-pages>`)
+    const sp = makeStapler(`<stapled-doc mode="flow" page-width="816px" page-height="1056px" page-gap="32px"></stapled-doc>`)
     sp.addEventListener('sp:ready', (e) => events.push(e as CustomEvent))
 
     const wrapper = document.createElement('div')
@@ -338,7 +338,7 @@ describe('sp:ready event — flow mode', () => {
 
   it('dispatches sp:ready with mode="flow-breaks" when isFlowBreaks=true', () => {
     const events: CustomEvent[] = []
-    const sp = makeStapledPages(`<stapled-pages mode="flow" page-width="816px" page-height="1056px" page-gap="32px"></stapled-pages>`)
+    const sp = makeStapler(`<stapled-doc mode="flow" page-width="816px" page-height="1056px" page-gap="32px"></stapled-doc>`)
     sp.addEventListener('sp:ready', (e) => events.push(e as CustomEvent))
 
     const wrapper = document.createElement('div')
@@ -350,7 +350,7 @@ describe('sp:ready event — flow mode', () => {
 
   it('computes pageCount from wrapper height (ceil(height / slotH))', () => {
     const events: CustomEvent[] = []
-    const sp = makeStapledPages(`<stapled-pages mode="flow" page-width="816px" page-height="1056px" page-gap="32px"></stapled-pages>`)
+    const sp = makeStapler(`<stapled-doc mode="flow" page-width="816px" page-height="1056px" page-gap="32px"></stapled-doc>`)
     sp.addEventListener('sp:ready', (e) => events.push(e as CustomEvent))
 
     const wrapper = document.createElement('div')
@@ -365,7 +365,7 @@ describe('sp:ready event — flow mode', () => {
 
   it('pageCount is at least 1 for an empty wrapper', () => {
     const events: CustomEvent[] = []
-    const sp = makeStapledPages(`<stapled-pages mode="flow" page-width="816px" page-height="1056px" page-gap="32px"></stapled-pages>`)
+    const sp = makeStapler(`<stapled-doc mode="flow" page-width="816px" page-height="1056px" page-gap="32px"></stapled-doc>`)
     sp.addEventListener('sp:ready', (e) => events.push(e as CustomEvent))
 
     const wrapper = document.createElement('div')
@@ -377,7 +377,7 @@ describe('sp:ready event — flow mode', () => {
 
   it('event bubbles', () => {
     let fired = false
-    const sp = makeStapledPages(`<stapled-pages mode="flow" page-width="816px" page-height="1056px" page-gap="32px"></stapled-pages>`)
+    const sp = makeStapler(`<stapled-doc mode="flow" page-width="816px" page-height="1056px" page-gap="32px"></stapled-doc>`)
     document.body.addEventListener('sp:ready', () => { fired = true })
 
     const wrapper = document.createElement('div')
@@ -392,37 +392,37 @@ describe('sp:ready event — flow mode', () => {
 // _detectMode — auto-detect consistency
 // ─────────────────────────────────────────────────────────────────────────────
 
-describe('_detectMode — nested page-break detection', () => {
+describe('_detectMode — nested page-spacer detection', () => {
   type DetectModeFn = () => string
 
   function detectMode(html: string): string {
     const container = document.createElement('div')
     container.innerHTML = html
     document.body.appendChild(container)
-    const sp = container.querySelector('stapled-pages') as StapledPages
+    const sp = container.querySelector('stapled-doc') as Stapler
     return (sp as unknown as { _detectMode: DetectModeFn })._detectMode()
   }
 
-  it('mode="flow" with a nested page-break returns flow-breaks', () => {
+  it('mode="flow" with a nested page-spacer returns flow-breaks', () => {
     const mode = detectMode(`
-      <stapled-pages mode="flow">
-        <div><page-break></page-break></div>
-      </stapled-pages>
+      <stapled-doc mode="flow">
+        <div><page-spacer></page-spacer></div>
+      </stapled-doc>
     `)
     expect(mode).toBe('flow-breaks')
   })
 
-  it('auto-detect with a nested page-break returns flow-breaks', () => {
+  it('auto-detect with a nested page-spacer returns flow-breaks', () => {
     const mode = detectMode(`
-      <stapled-pages>
-        <div><page-break></page-break></div>
-      </stapled-pages>
+      <stapled-doc>
+        <div><page-spacer></page-spacer></div>
+      </stapled-doc>
     `)
     expect(mode).toBe('flow-breaks')
   })
 
-  it('auto-detect with no page-break and no s-page returns pure flow', () => {
-    const mode = detectMode(`<stapled-pages><p>Content</p></stapled-pages>`)
+  it('auto-detect with no page-spacer and no s-page returns pure flow', () => {
+    const mode = detectMode(`<stapled-doc><p>Content</p></stapled-doc>`)
     expect(mode).toBe('flow')
   })
 })
@@ -449,13 +449,13 @@ describe('refresh() — flow mode', () => {
   it('has exactly one .sp-flow-wrapper and one .sp-frame-layer after refresh', () => {
     const container = document.createElement('div')
     container.innerHTML = `
-      <stapled-pages mode="flow" page-width="816px" page-height="1056px" page-gap="32px">
+      <stapled-doc mode="flow" page-width="816px" page-height="1056px" page-gap="32px">
         <page-header height="48px"><span>H</span></page-header>
         <p>Content</p>
-      </stapled-pages>
+      </stapled-doc>
     `
     document.body.appendChild(container)
-    const sp = container.querySelector('stapled-pages') as StapledPages
+    const sp = container.querySelector('stapled-doc') as Stapler
 
     ;(sp as unknown as { _build(): void })._build()
 
@@ -468,13 +468,13 @@ describe('refresh() — flow mode', () => {
   it('re-stamps header content into the frame layer after refresh', () => {
     const container = document.createElement('div')
     container.innerHTML = `
-      <stapled-pages mode="flow" page-width="816px" page-height="1056px" page-gap="32px">
+      <stapled-doc mode="flow" page-width="816px" page-height="1056px" page-gap="32px">
         <page-header height="48px"><span class="hdr-content">H</span></page-header>
         <p>Content</p>
-      </stapled-pages>
+      </stapled-doc>
     `
     document.body.appendChild(container)
-    const sp = container.querySelector('stapled-pages') as StapledPages
+    const sp = container.querySelector('stapled-doc') as Stapler
 
     ;(sp as unknown as { _build(): void })._build()
     sp.refresh()
@@ -485,12 +485,12 @@ describe('refresh() — flow mode', () => {
   it('original content is preserved in the flow wrapper after refresh', () => {
     const container = document.createElement('div')
     container.innerHTML = `
-      <stapled-pages mode="flow" page-width="816px" page-height="1056px" page-gap="32px">
+      <stapled-doc mode="flow" page-width="816px" page-height="1056px" page-gap="32px">
         <p class="my-content">Hello</p>
-      </stapled-pages>
+      </stapled-doc>
     `
     document.body.appendChild(container)
-    const sp = container.querySelector('stapled-pages') as StapledPages
+    const sp = container.querySelector('stapled-doc') as Stapler
 
     ;(sp as unknown as { _build(): void })._build()
     sp.refresh()

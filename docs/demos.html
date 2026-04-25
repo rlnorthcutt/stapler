@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demos — Stapler</title>
+  <meta name="description" content="Live demos of the three Stapler rendering modes: Explicit, Flow, and Pure Flow.">
+  <link rel="stylesheet" href="ivy.full.min.css">
+  <link rel="stylesheet" href="lattice.full.min.css">
+  <link rel="stylesheet" href="custom.css">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="logo-32x32.png">
+  <link rel="apple-touch-icon" href="logo-192x192.png">
+  <script src="dark-mode-toggle.min.js" defer></script>
+</head>
+<body>
+
+  <header class="site-header">
+    <nav>
+      <a href="index.html" class="nav-brand">
+        <img src="logo-32x32.png" alt="" aria-hidden="true">
+        Stapler
+      </a>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="docs.html">Docs</a></li>
+        <li><a href="demos.html" aria-current="page">Demos</a></li>
+        <li><a href="about.html">About</a></li>
+      </ul>
+      <dark-mode-toggle></dark-mode-toggle>
+    </nav>
+  </header>
+
+  <main class="site-main">
+
+    <section class="hero">
+      <p class="kicker">The Showroom</p>
+      <h1>Three modes. Three documents.</h1>
+      <p class="hero-sub">Each demo is a live rendering — no screenshots, no iframes. The library runs in your browser and lays out the document in real time.</p>
+    </section>
+
+    <section class="section-full">
+      <div class="section-inner">
+        <div class="grid col-3 gap-4">
+
+          <div class="card">
+            <header>
+              <p class="kicker">Demo 1 · Explicit Mode</p>
+              <h3>The Staple</h3>
+              <p class="muted">A 120-Year Journey to Perfection</p>
+            </header>
+            <p>Three hard-clipped pages with explicit layout control. Each <code>&lt;s-page&gt;</code> is a fixed container — content that overflows is clipped by design.</p>
+            <ul class="demo-card-list">
+              <li>Cover page with no header or footer</li>
+              <li>Running header and footer on pages 2–3</li>
+              <li>Page numbers in <code>n of total</code> format</li>
+            </ul>
+            <footer>
+              <a href="demo-explicit.html" role="button" data-variant="primary">View Demo</a>
+            </footer>
+          </div>
+
+          <div class="card">
+            <header>
+              <p class="kicker">Demo 2 · Flow Mode</p>
+              <h3>The Papyrus Protocol</h3>
+              <p class="muted">A History of Binding</p>
+            </header>
+            <p>A multi-section whitepaper where <code>&lt;page-spacer&gt;</code> elements ensure each chapter starts on a new page. Headers and footers are stamped automatically.</p>
+            <ul class="demo-card-list">
+              <li>Five chapters, each forced to its own page</li>
+              <li>Header and footer on every page</li>
+              <li>Page numbers in running header</li>
+            </ul>
+            <footer>
+              <a href="demo-flow.html" role="button" data-variant="primary">View Demo</a>
+            </footer>
+          </div>
+
+          <div class="card">
+            <header>
+              <p class="kicker">Demo 3 · Pure Flow</p>
+              <h3>Flatland</h3>
+              <p class="muted">A Romance of Many Dimensions</p>
+            </header>
+            <p>Long-form prose with zero <code>&lt;page-spacer&gt;</code> elements. The library measures every block, computes all page boundaries, and injects spacers automatically.</p>
+            <ul class="demo-card-list">
+              <li>No manual page breaks whatsoever</li>
+              <li>All spacers injected automatically at runtime</li>
+              <li>Running header with total page count</li>
+            </ul>
+            <footer>
+              <a href="demo-pure-flow.html" role="button" data-variant="primary">View Demo</a>
+            </footer>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Built with logic in Vermont. No trees were harmed in the rendering of these PDFs.</p>
+    <p><a href="https://github.com/rlnorthcutt/stapled-pages">GitHub</a> · MIT License</p>
+  </footer>
+
+</body>
+</html>

@@ -1,4 +1,4 @@
-# CLAUDE.md — stapled-pages project guide
+# CLAUDE.md — Stapler project guide
 
 This file tells Claude Code how to work on this project. Read it before touching any code.
 
@@ -6,11 +6,11 @@ This file tells Claude Code how to work on this project. Read it before touching
 
 ## What this project is
 
-**stapled-pages** is a zero-dependency web component library for rendering print-accurate
+**Stapler** is a zero-dependency web component library for rendering print-accurate
 multi-page documents in the browser. Authors drop in one `<script>` tag — no npm, no bundler,
 no build step on their end.
 
-The compiled output (`dist/stapled-pages.js`) must always have zero runtime dependencies.
+The compiled output (`dist/stapler.js`) must always have zero runtime dependencies.
 If you find yourself reaching for a utility, write the 5-line version instead.
 
 Full technical spec is in `SPEC.md`. Read it before implementing anything non-trivial.
@@ -32,16 +32,16 @@ Full technical spec is in `SPEC.md`. Read it before implementing anything non-tr
 
 | Element | Class | Role |
 |---------|-------|------|
-| `<stapled-pages>` | `StapledPages` | Root wrapper. Orchestrates everything. |
+| `<stapled-doc>` | `Stapler` | Root wrapper. Orchestrates everything. |
 | `<s-page>` | `SPage` | Hard-clipped page (explicit mode only) |
 | `<page-header>` | `PageHeader` | Header template — stamped into each page |
 | `<page-footer>` | `PageFooter` | Footer template — stamped into each page |
-| `<page-break>` | `PageBreak` | Bridging spacer (flow mode only) |
+| `<page-spacer>` | `PageSpacer` | Bridging spacer (flow mode only) |
 | `<page-number>` | `PageNumber` | Inline page-number placeholder |
 
-`StapledPages` is the center of gravity. All DOM manipulation happens there.
+`Stapler` is the center of gravity. All DOM manipulation happens there.
 The other components are data containers — they parse attributes and expose them;
-`StapledPages` does the building.
+`Stapler` does the building.
 
 ---
 
@@ -54,11 +54,11 @@ Shadow DOM breaks that. Every component uses Light DOM.
 are injected at page boundaries to physically push content clear of header/footer/gap zones.
 Never use an overlay to hide content — everything in the DOM stays accessible.
 
-**Print via CSS only.** `break-after: page` on spacers and `<page-break>` elements, plus
+**Print via CSS only.** `break-after: page` on spacers and `<page-spacer>` elements, plus
 `@page { margin: 0; size: ... }` in the author's stylesheet. No `beforeprint`/`afterprint`
 DOM surgery — ever.
 
-**Sequential page-break processing.** `_processPageBreaks()` sets each `<page-break>`
+**Sequential page-spacer processing.** `_processPageBreaks()` sets each `<page-spacer>`
 height one at a time: set → read position → set next. Batching reads and writes produces
 wrong results because each height change shifts everything below it. Do not refactor this.
 
@@ -74,7 +74,7 @@ a fallback for hand-authored HTML only. AI should always emit `mode="explicit"` 
 ## Building
 
 ```bash
-npm run build        # → dist/stapled-pages.js + dist/stapled-pages.min.js
+npm run build        # → dist/stapler.js + dist/stapler.min.js
 npm run dev          # watch mode with inline sourcemaps
 npm run test         # run all tests once
 npm run test:watch   # watch mode

@@ -5,7 +5,7 @@
  */
 export const CORE_CSS = `
 /* ── Host ──────────────────────────────────────────────── */
-stapled-pages {
+stapled-doc {
   display: block;
   position: relative;
 }
@@ -39,9 +39,9 @@ s-page > page-footer {
   box-sizing: border-box;
 }
 
-/* Hide template elements (direct children of stapled-pages) until JS processes them */
-stapled-pages > page-header,
-stapled-pages > page-footer {
+/* Hide template elements (direct children of stapled-doc) until JS processes them */
+stapled-doc > page-header,
+stapled-doc > page-footer {
   display: none;
 }
 
@@ -91,7 +91,7 @@ stapled-pages > page-footer {
 }
 
 /* ── Page break indicator (flow mode) ───────────────────── */
-page-break {
+page-spacer {
   display: block;
   overflow: hidden;
   border-top: 1.5px dashed rgba(0, 0, 0, .18);
@@ -116,13 +116,13 @@ page-number {
     margin: 0 !important;
   }
 
-  /* Flow mode: spacers and page-breaks trigger print page breaks */
+  /* Flow mode: spacers and page-spacers trigger print page breaks */
   .sp-page-spacer {
     break-after: page;
     visibility: hidden;
   }
 
-  page-break {
+  page-spacer {
     break-after: page;
     visibility: hidden;
   }
@@ -133,7 +133,7 @@ page-number {
   }
 
   /* Page break authoring aid border not needed in print */
-  page-break {
+  page-spacer {
     border-top: none;
   }
 }

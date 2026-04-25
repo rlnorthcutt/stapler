@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Staple: A 120-Year Journey to Perfection</title>
+  <link rel="stylesheet" href="ivy.full.min.css">
+  <link rel="stylesheet" href="custom.css">
+  <link rel="stylesheet" href="doc.css">
+  <script src="stapler.min.js" defer></script>
+  <script src="doc-ready.js" defer></script>
+</head>
+<body>
+
+  <stapled-doc class="sample-staple" mode="explicit" page-width="7in" page-height="9in" page-gap="2rem">
+
+    <page-header height="36px" skip-first>
+      <span>The Staple: A 120-Year Journey</span>
+      <span>Page <page-number format="n of total"></page-number></span>
+    </page-header>
+
+    <page-footer height="28px" skip-first>
+      <span>A Stapler Production</span>
+      <span>Historical Division</span>
+    </page-footer>
+
+    <s-page skip-header skip-footer>
+      <div class="staple-cover">
+        <div class="staple-icon-wrap">
+          <svg viewBox="0 0 60 36" fill="white" aria-hidden="true" width="36" height="22">
+            <rect x="2" y="26" width="56" height="8" rx="3"/>
+            <rect x="2" y="14" width="40" height="13" rx="2" opacity="0.7"/>
+            <path d="M2 14 Q2 4 10 4 L44 4 Q52 4 52 10 L52 14 Z"/>
+          </svg>
+        </div>
+        <h1>The Staple</h1>
+        <p class="cover-subtitle">A 120-Year Journey to Perfection</p>
+        <p class="cover-year">A brief history &nbsp;·&nbsp; 1866–present</p>
+      </div>
+    </s-page>
+
+    <s-page>
+      <h2>From Eyelets to Wire</h2>
+      <p>The modern staple did not spring fully formed from the minds of Victorian industrialists. It arrived slowly, through a long succession of metal fasteners, paper clips, and desperate improvisation. The first devices for joining paper were little more than eyelets punched through a stack of sheets and bent flat — a process requiring a small hammer and considerable patience.</p>
+      <p>In 1866, the McGill Single-Stroke Staple Press was patented in the United States. It was a formidable piece of machinery, capable of driving a single staple through a modest stack of paper with the force of a lever. Each staple had to be loaded individually. Progress was measured in minutes per document.</p>
+      <p>By the turn of the century, the Hotchkiss No. 1 had changed everything. A French invention manufactured with Germanic precision, it introduced the strip-loaded staple magazine — a coil of wire pre-formed into individual staples and fed automatically with each stroke. For the first time, a clerk could staple a document without breaking concentration. The modern office was now possible.</p>
+      <p>Early adopters reported the experience as "transformative." A 1908 account in <em>The Office Supplies Gazette</em> described it thus: "One strikes the lever, and the pages are joined — permanently, cleanly, with none of the rattling uncertainty of the eyelet punch. The Hotchkiss has made the staple civilized."</p>
+      <p>The wire gauge, the crown width, the leg length — these are not arbitrary specifications. They are the result of a hundred and twenty years of refinement, each dimension calculated against every other, each tolerance the product of ten thousand failed predecessors. A modern staple is a solved problem.</p>
+    </s-page>
+
+    <s-page>
+      <h2>The Logical Conclusion</h2>
+      <p>We have perfected the physical staple. Its dimensions are fixed. Its mechanism is reliable. Its function — to join discrete sheets into a coherent document — is accomplished with a single downward stroke and no further thought required.</p>
+      <p>The digital document, by contrast, remains unsolved. CSS <code>@media print</code> rules produce different results on different browsers. PDF generators require server-side runtimes. "Print-friendly" stylesheets are maintained as afterthoughts, updated only after a client reports that their quarterly report prints with the navigation bar across page three.</p>
+      <p>Stapler is the binary staple. It applies the same logic that made the Hotchkiss No. 1 successful: fixed dimensions, explicit layout, zero ambiguity. A page is a page. Content either fits or it doesn't. The library does not guess.</p>
+      <p>The stapler does not concern itself with the contents of the document. It holds things together. That is its entire mandate, and it executes that mandate without complaint, without configuration, without a 2&nbsp;GB installation footprint.</p>
+      <p>We have built the digital equivalent. We offer it to you without ceremony.</p>
+      <p><em>One script tag. Drop it in. Write pages.</em></p>
+    </s-page>
+
+  </stapled-doc>
+
+</body>
+</html>

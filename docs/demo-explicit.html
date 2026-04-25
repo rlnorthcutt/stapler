@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demo: The Staple — Stapler</title>
+  <meta name="description" content="Explicit mode demo: three fixed pages with a cover page, running header and footer, and page numbers.">
+  <link rel="stylesheet" href="ivy.full.min.css">
+  <link rel="stylesheet" href="lattice.full.min.css">
+  <link rel="stylesheet" href="custom.css">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="logo-32x32.png">
+  <link rel="apple-touch-icon" href="logo-192x192.png">
+  <script src="dark-mode-toggle.min.js" defer></script>
+  <script src="demo.js" defer></script>
+</head>
+<body>
+
+  <header class="site-header">
+    <nav>
+      <a href="index.html" class="nav-brand">
+        <img src="logo-32x32.png" alt="" aria-hidden="true">
+        Stapler
+      </a>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="docs.html">Docs</a></li>
+        <li><a href="demos.html" aria-current="page">Demos</a></li>
+        <li><a href="about.html">About</a></li>
+      </ul>
+      <dark-mode-toggle></dark-mode-toggle>
+    </nav>
+  </header>
+
+  <div class="demo-header">
+    <p class="demo-breadcrumb"><a href="demos.html">← Demos</a></p>
+    <p class="kicker">Demo 1 · Explicit Mode</p>
+    <h1>The Staple: A 120-Year Journey to Perfection</h1>
+    <p>Three hard-clipped pages using <code>mode="explicit"</code>. The cover page suppresses its header and footer with <code>skip-header skip-footer</code>. Pages 2 and 3 receive the running header and footer automatically.</p>
+  </div>
+
+  <div class="demo-controls">
+    <a href="#" class="print-btn" role="button" data-variant="primary">Print / Save as PDF</a>
+  </div>
+
+  <div class="demo-stage">
+    <iframe class="demo-iframe" src="doc-explicit.html" title="Explicit mode document — The Staple"></iframe>
+  </div>
+
+  <footer class="site-footer">
+    <p>Built with logic in Vermont. No trees were harmed in the rendering of these PDFs.</p>
+    <p><a href="https://github.com/rlnorthcutt/stapled-pages">GitHub</a> · MIT License</p>
+  </footer>
+
+</body>
+</html>

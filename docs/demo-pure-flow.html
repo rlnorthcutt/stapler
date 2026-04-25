@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demo: Flatland — Stapler</title>
+  <meta name="description" content="Pure flow mode demo: long-form prose with no page-spacer elements — the library places all breaks automatically.">
+  <link rel="stylesheet" href="ivy.full.min.css">
+  <link rel="stylesheet" href="lattice.full.min.css">
+  <link rel="stylesheet" href="custom.css">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="logo-32x32.png">
+  <link rel="apple-touch-icon" href="logo-192x192.png">
+  <script src="dark-mode-toggle.min.js" defer></script>
+  <script src="demo.js" defer></script>
+</head>
+<body>
+
+  <header class="site-header">
+    <nav>
+      <a href="index.html" class="nav-brand">
+        <img src="logo-32x32.png" alt="" aria-hidden="true">
+        Stapler
+      </a>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="docs.html">Docs</a></li>
+        <li><a href="demos.html" aria-current="page">Demos</a></li>
+        <li><a href="about.html">About</a></li>
+      </ul>
+      <dark-mode-toggle></dark-mode-toggle>
+    </nav>
+  </header>
+
+  <div class="demo-header">
+    <p class="demo-breadcrumb"><a href="demos.html">← Demos</a></p>
+    <p class="kicker">Demo 3 · Pure Flow</p>
+    <h1>Flatland: A Romance of Many Dimensions</h1>
+    <p>Long-form prose using <code>mode="flow"</code> with zero <code>&lt;page-spacer&gt;</code> elements. The library measures every block, computes where page boundaries fall, and injects all spacers automatically.</p>
+  </div>
+
+  <div class="demo-controls">
+    <a href="#" class="print-btn" role="button" data-variant="primary">Print / Save as PDF</a>
+  </div>
+
+  <div class="demo-stage">
+    <iframe class="demo-iframe" src="doc-pure-flow.html" title="Pure flow mode document — Flatland"></iframe>
+  </div>
+
+  <footer class="site-footer">
+    <p>Built with logic in Vermont. No trees were harmed in the rendering of these PDFs.</p>
+    <p><a href="https://github.com/rlnorthcutt/stapled-pages">GitHub</a> · MIT License</p>
+  </footer>
+
+</body>
+</html>

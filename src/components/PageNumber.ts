@@ -16,8 +16,8 @@ export class PageNumber extends HTMLElement {
   static readonly TAG = 'page-number'
 
   connectedCallback(): void {
-    // Outside a stapled-pages context: show a fallback so authors see the placeholder
-    if (!this.closest('stapled-pages')) {
+    // Outside a stapled-doc context: show a fallback so authors see the placeholder
+    if (!this.closest('stapled-doc')) {
       this.textContent = '?'
     }
   }
