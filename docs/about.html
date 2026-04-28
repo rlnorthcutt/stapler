@@ -71,7 +71,7 @@
 
     <h2>Design principles</h2>
     <p><strong>Light DOM only.</strong> Authors must be able to style headers and footers with their own CSS. Shadow DOM breaks that. Every component uses Light DOM.</p>
-    <p><strong>Spacers, not masking.</strong> In flow mode, invisible spacer elements are injected at page boundaries to physically push content clear of header and footer zones. Nothing is hidden with an overlay. Everything in the DOM stays accessible.</p>
+    <p><strong>No hidden overlays.</strong> Headers and footers are stamped directly into each page's DOM. Nothing is hidden with an overlay. Everything stays accessible and styleable with plain CSS.</p>
     <p><strong>Print via CSS only.</strong> Page breaks are handled with <code>break-after: page</code> on spacer elements. There is no <code>beforeprint</code> or <code>afterprint</code> DOM surgery. What you see in the browser is what prints.</p>
     <p><strong>Zero runtime dependencies.</strong> The compiled output is a standalone IIFE. It will run in any browser that supports custom elements. It does not phone home. It does not require a CDN. It does not have opinions about your build toolchain because it does not know you have one.</p>
 

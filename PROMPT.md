@@ -1,83 +1,150 @@
-# Stapler — AI authoring guide
+# Stapler — AI Prompt
 
-Stapler renders multi-page documents in the browser. Drop in one script tag; no npm, no build step.
-Each page is a **fixed-size, hard-clipped container** — content that overflows is hidden.
-**You control what goes on each page. Stapler does not reflow content.**
+Paste the block below into any LLM conversation to generate a valid Stapler document.
 
 ---
+
+```
+You are generating an HTML document that uses the Stapler web component library for
+print-accurate, multi-page documents. Follow these rules exactly.
 
 ## Script tag
 
-```html
-<script src="https://cdn.jsdelivr.net/gh/rlnorthcutt/stapler@main/dist/stapler.min.js"></script>
-```
+Always include this in <head>:
 
----
+  <script src="https://cdn.jsdelivr.net/gh/rlnorthcutt/stapler@main/dist/stapler.min.js"></script>
 
-## Minimal document
+## Root element
 
-```html
+  <stapled-doc page-width="8.5in" page-height="11in" page-gap="2rem">
+
+page-width and page-height are required. Use "8.5in" × "11in" for US Letter, "210mm" × "297mm"
+for A4. page-gap controls the visual space between pages on screen only; it does not print.
+
+## Pages
+
+Each page is an <s-page> element:
+
+  <s-page>
+    <s-page-body style="padding: 2rem;">
+      <!-- your content here -->
+    </s-page-body>
+  </s-page>
+
+<s-page-body> is the content area between the header and footer. Always include it and set
+padding via inline style. Content that overflows the page is clipped — you are responsible
+for fitting content within: page-height − header-height − footer-height.
+
+## Headers and footers
+
+Define them once, directly inside <stapled-doc>. They are cloned onto every page automatically.
+Always set the height attribute explicitly — this avoids a measurement pass and is more reliable.
+
+  <page-header height="40px">
+    <div>My Document</div>
+    <div>Page <page-number format="n of total"></page-number></div>
+  </page-header>
+
+  <page-footer height="24px">
+    <div>Confidential</div>
+    <div>© Acme Corp 2025</div>
+  </page-footer>
+
+Style headers and footers with your own CSS — the library adds no colors, fonts, or padding.
+
+## Page numbers
+
+Use <page-number> inside any header or footer. Format options:
+  n            → "3"
+  n/total      → "3 / 8"
+  n of total   → "3 of 8"
+  total        → "8"
+
+## Suppressing headers and footers
+
+On <page-header> or <page-footer>:
+  skip-first         — suppress on page 1 (useful when page 1 is a cover)
+  skip-pages="1,3"   — suppress on specific pages (1-indexed, comma-separated)
+
+On an individual <s-page>:
+  skip-header        — suppress the header on this page only
+  skip-footer        — suppress the footer on this page only
+
+## Landscape inserts
+
+  <s-page page-width="11in" page-height="8.5in">
+    <s-page-body style="padding: 2rem;">
+      <!-- wide chart or table -->
+    </s-page-body>
+  </s-page>
+
+## Print CSS
+
+Add this to your stylesheet to pin the paper size when printing to PDF:
+
+  @page {
+    size: 8.5in 11in;  /* match page-width × page-height */
+    margin: 0;
+  }
+
+## Full example
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
+  <title>My Report</title>
   <script src="https://cdn.jsdelivr.net/gh/rlnorthcutt/stapler@main/dist/stapler.min.js"></script>
   <style>
-    /* Style body slot via CSS — never write <s-page-body> in HTML (JS creates it) */
-    s-page-body {
-      padding: 2rem 2.5rem;
-      overflow-y: hidden;
-    }
-
+    @page { size: 8.5in 11in; margin: 0; }
     page-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 0 1.5rem;
+      background: #1a1a2e;
+      color: white;
       font-size: 10px;
-      border-bottom: 1px solid #ddd;
     }
-
     page-footer {
       display: flex;
-      justify-content: flex-end;
+      justify-content: space-between;
       align-items: center;
       padding: 0 1.5rem;
+      border-top: 1px solid #e5e7eb;
       font-size: 10px;
-      color: #888;
+      color: #9ca3af;
     }
   </style>
 </head>
 <body>
 
-<stapled-doc page-width="6in" page-height="9in" page-gap="2rem">
+<stapled-doc page-width="8.5in" page-height="11in" page-gap="2rem">
 
-  <!-- Header template — cloned into every page automatically -->
-  <page-header height="36px">
-    <span>My Book</span>
-    <page-number format="n of total"></page-number>
+  <page-header height="40px" skip-first>
+    <div>My Report</div>
+    <div><page-number format="n of total"></page-number></div>
   </page-header>
 
-  <!-- Footer template — optional -->
   <page-footer height="24px">
-    <span>© 2026 Author Name</span>
+    <div>Confidential</div>
+    <div>© Acme Corp 2025</div>
   </page-footer>
 
-  <!-- Cover — no header or footer -->
+  <!-- Cover page — no header or footer -->
   <s-page skip-header skip-footer>
-    <h1>My Book</h1>
-    <p>By Author Name</p>
+    <s-page-body style="padding: 3rem; display: flex; flex-direction: column; justify-content: center;">
+      <h1>My Report</h1>
+      <p>Prepared by Acme Corp</p>
+    </s-page-body>
   </s-page>
 
-  <!-- Chapter page — header and footer stamped automatically -->
+  <!-- Page 2 onwards — header and footer stamped automatically -->
   <s-page>
-    <h2>Chapter 1: The Beginning</h2>
-    <p>Content here. Fit all text within the available body height.</p>
-  </s-page>
-
-  <!-- Another page -->
-  <s-page>
-    <p>Page 3 content…</p>
+    <s-page-body style="padding: 2rem 2.5rem;">
+      <h2>Executive Summary</h2>
+      <p>Content here.</p>
+    </s-page-body>
   </s-page>
 
 </stapled-doc>
@@ -85,97 +152,3 @@ Each page is a **fixed-size, hard-clipped container** — content that overflows
 </body>
 </html>
 ```
-
----
-
-## Rules you must follow
-
-| Rule | Detail |
-|------|--------|
-| `page-width` and `page-height` required | On `<stapled-doc>`. Accept `px`, `in`, `cm`, `mm`, `pt`, `rem`, `em`. |
-| `height` required | On every `<page-header>` and `<page-footer>`. |
-| Content must fit | Each page clips at its boundary. You are responsible for how much text goes on each page. |
-| CSS-first body styling | Style `s-page-body` in CSS. **Never write `<s-page-body>` in HTML** unless you need a different padding on one specific page. |
-| No inline padding on `<s-page>` | Put padding on `s-page-body` via CSS instead. |
-
----
-
-## Elements
-
-### `<stapled-doc>` — root wrapper
-
-| Attribute | Required | Description |
-|-----------|----------|-------------|
-| `page-width` | yes | Page width, e.g. `8.5in`, `210mm`, `816px` |
-| `page-height` | yes | Page height |
-| `page-gap` | no | Gap between pages on screen (default `2rem`) |
-| `preview="print"` | no | Removes gap and shadows — useful while laying out |
-
-### `<page-header>` and `<page-footer>` — doc-level templates
-
-Defined **once** as direct children of `<stapled-doc>`. JS clones them into every page.
-
-| Attribute | Required | Description |
-|-----------|----------|-------------|
-| `height` | yes | e.g. `40px` |
-| `skip-first` | no | Suppress on page 1 |
-| `skip-pages` | no | e.g. `"1,3"` — 1-indexed page numbers to suppress |
-
-### `<s-page>` — one page
-
-| Attribute | Description |
-|-----------|-------------|
-| `skip-header` | Suppress header on this page |
-| `skip-footer` | Suppress footer on this page |
-| `page-width` / `page-height` | Per-page size override (e.g. landscape insert) |
-
-### `<page-number>` — inline placeholder inside headers/footers
-
-| `format` | Output |
-|----------|--------|
-| `n` (default) | `3` |
-| `n of total` | `3 of 8` |
-| `n/total` | `3 / 8` |
-| `total` | `8` |
-
----
-
-## Common page sizes
-
-| Format | `page-width` | `page-height` |
-|--------|-------------|--------------|
-| US Letter | `8.5in` | `11in` |
-| A4 | `210mm` | `297mm` |
-| Trade paperback (6×9) | `6in` | `9in` |
-| Half-letter booklet | `5.5in` | `8.5in` |
-| Digest (5.5×8.5) | `5.5in` | `8.5in` |
-
----
-
-## How to calculate content that fits
-
-Available body height = `page-height` − `header-height` − `footer-height`
-
-A page with `page-height="9in"`, `header height="36px"`, `footer height="24px"`:
-- `9in = 864px` − `36px` − `24px` = **804px** of body space
-- At `font-size: 16px; line-height: 1.6` → ~31 lines per page
-
-When in doubt, put less on each page. Overflow is silently clipped.
-
----
-
-## Print to PDF
-
-Browser → Cmd/Ctrl+P → set:
-- Paper size: match your `page-width` × `page-height`
-- Margins: **None**
-- Background graphics: **on**
-
-Stapler auto-injects `@page { size: …; margin: 0; }` — no manual `@page` rule needed.
-
----
-
-## What Stapler is NOT for
-
-Long-form prose where the content length is unknown. You must decide what goes on each page.
-For reflowing documents, use Google Docs, Word, or LaTeX.

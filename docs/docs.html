@@ -42,13 +42,8 @@
         <ul>
           <li><a href="#getting-started">Getting Started</a></li>
           <li><a href="#anatomy">Anatomy of a Staple</a></li>
+          <li><a href="#how-it-works">How It Works</a></li>
           <li><a href="#attributes">Attributes Reference</a></li>
-        </ul>
-        <span class="sidebar-label">The Modes</span>
-        <ul>
-          <li><a href="#mode-explicit">Explicit Mode</a></li>
-          <li><a href="#mode-flow">Flow Mode</a></li>
-          <li><a href="#mode-pure-flow">Pure Flow</a></li>
         </ul>
         <span class="sidebar-label">Advanced</span>
         <ul>
@@ -57,6 +52,7 @@
           <li><a href="#refresh">Dynamic Refresh</a></li>
           <li><a href="#print">Printing to PDF</a></li>
           <li><a href="#css-properties">CSS Properties</a></li>
+          <li><a href="#ai">Using with AI</a></li>
         </ul>
       </nav>
     </aside>
@@ -70,25 +66,24 @@
 
       <h2 id="getting-started">Getting Started</h2>
       <p class="kicker">5-second setup</p>
-      <p>No npm. No bundler. Copy <code>stapler.min.js</code> into your project and reference it with a single script tag. All six custom elements register themselves immediately when the script runs.</p>
-      <pre><code>&lt;script src="stapler.min.js"&gt;&lt;/script&gt;</code></pre>
+      <p>No npm. No bundler. The easiest option is to load Stapler directly from the CDN:</p>
+      <pre><code>&lt;script src="https://cdn.jsdelivr.net/gh/rlnorthcutt/stapler@main/dist/stapler.min.js"&gt;&lt;/script&gt;</code></pre>
+      <p>Or <a href="https://cdn.jsdelivr.net/gh/rlnorthcutt/stapler@main/dist/stapler.min.js" download>download <code>stapler.min.js</code></a> and host it yourself. Either way, all custom elements register themselves immediately when the script runs.</p>
       <p>That's it. You're done installing. Write a page:</p>
-      <pre><code>&lt;stapled-doc mode="explicit" page-width="8.5in" page-height="11in"&gt;
+      <pre><code>&lt;stapled-doc page-width="8.5in" page-height="11in"&gt;
   &lt;s-page&gt;
-    &lt;h1&gt;Hello, paper.&lt;/h1&gt;
+    &lt;s-page-body style="padding: 2rem;"&gt;
+      &lt;h1&gt;Hello, paper.&lt;/h1&gt;
+    &lt;/s-page-body&gt;
   &lt;/s-page&gt;
 &lt;/stapled-doc&gt;</code></pre>
-
-      <div class="callout" data-tone="info">
-        <strong>For AI-generated documents:</strong> Always set <code>mode="explicit"</code> or <code>mode="flow"</code> explicitly. Auto-detection is a fallback for hand-authored HTML only.
-      </div>
 
       <h2 id="anatomy">The Anatomy of a Staple</h2>
       <p>Every Stapler document has the same basic structure: a root wrapper that sets the page dimensions, and page content inside it.</p>
 
       <p><code>&lt;stapled-doc&gt;</code> is the root. It reads your attributes, measures things, and does all the real work. Think of it as the stapler itself.</p>
 
-      <p><code>&lt;s-page&gt;</code> is a single page in explicit mode — a hard-clipped, fixed-size container. Content that overflows is hidden. This is intentional: if something doesn't fit on a page, it should be on a different page.</p>
+      <p><code>&lt;s-page&gt;</code> is a single page — a hard-clipped, fixed-size container. Content that overflows is hidden. This is intentional: if something doesn't fit on a page, it should be on a different page.</p>
 
       <p>Headers, footers, page breaks, and page numbers are all declared once inside <code>&lt;stapled-doc&gt;</code>. The library handles the repetition.</p>
 
@@ -105,12 +100,6 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td><code>mode</code></td>
-            <td><code>explicit</code> | <code>flow</code></td>
-            <td>auto</td>
-            <td>Required for AI-generated documents. Explicit = <code>&lt;s-page&gt;</code> children. Flow = freeform content with optional <code>&lt;page-spacer&gt;</code> elements.</td>
-          </tr>
           <tr>
             <td><code>page-width</code></td>
             <td>CSS length</td>
@@ -165,7 +154,7 @@
         </tbody>
       </table>
 
-      <h3><code>&lt;s-page&gt;</code> <small class="muted">(explicit mode only)</small></h3>
+      <h3><code>&lt;s-page&gt;</code></h3>
       <table>
         <thead>
           <tr>
@@ -203,12 +192,12 @@
         </tbody>
       </table>
 
-      <!-- THE MODES -->
+      <!-- HOW IT WORKS -->
 
-      <h2 id="mode-explicit">Explicit Mode — "The Control Freak"</h2>
-      <p>You own every pixel. Each <code>&lt;s-page&gt;</code> is a fixed-size, hard-clipped box. What you put in is what you get. Content that overflows is clipped. Use this when you know exactly what goes on every page: pitch decks, certificates, structured reports, cover pages.</p>
+      <h2 id="how-it-works">How It Works</h2>
+      <p>Each <code>&lt;s-page&gt;</code> is a fixed-size, hard-clipped box sized from your <code>page-width</code> and <code>page-height</code> attributes. What you put in is what you get — content that overflows is hidden. You control exactly what goes on every page.</p>
 
-      <pre><code>&lt;stapled-doc mode="explicit" page-width="8.5in" page-height="11in" page-gap="2rem"&gt;
+      <pre><code>&lt;stapled-doc page-width="8.5in" page-height="11in" page-gap="2rem"&gt;
 
   &lt;page-header height="40px" skip-first&gt;
     &lt;div&gt;My Document · &lt;page-number format="n of total"&gt;&lt;/page-number&gt;&lt;/div&gt;
@@ -221,10 +210,16 @@
 
   &lt;s-page skip-header skip-footer&gt;
     &lt;!-- Cover page — no header or footer --&gt;
+    &lt;s-page-body style="padding: 3rem;"&gt;
+      &lt;h1&gt;My Document&lt;/h1&gt;
+    &lt;/s-page-body&gt;
   &lt;/s-page&gt;
 
   &lt;s-page&gt;
     &lt;!-- Page 2 — header and footer stamped automatically --&gt;
+    &lt;s-page-body style="padding: 2rem;"&gt;
+      &lt;p&gt;Content here.&lt;/p&gt;
+    &lt;/s-page-body&gt;
   &lt;/s-page&gt;
 
   &lt;s-page page-width="11in" page-height="8.5in"&gt;
@@ -237,55 +232,10 @@
         <strong>Staple Jam:</strong> Content that overflows a page is clipped by design. You're responsible for making sure your content fits within <code>page-height − header-height − footer-height</code>.
       </div>
 
-      <h2 id="mode-flow">Flow Mode — "The Professional"</h2>
-      <p>Write content naturally in a single column. Use <code>&lt;page-spacer&gt;</code> elements to force section starts onto new pages. The library calculates each break's required height to bridge the gap to the next page's content area, accounting for headers, footers, and page gaps. Headers and footers are rendered on a separate layer, overlaid precisely over the flowing content.</p>
-
-      <pre><code>&lt;stapled-doc mode="flow" page-width="8.5in" page-height="11in" page-gap="2rem"&gt;
-
-  &lt;page-header height="36px"&gt;
-    My Report · Page &lt;page-number format="n"&gt;&lt;/page-number&gt;
-  &lt;/page-header&gt;
-
-  &lt;page-footer height="24px"&gt;
-    Confidential
-  &lt;/page-footer&gt;
-
-  &lt;h1&gt;Executive Summary&lt;/h1&gt;
-  &lt;p&gt;Content flows here naturally...&lt;/p&gt;
-
-  &lt;page-spacer&gt;&lt;/page-spacer&gt;
-
-  &lt;h2&gt;Section Two&lt;/h2&gt;
-  &lt;p&gt;This always starts on a new page.&lt;/p&gt;
-
-&lt;/stapled-doc&gt;</code></pre>
-
-      <h2 id="mode-pure-flow">Pure Flow — "The Librarian"</h2>
-      <p>No <code>&lt;page-spacer&gt;</code> elements. The library measures every block-level child, computes where page boundaries fall, and injects invisible <code>&lt;div class="sp-page-spacer"&gt;</code> elements to push content clear of header and footer zones. Total automation. Drop in a thousand lines of text and watch it paginate itself.</p>
-
-      <pre><code>&lt;stapled-doc mode="flow" page-width="8.5in" page-height="11in" page-gap="2rem"&gt;
-
-  &lt;page-header height="36px"&gt;
-    Checklist · &lt;page-number format="n of total"&gt;&lt;/page-number&gt;
-  &lt;/page-header&gt;
-
-  &lt;h1&gt;The Full Checklist&lt;/h1&gt;
-  &lt;ul&gt;
-    &lt;li&gt;Item one&lt;/li&gt;
-    &lt;li&gt;Item two&lt;/li&gt;
-    &lt;!-- ...as many items as you want --&gt;
-  &lt;/ul&gt;
-
-&lt;/stapled-doc&gt;</code></pre>
-
-      <div class="callout" data-tone="info">
-        <strong>Block-level granularity:</strong> Spacers are injected between block-level children. A paragraph taller than the remaining space on a page is moved to the next page in its entirety. This may leave whitespace at the bottom of some pages.
-      </div>
-
       <!-- ADVANCED -->
 
       <h2 id="stamping">Stamping Headers &amp; Footers</h2>
-      <p>Define your header and footer once, directly inside <code>&lt;stapled-doc&gt;</code>. The library clones them into every page, then removes the originals from the DOM. In explicit mode, they're stamped inside each <code>&lt;s-page&gt;</code>. In flow mode, they're rendered on an absolutely-positioned frame layer.</p>
+      <p>Define your header and footer once, directly inside <code>&lt;stapled-doc&gt;</code>. The library clones them into every <code>&lt;s-page&gt;</code> automatically, then removes the originals from the DOM.</p>
 
       <p>Style with plain CSS — the library sets no colors, fonts, or padding on your header and footer content:</p>
 
@@ -355,7 +305,7 @@ doc.refresh()
 // Listen for completion:
 doc.addEventListener('sp:ready', (e) =&gt; {
   console.log(e.detail)
-  // { pageCount: 3, mode: 'explicit', pageWidth: 816, pageHeight: 1056 }
+  // { pageCount: 3, pageWidth: 816, pageHeight: 1056 }
 })</code></pre>
 
       <p>The <code>sp:ready</code> event fires after every build, including the initial build and every <code>refresh()</code> call. It bubbles.</p>
@@ -398,6 +348,37 @@ doc.addEventListener('sp:ready', (e) =&gt; {
           </tr>
         </tbody>
       </table>
+
+      <h2 id="ai">Using with AI</h2>
+      <p>Stapler is designed to work well with LLMs. The markup is unambiguous, the attributes have explicit contracts, and there is no layout engine for the model to reason about — it just emits pages and the library handles the rest.</p>
+
+      <p>The quickest way to get started is to paste the <strong>Stapler AI Prompt</strong> into your conversation. It gives the model everything it needs: the script tag, element structure, attribute rules, and a complete working example.</p>
+
+      <p><a href="https://github.com/rlnorthcutt/stapler/blob/main/prompt.md" target="_blank" rel="noopener">View the AI prompt on GitHub →</a></p>
+
+      <h3>Key rules for AI-generated documents</h3>
+      <ul>
+        <li>Always include the CDN <code>&lt;script&gt;</code> tag in <code>&lt;head&gt;</code>.</li>
+        <li><code>page-width</code> and <code>page-height</code> are required on <code>&lt;stapled-doc&gt;</code>.</li>
+        <li>Always set <code>height</code> explicitly on <code>&lt;page-header&gt;</code> and <code>&lt;page-footer&gt;</code> — this skips a measurement pass and is more reliable.</li>
+        <li>Wrap page content in <code>&lt;s-page-body&gt;</code> and set padding via inline style.</li>
+        <li>Content that overflows a page is clipped. The model must fit content within <code>page-height − header-height − footer-height</code>.</li>
+        <li>Use <code>skip-header skip-footer</code> on a cover <code>&lt;s-page&gt;</code> and <code>skip-first</code> on <code>&lt;page-header&gt;</code> to suppress the header on page 1.</li>
+      </ul>
+
+      <h3>Minimal prompt to include in your conversation</h3>
+      <pre><code>Generate an HTML document using the Stapler web component library.
+Load it from the CDN:
+  &lt;script src="https://cdn.jsdelivr.net/gh/rlnorthcutt/stapler@main/dist/stapler.min.js"&gt;&lt;/script&gt;
+
+Use &lt;stapled-doc page-width="8.5in" page-height="11in"&gt; as the root.
+Each page is an &lt;s-page&gt; with an &lt;s-page-body style="padding: 2rem;"&gt; inside.
+Define &lt;page-header height="40px"&gt; and &lt;page-footer height="24px"&gt; once inside the root.
+Use &lt;page-number format="n of total"&gt;&lt;/page-number&gt; inside the header.
+The cover page should have skip-header skip-footer on its &lt;s-page&gt;.
+Add skip-first to &lt;page-header&gt; so the header is suppressed on page 1.
+Add @page { size: 8.5in 11in; margin: 0; } to the stylesheet.
+Content that overflows a page is clipped — fit all content within each page.</code></pre>
 
     </article>
   </div>

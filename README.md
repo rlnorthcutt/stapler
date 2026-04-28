@@ -16,14 +16,19 @@ Pandoc, or LaTeX. Stapler is for documents where the author controls what goes o
 
 ## Installation
 
-No npm. No build step. Copy `dist/stapler.js` (or `dist/stapler.min.js`) into your project
-and reference it:
+The easiest option is the CDN — no download required:
 
 ```html
-<script src="stapler.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/rlnorthcutt/stapler@main/dist/stapler.min.js"></script>
 ```
 
-Both files are self-registering. All custom elements are available immediately after the script runs.
+Or download `dist/stapler.min.js` and reference it locally:
+
+```html
+<script src="stapler.min.js"></script>
+```
+
+Both are self-registering. All custom elements are available immediately after the script runs.
 
 ---
 
