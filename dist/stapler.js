@@ -148,14 +148,49 @@ stapled-doc[preview="print"] s-page {
       this._footerTemplate = null;
       this._built = false;
       this._pageStyleEl = null;
+      this._shadowInitialized = false;
     }
     static {
       this.TAG = "stapled-doc";
     }
+    // When embed mode is active, all authored content lives in the shadow root.
+    // This getter lets build/teardown code operate on the right container without
+    // branching everywhere.
+    get _contentRoot() {
+      return this.shadowRoot ?? this;
+    }
     connectedCallback() {
-      waitForAssets(this).then(() => {
+      if (this.hasAttribute("embed")) {
+        this._initEmbedMode();
+      }
+      const assetRoot = this.shadowRoot ?? this;
+      waitForAssets(assetRoot).then(() => {
         requestAnimationFrame(() => this._build());
       });
+    }
+    // Attaches a shadow root, injects structural CSS, injects any author-supplied
+    // stylesheets (via `stylesheet` attribute or <link>/<style> children), then
+    // moves all remaining light-DOM children into the shadow root so they are
+    // isolated from the parent page's CSS.
+    _initEmbedMode() {
+      if (this._shadowInitialized) return;
+      const shadow = this.attachShadow({ mode: "open" });
+      const coreStyle = document.createElement("style");
+      coreStyle.textContent = CORE_CSS;
+      shadow.appendChild(coreStyle);
+      const stylesheetAttr = this.getAttribute("stylesheet");
+      if (stylesheetAttr) {
+        for (const href of stylesheetAttr.split(",").map((s) => s.trim()).filter(Boolean)) {
+          const link = document.createElement("link");
+          link.rel = "stylesheet";
+          link.href = href;
+          shadow.appendChild(link);
+        }
+      }
+      while (this.firstChild) {
+        shadow.appendChild(this.firstChild);
+      }
+      this._shadowInitialized = true;
     }
     refresh() {
       this._teardown();
@@ -173,7 +208,7 @@ stapled-doc[preview="print"] s-page {
       return parseToPx(this.getAttribute("page-gap") ?? "2rem", this);
     }
     _directChildren(tag) {
-      return Array.from(this.children).filter(
+      return Array.from(this._contentRoot.children).filter(
         (el) => el.tagName.toLowerCase() === tag
       );
     }
@@ -302,10 +337,11 @@ stapled-doc[preview="print"] s-page {
     // ─── Teardown ────────────────────────────────────────────────────────────
     _teardown() {
       if (!this._built) return;
-      if (this._headerTemplate) this.prepend(this._headerTemplate);
+      const root = this._contentRoot;
+      if (this._headerTemplate) root.prepend(this._headerTemplate);
       if (this._footerTemplate) {
-        const ref = this._headerTemplate ? this._headerTemplate.nextSibling : this.firstChild;
-        this.insertBefore(this._footerTemplate, ref);
+        const ref = this._headerTemplate ? this._headerTemplate.nextSibling : root.firstChild;
+        root.insertBefore(this._footerTemplate, ref);
       }
       const pages = this._directChildren("s-page");
       for (const page of pages) {

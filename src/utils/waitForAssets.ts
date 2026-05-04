@@ -6,7 +6,7 @@
  *
  * This ensures height measurements after this fence are stable.
  */
-export function waitForAssets(root: Element): Promise<void> {
+export function waitForAssets(root: Element | ShadowRoot): Promise<void> {
   const domReady = new Promise<void>((resolve) => {
     if (document.readyState !== 'loading') {
       resolve()

@@ -47,8 +47,10 @@ The other components are data containers — they parse attributes and expose th
 
 ## Key architectural decisions — do not change without good reason
 
-**Light DOM only.** Authors must be able to style headers and footers with their own CSS.
-Shadow DOM breaks that. Every component uses Light DOM.
+**Light DOM by default.** Authors must be able to style headers and footers with their own CSS.
+Every component uses Light DOM in normal mode. The one exception is `embed` mode, which
+attaches a shadow root to `<stapled-doc>` specifically to isolate the document's CSS from
+the host page — see SPEC.md §4a. Do not add Shadow DOM anywhere else.
 
 **Spacers, not masking.** In flow mode, invisible `<div class="sp-page-spacer">` elements
 are injected at page boundaries to physically push content clear of header/footer/gap zones.
@@ -125,7 +127,7 @@ flow build (spacer injection, frame layer offsets, `sp:ready` event, refresh).
 ## Hard rules
 
 1. **Zero runtime dependencies.** The compiled output must be a standalone IIFE.
-2. **No Shadow DOM.** Authors need CSS access to everything.
+2. **No Shadow DOM except in embed mode.** Authors need CSS access to everything in normal mode. Shadow DOM is only used on `<stapled-doc>` when the `embed` attribute is present.
 3. **No visual styles in `css.ts`.** Brand-agnostic structural rules only.
 4. **Don't strip author attributes when cloning templates.** Only remove `height`,
    `skip-first`, and `skip-pages` from clones — leave everything else.

@@ -64,7 +64,7 @@
     <section class="hero">
       <p class="kicker">The Showroom</p>
       <h1>One mode. Two documents.</h1>
-      <p class="hero-sub">Each demo is a live rendering — no screenshots, no iframes. The library runs in your browser and lays out the document in real time.</p>
+      <p class="hero-sub">Each demo is a live rendering — no screenshots, no server-side processing. The library runs in your browser and lays out the document in real time. Demo 1 renders inside an iframe; Demo 2 uses the new <code>embed</code> mode and runs directly inside this page.</p>
     </section>
 
     <section class="section-full">
@@ -89,13 +89,13 @@
 
           <div class="card demo-card">
             <header>
-              <p class="kicker">Demo 2</p>
+              <p class="kicker">Demo 2 · Embed Mode</p>
               <h3>An Apology for Printers</h3>
               <p class="muted">Benjamin Franklin, 1731</p>
             </header>
-            <p>A pamphlet typeset in period typefaces across 8 explicit pages. Each section occupies its own page, with a cover, table of contents, numbered arguments, and colophon.</p>
+            <p>A pamphlet typeset in period typefaces across 8 explicit pages, embedded directly inside a website page. Shadow DOM isolates the document's CSS from the host page — no iframe required.</p>
             <ul class="demo-card-list">
-              <li>8 hard-clipped pages</li>
+              <li>8 hard-clipped pages via <code>embed</code> mode</li>
               <li>Period typefaces via Google Fonts</li>
               <li>Running header with page numbers</li>
             </ul>

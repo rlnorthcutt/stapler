@@ -1,6 +1,7 @@
 import { parseToPx } from '../utils/parseToPx.js'
 import { measureHeight } from '../utils/measureHeight.js'
 import { waitForAssets } from '../utils/waitForAssets.js'
+import { CORE_CSS } from '../css.js'
 import { PageHeader } from './PageHeader.js'
 import { PageFooter } from './PageFooter.js'
 import { SPage } from './SPage.js'
@@ -32,11 +33,57 @@ export class Stapler extends HTMLElement {
   private _footerTemplate: PageFooter | null = null
   private _built = false
   private _pageStyleEl: HTMLStyleElement | null = null
+  private _shadowInitialized = false
+
+  // When embed mode is active, all authored content lives in the shadow root.
+  // This getter lets build/teardown code operate on the right container without
+  // branching everywhere.
+  private get _contentRoot(): Element | ShadowRoot {
+    return this.shadowRoot ?? this
+  }
 
   connectedCallback(): void {
-    waitForAssets(this).then(() => {
+    if (this.hasAttribute('embed')) {
+      this._initEmbedMode()
+    }
+    const assetRoot = this.shadowRoot ?? this
+    waitForAssets(assetRoot).then(() => {
       requestAnimationFrame(() => this._build())
     })
+  }
+
+  // Attaches a shadow root, injects structural CSS, injects any author-supplied
+  // stylesheets (via `stylesheet` attribute or <link>/<style> children), then
+  // moves all remaining light-DOM children into the shadow root so they are
+  // isolated from the parent page's CSS.
+  private _initEmbedMode(): void {
+    if (this._shadowInitialized) return
+
+    const shadow = this.attachShadow({ mode: 'open' })
+
+    // Structural CSS scoped to this shadow root instead of <head>
+    const coreStyle = document.createElement('style')
+    coreStyle.textContent = CORE_CSS
+    shadow.appendChild(coreStyle)
+
+    // `stylesheet="a.css, b.css"` convenience attribute — one or more URLs
+    const stylesheetAttr = this.getAttribute('stylesheet')
+    if (stylesheetAttr) {
+      for (const href of stylesheetAttr.split(',').map((s) => s.trim()).filter(Boolean)) {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = href
+        shadow.appendChild(link)
+      }
+    }
+
+    // Move all light-DOM children (<style>, <link>, <page-header>, <s-page>, …)
+    // into the shadow root in document order.
+    while (this.firstChild) {
+      shadow.appendChild(this.firstChild)
+    }
+
+    this._shadowInitialized = true
   }
 
   refresh(): void {
@@ -60,7 +107,7 @@ export class Stapler extends HTMLElement {
   }
 
   private _directChildren<T extends HTMLElement>(tag: string): T[] {
-    return Array.from(this.children).filter(
+    return Array.from(this._contentRoot.children).filter(
       (el) => el.tagName.toLowerCase() === tag
     ) as T[]
   }
@@ -241,13 +288,15 @@ export class Stapler extends HTMLElement {
   private _teardown(): void {
     if (!this._built) return
 
+    const root = this._contentRoot
+
     // Re-add template stubs so _build() can find and re-read them
-    if (this._headerTemplate) this.prepend(this._headerTemplate)
+    if (this._headerTemplate) root.prepend(this._headerTemplate)
     if (this._footerTemplate) {
       const ref = this._headerTemplate
         ? this._headerTemplate.nextSibling
-        : this.firstChild
-      this.insertBefore(this._footerTemplate, ref)
+        : root.firstChild
+      root.insertBefore(this._footerTemplate, ref)
     }
 
     const pages = this._directChildren<SPage>('s-page')

@@ -47,7 +47,7 @@ all visual styling belongs to the author.
 - Auto-reflowing text at the word or character level across pages (block-level flow only)
 - Mid-paragraph splitting — content moves as whole blocks
 - Compatibility with IE or legacy Edge
-- Shadow DOM isolation — Light DOM only so authors have full CSS access to header/footer content
+- Shadow DOM isolation in the default (non-embed) mode — Light DOM only so authors have full CSS access to header/footer content
 - Complex CSS pagination (`@page` counters, running elements) — that is Paged.js territory
 
 ---
@@ -137,6 +137,8 @@ builds the final DOM structure, and manages refresh lifecycle.
 | `page-width`  | CSS length                          | `8.5in`     | Width of each page |
 | `page-height` | CSS length                          | `11in`      | Height of each page |
 | `page-gap`    | CSS length                          | `2rem`      | Visual gap between pages |
+| `embed`       | Boolean attribute                   | false       | Activates embed mode — see §4a |
+| `stylesheet`  | URL or comma-separated URLs         | —           | Author CSS loaded into the shadow root (embed mode only) |
 
 Auto-detection fallback (human-authored HTML only): `<s-page>` children → explicit;
 `<page-spacer>` present → flow-breaks; neither → pure flow.
@@ -232,6 +234,72 @@ the next page's content area. No content is ever masked.
 **Best for:** long-form content (checklists, reports) where page breaks fall naturally.
 
 **Print behavior:** `break-after: page` on each injected `.sp-page-spacer`.
+
+---
+
+## 4a. Embed Mode
+
+### Purpose
+
+When `<stapled-doc>` is dropped into a pre-existing webpage (not an iframe), the host
+page's CSS can collide with stapler's structural rules in both directions:
+
+- **Inward**: host `h1`, `p`, `a` etc. rules cascade into page headers/footers and content areas
+- **Outward**: stapler structural CSS (injected into `<head>`) is global and could be affected by
+  high-specificity host rules
+
+Embed mode uses Shadow DOM to create a complete CSS isolation boundary. The document's
+HTML remains in the real DOM (visible to search crawlers and LLM bots), but styled
+independently of the host page.
+
+### Activation
+
+```html
+<stapled-doc embed page-width="8.5in" page-height="11in" stylesheet="my-doc.css">
+  …pages…
+</stapled-doc>
+```
+
+### What changes in embed mode
+
+1. A shadow root is attached to `<stapled-doc>` (`mode: 'open'`).
+2. Stapler's structural CSS is injected as a `<style>` inside the shadow root (not `<head>`).
+3. All light-DOM children (`<page-header>`, `<s-page>`, etc.) are moved into the shadow root,
+   giving them shadow CSS isolation while keeping their HTML in the real DOM for crawlability.
+4. Author CSS is loaded inside the shadow root — not the host page.
+
+### Author CSS injection
+
+Two mechanisms, usable together:
+
+**`stylesheet` attribute** — comma-separated list of URLs loaded as `<link>` elements in the shadow root:
+
+```html
+<stapled-doc embed stylesheet="doc-base.css, brand.css">
+```
+
+**Inline `<style>` / `<link>` children** — placed as children of `<stapled-doc>` before the pages; moved into the shadow root automatically:
+
+```html
+<stapled-doc embed>
+  <link rel="stylesheet" href="doc-base.css">
+  <style>s-page { border: 1px solid #ddd; }</style>
+  <s-page>…</s-page>
+</stapled-doc>
+```
+
+### Crawlability note
+
+The shadow root is opened (`mode: 'open'`), and all page content elements are real DOM nodes —
+not slotted. Google and modern headless browsers process open shadow DOM. For LLM crawlers
+that fetch raw HTML only, the custom element tags and their text content are present in the
+document source regardless of shadow DOM.
+
+### What does NOT change in embed mode
+
+- Build logic, teardown, refresh, and all rendering behavior are identical.
+- The `@page` print rule is still injected into `document.head` (it is always document-global).
+- `sp:ready` fires normally on the `<stapled-doc>` element.
 
 ---
 
