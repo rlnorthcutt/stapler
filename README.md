@@ -208,7 +208,12 @@ page-footer {
 
 ## Print to PDF
 
-Open the document in Chrome or Edge, press **Cmd/Ctrl+P**, set:
+There are two scenarios, and they want different tools.
+
+### Standalone documents
+
+When the stapler doc is the page — open directly in a browser, or the sole document inside an iframe — `window.print()` is the right call. Open in Chrome or Edge, press **Cmd/Ctrl+P**, and set:
+
 - Paper size: match your `page-width` × `page-height`
 - Margins: None
 - Background graphics: on
@@ -220,6 +225,44 @@ chrome --headless --print-to-pdf=output.pdf --no-margins your-document.html
 ```
 
 > Stapler automatically injects the `@page { size: …; margin: 0; }` rule. No manual `@page` rule needed.
+
+If the stapler doc lives inside an iframe on a host page, have the parent post a message and let the iframe call `window.print()` on itself:
+
+```js
+// parent
+iframe.contentWindow.postMessage({ type: 'print' }, '*');
+
+// inside the iframe
+window.addEventListener('message', (e) => {
+  if (e.data?.type === 'print') window.print();
+});
+```
+
+The iframe owns its `<head>`, its stylesheets, and its `@page` rule, so it has to be the one to drive the dialog.
+
+### Embedded in a larger page
+
+When `<stapled-doc>` is one element inside a larger host page, `window.print()` prints the entire host page, which is rarely what you want. Use the companion [`<print-element-button>`](https://github.com/rlnorthcutt/print-element-button) custom element. It prints just the target element in an isolated iframe and clones the host document's `<head>` so the stapler's styles travel with it.
+
+Drop in the script:
+
+```html
+<script type="module" src="https://cdn.jsdelivr.net/gh/rlnorthcutt/print-element-button@main/dist/print-element-button.min.js"></script>
+```
+
+Then add a button targeting your stapler:
+
+```html
+<print-element-button target="stapled-doc" page-size="8.5in 11in" margins="0">
+  Print Document
+</print-element-button>
+```
+
+The `page-size` and `margins` attributes get written into the print iframe's `@page` rule, so the stapler doc prints at its declared dimensions without margin chrome.
+
+### Why two tools?
+
+They solve different problems. `<print-element-button>` means "print this element from my document" — it borrows the host page's styles and renders the target in isolation. Iframe-driven `window.print()` means "tell that document to print itself" — the iframe already has its own head and styles, so it should drive its own dialog. Mixing the two either breaks on cross-origin iframes or strips the wrong styles.
 
 ---
 
@@ -265,46 +308,6 @@ npm run typecheck    # type-check without compiling
 
 Source is TypeScript in `src/`. Entry point is `src/stapler.ts`. Output is a single
 IIFE with no exports and no runtime dependencies.
-
----
-
-## Migration from 0.x
-
-### Breaking changes in v0.5.0
-
-- **`mode` attribute removed.** There is only one mode (explicit). Remove `mode="explicit"` from your markup. If you were using `mode="flow"`, see below.
-- **`page-width` and `page-height` are now required.** Previously they had defaults.
-- **`<page-spacer>` element removed.**
-- **`<s-page-body>` added.** The body slot for page content. Auto-created if you omit it.
-- **`sp:ready` event `detail.mode` removed.** Only `pageCount`, `pageWidth`, `pageHeight`.
-
-### Migrating from explicit mode (simple)
-
-Remove `mode="explicit"` from your `<stapled-doc>` tag. Optionally add `<s-page-body>` wrappers for padding control:
-
-```html
-<!-- before -->
-<stapled-doc mode="explicit" page-width="8.5in" page-height="11in">
-  <s-page>
-    <div style="padding: 2rem;">Content</div>
-  </s-page>
-</stapled-doc>
-
-<!-- after -->
-<stapled-doc page-width="8.5in" page-height="11in">
-  <s-page>
-    <s-page-body style="padding: 2rem;">Content</s-page-body>
-  </s-page>
-</stapled-doc>
-```
-
-### Migrating from flow mode
-
-Flow mode has been removed. You have two options:
-
-1. **Convert to explicit mode:** Wrap each logical page's content in an `<s-page>`. This works well for documents where you know the content of each page.
-
-2. **Pin to v0.4.x:** If you need flow mode for long-form content, keep the v0.4 build. For new documents of that type, use Google Docs, Word, Pandoc, or LaTeX — tools built for paginated prose.
 
 ---
 

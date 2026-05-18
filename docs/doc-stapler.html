@@ -13,12 +13,15 @@
     .sample-staple page-header {
       background: #1a1a2e;
       color: #80caff;
-      border-bottom-color: #2d3748;
+      border-bottom :2px solid #80caff;
+      padding: 0.5rem 2rem;
     }
     .sample-staple page-footer {
       background: #1a1a2e;
-      color: rgba(128, 202, 255, 0.55);
-      border-top-color: #2d3748;
+      color: rgba(128, 202, 255, 0.9);
+      border-top :2px solid #80caff;
+      justify-content: space-between;
+      display: flex;
     }
     .sample-staple s-page {
       font-size: 13px;
@@ -28,7 +31,7 @@
       font-family: Georgia, 'Times New Roman', serif;
     }
     .sample-staple s-page-body {
-      padding: 2.5rem;
+      padding: 1rem 2rem;
     }
     .staple-cover {
       position: absolute;
@@ -83,22 +86,168 @@
     .sample-staple s-page p {
       margin-bottom: 0.85rem;
     }
+    /* ---- timeline (page 5) ---- */
+    .tl {
+      position: relative;
+      margin: 1.1rem 0 1rem;
+      padding-left: 1.7rem;
+    }
+    .tl::before {
+      content: "";
+      position: absolute;
+      left: 0.31rem;
+      top: 0.4rem;
+      bottom: 0.4rem;
+      width: 2px;
+      background: #dde1e7;
+    }
+    .tl-row {
+      position: relative;
+      margin-bottom: 0.6rem;
+    }
+    .tl-row:last-child { margin-bottom: 0; }
+    .tl-row::before {
+      content: "";
+      position: absolute;
+      left: -1.7rem;
+      top: 0.16rem;
+      width: 0.62rem;
+      height: 0.62rem;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 2px solid #1a1a2e;
+      box-sizing: border-box;
+    }
+    .tl-row.is-now::before {
+      border-color: #b3322a;
+      background: #b3322a;
+    }
+    .tl-year {
+      font-family: ui-monospace, Menlo, monospace;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: #2d588f;
+    }
+    .tl-row.is-now .tl-year { color: #b3322a; }
+    .tl-desc { display: block; margin-top: 0.04rem; }
+    /* ---- figures ---- */
+    .fig { text-align: center; margin: 1rem 0 0.3rem; }
+    .fig svg { max-width: 100%; height: auto; }
+    .fig.fig-anatomy svg { max-width: 320px; }
+    .fig.fig-stapler svg { max-width: 300px; }
+    .fig-cap {
+      font-size: 0.66rem;
+      font-style: italic;
+      color: #9aa0ac;
+      text-align: center;
+      margin: 0 0 1rem;
+    }
+    /* ---- spec strip (anatomy page) ---- */
+    .spec-strip {
+      display: flex;
+      border: 1px solid #e3e6ea;
+      border-radius: 5px;
+      margin: 1.05rem 0;
+      overflow: hidden;
+    }
+    .spec-strip > div {
+      flex: 1;
+      padding: 0.6rem 0.55rem;
+      text-align: center;
+    }
+    .spec-strip > div + div { border-left: 1px solid #e3e6ea; }
+    .spec-v {
+      font-family: ui-monospace, Menlo, monospace;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #1a1a2e;
+    }
+    .spec-l {
+      font-size: 0.63rem;
+      line-height: 1.4;
+      color: #737b88;
+      margin-top: 0.22rem;
+    }
+    /* ---- callout (Hotchkiss page) ---- */
+    .callout {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background: #f3f5f8;
+      border-left: 3px solid #1a1a2e;
+      padding: 0.7rem 1rem;
+      margin: 1.05rem 0;
+    }
+    .callout-jp {
+      font-size: 1.65rem;
+      line-height: 1;
+      color: #1a1a2e;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .callout-tx {
+      font-size: 0.72rem;
+      color: #5b6470;
+      font-style: italic;
+    }
+    /* ---- comparison table (spec sheet) ---- */
+    .cmp {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0.95rem 0 1rem;
+    }
+    .cmp th {
+      font-family: ui-monospace, Menlo, monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: #1a1a2e;
+      text-align: left;
+      padding: 0.4rem 0.5rem 0.45rem;
+      border-bottom: 2px solid #1a1a2e;
+    }
+    .cmp td {
+      font-size: 0.78rem;
+      padding: 0.4rem 0.5rem;
+      border-bottom: 1px solid #ebedf0;
+      vertical-align: top;
+    }
+    .cmp tr:last-child td { border-bottom: none; }
+    .cmp .k {
+      font-family: ui-monospace, Menlo, monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #9aa0ac;
+      width: 27%;
+      padding-top: 0.5rem;
+    }
+    .cmp .a, .cmp .b { width: 36.5%; }
+    .cmp code {
+      font-family: ui-monospace, Menlo, monospace;
+      font-size: 0.72rem;
+      background: #f3f5f8;
+      padding: 0.05rem 0.25rem;
+      border-radius: 3px;
+    }
+    .cmp .zero {
+      font-family: ui-monospace, Menlo, monospace;
+      font-weight: 700;
+      color: #1a1a2e;
+    }
   </style>
 </head>
 <body>
-
   <stapled-doc class="sample-staple" page-width="7in" page-height="9in" page-gap="2rem">
-
     <page-header height="36px" skip-first>
       <span>The Staple: A 120-Year Journey</span>
-      <span>Page <page-number format="n of total"></page-number></span>
     </page-header>
-
     <page-footer height="28px" skip-first>
-      <span>A Stapler Production</span>
-      <span>Historical Division</span>
+      <span>A Stapler Production &nbsp;·&nbsp; Historical Division</span>
+      <span>Page <page-number format="n of total"></page-number></span>
     </page-footer>
-
+    <!-- ============ PAGE 1 — COVER ============ -->
     <s-page skip-header skip-footer>
       <div class="staple-cover">
         <div class="staple-icon-wrap">
@@ -113,27 +262,204 @@
         <p class="cover-year">A brief history &nbsp;·&nbsp; 1866–present</p>
       </div>
     </s-page>
-
+    <!-- ============ PAGE 2 — FROM EYELETS TO WIRE ============ -->
     <s-page>
       <h2>From Eyelets to Wire</h2>
-      <p>The modern staple did not spring fully formed from the minds of Victorian industrialists. It arrived slowly, through a long succession of metal fasteners, paper clips, and desperate improvisation. The first devices for joining paper were little more than eyelets punched through a stack of sheets and bent flat — a process requiring a small hammer and considerable patience.</p>
-      <p>In 1866, the McGill Single-Stroke Staple Press was patented in the United States. It was a formidable piece of machinery, capable of driving a single staple through a modest stack of paper with the force of a lever. Each staple had to be loaded individually. Progress was measured in minutes per document.</p>
-      <p>By the turn of the century, the Hotchkiss No. 1 had changed everything. A French invention manufactured with Germanic precision, it introduced the strip-loaded staple magazine — a coil of wire pre-formed into individual staples and fed automatically with each stroke. For the first time, a clerk could staple a document without breaking concentration. The modern office was now possible.</p>
-      <p>Early adopters reported the experience as "transformative." A 1908 account in <em>The Office Supplies Gazette</em> described it thus: "One strikes the lever, and the pages are joined — permanently, cleanly, with none of the rattling uncertainty of the eyelet punch. The Hotchkiss has made the staple civilized."</p>
-      <p>The wire gauge, the crown width, the leg length — these are not arbitrary specifications. They are the result of a hundred and twenty years of refinement, each dimension calculated against every other, each tolerance the product of ten thousand failed predecessors. A modern staple is a solved problem.</p>
+      <p>The modern staple did not arrive in one stroke. It came together over several decades, through patents that didn't quite work and a long line of clerks who would rather have done anything else. The alternative was threading a length of ribbon through a punched hole and tying it off.</p>
+      <p>Eighteenth-century France produced what may be the earliest known stapler, a small handheld press said to have belonged to Louis XV and stamped with his royal coat of arms. The artifact has never been firmly authenticated, and the king is unavailable for comment. Whatever its provenance, it did not catch on. For the next hundred years, "fastening a document" meant a punch and a length of thread tied off in a knot.</p>
+      <p>The real beginning is 1866. George W. McGill, a prolific inventor working out of Washington and later New York, was granted US Patent 56,587 for a small bendable brass fastener, the recognizable ancestor of the modern staple. The next year, in August 1867, he received patent 67,665 for the press to drive it. He had now patented both the consumable and the device that consumed it, which is the structural foundation of every office-supply business since.</p>
+      <p>He was not alone. Albert Kletzker of St. Louis patented a competing fastener in 1868. C. H. Gould obtained an English patent the same year. The 1870s saw a small patent rush around paper fastening that produced more inventors than products. It also produced the central engineering insight. In 1877, Henry R. Heyl of Philadelphia filed US Patent 195,603 for a machine that did not merely insert a staple but drove and clinched it in a single stroke. Before Heyl, a stapler could punch legs through a stack of paper and simply stop; the legs jutted out the back, holding nothing in particular. Heyl folded them flat against an anvil on the underside. This is the entire trick. Nothing essential has been added since.</p>
+      <p>McGill, undeterred by the competition, kept iterating. He showed his fasteners at the 1876 Philadelphia Centennial Exhibition and walked off with a first-prize medal. In February 1879 he was granted patent 212,316 for the McGill Single-Stroke Staple Press. The machine weighed two and a half pounds and loaded one half-inch staple at a time. It is generally considered the first commercially successful stapler.</p>
+      <p>Commercially successful, though, is not the same as commercially viable. A contemporary account notes that a single McGill press was thought sufficient for an office of five hundred employees. Each staple still had to be hand-loaded. Progress was measured in minutes per document. The office was waiting for its workhorse, and it would arrive from Norwalk, Connecticut.</p>
     </s-page>
-
+    <!-- ============ PAGE 3 — THE HOTCHKISS ERA ============ -->
+    <s-page>
+      <h2>The Hotchkiss Era</h2>
+      <p>In 1893 a small office-supply concern called the Jones Manufacturing Company was incorporated in Norwalk, Connecticut. Among its principal organizers was a Waterbury stationer named Eli Hubbell Hotchkiss. By 1897 Hotchkiss owned the company outright and had renamed it after himself. By every available measure this was the dullest possible corporate origin story, and within a decade it had given Japan its word for stapler.</p>
+      <p>The breakthrough was the Hotchkiss No. 1 Paper Fastener, introduced in 1895. The innovation was not in driving the staple, which had been solved by Heyl, nor in clinching it, also solved by Heyl. The innovation was in the supply. The No. 1 fed staples from a long strip of pre-formed wires held together with a thin adhesive. The clerk pressed once; one staple separated, drove, clinched. On the next press, the strip advanced and the following staple slid into position. For the first time, a stapler could be operated continuously, without thought, the way a typewriter is operated.</p>
+      <p>In practice, the early Hotchkiss machines still asked something of the user. Separating a staple from the strip took such a firm strike that clerks frequently kept a small mallet on the desk for the more stubborn fasteners. For roughly forty years, the office stapler shipped, in spirit, with a hammer. Swingline finally retired the mallet in 1939 with a top that flipped open for loading. Then, having reached the obvious endpoint, the company largely stopped improving it.</p>
+      <p>Eli Hotchkiss exported aggressively. A shipment of No. 1 fasteners arrived in Japan in the early twentieth century, where no equivalent device existed and no word existed for one either. The product and the brand walked through the door together, and only the brand stayed. A stapler in Japanese is, to this day, a <em>hotchikisu</em>, locked into the language like a fly in amber. The same word made its way into Korean as 호치키스, apparently carried over during the Japanese occupation.</p>
+      <div class="callout">
+        <span class="callout-jp" lang="ja">ホッチキス</span>
+        <span class="callout-tx">hotchikisu &nbsp;·&nbsp; Japanese, common noun: "stapler." Named, permanently, after the company that made the first good one.</span>
+      </div>
+      <p>There is a wrinkle worth knowing. Some Japanese reference works credit the stapler not to Eli of Norwalk but to one Benjamin B. Hotchkiss. He was an American arms maker who emigrated to France and founded a famous Paris-based artillery and machine-gun concern. He had nothing whatever to do with staplers, but he was almost certainly a cousin of Eli's. The Japanese, receiving the brand at one remove from the man, appear to have quietly merged the two. The Hotchkiss family thus enjoys the distinction of having lent its name to two unrelated mechanical devices, exactly one of which is permitted in a school.</p>
+    </s-page>
+    <!-- ============ PAGE 4 — AN IMPROBABLE CULTURAL FOOTNOTE ============ -->
+    <s-page>
+      <h2>An Improbable Cultural Footnote</h2>
+      <p>For most of the twentieth century the stapler was a piece of office furniture. It sat on the desk and did its job. No one wrote about it.</p>
+      <p>Then, in 1999, the comedy <em>Office Space</em> needed a stapler, and the script wanted a real brand. The director, Mike Judge, approached Bostitch first. Bostitch declined. He approached Boston, the second-largest brand at the time. Boston declined. Swingline said yes, asked for nothing, and changed company history for the trouble.</p>
+      <p>The script called for the stapler to be a vivid red, bright enough to read across a wide shot and a small visual jolt against the muted grays of an Initech cubicle. Swingline, at the time, made staplers in gray and black. They did not make a red one. The film's prop master, Stan Gilbert, bought a fleet of standard Swingline 747s and got to work. He applied auto-body filler to the top to give the hump a more pronounced bulb, painted them red, and added vinyl Swingline logos to the sides because the original logo sat on top and would no longer photograph. He made roughly ten of these and handed them to the camera.</p>
+      <div class="fig fig-stapler">
+        <svg viewBox="0 0 320 130" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Side profile of a red desktop stapler">
+          <rect x="66"  y="111" width="22" height="8"  rx="2.5" fill="#7e241d"/>
+          <rect x="208" y="111" width="22" height="8"  rx="2.5" fill="#7e241d"/>
+          <rect x="44"  y="91"  width="234" height="21" rx="7"   fill="#9c2a22"/>
+          <rect x="250" y="98"  width="46" height="9"  rx="2.5" fill="#9c2a22"/>
+          <circle cx="52" cy="91" r="11" fill="#7e241d"/>
+          <path d="M54 88 C50 62 66 48 108 47 L194 47 C234 47 260 55 274 73 L278 80 C280 85 276 89 270 89 L70 89 C58 89 54 91 54 88 Z" fill="#b3322a"/>
+          <circle cx="52" cy="91" r="3.4" fill="#b3322a"/>
+        </svg>
+      </div>
+      <p class="fig-cap">Fig. 1 — A red stapler. Repainted with a slightly larger hump.</p>
+      <p>The film opened on February 19, 1999, and lost money. It earned $10.8 million against a $10 million budget. Technically a profit, mathematically a wash, culturally a flop. Then it began to circulate on VHS. Then on Comedy Central. Then it conquered the IT departments. Within two years <em>Office Space</em> had quietly become the most quoted film in the American white-collar workforce, and fans started writing to Swingline asking where they could buy a red stapler. Swingline, which still did not make one, started a development project. In April 2002 the company shipped a red 747. That was three years after a comedy about loathing your office made it the most famous stapler in the world.</p>
+      <p>Today every new Swingline employee in the United States is given a red stapler on the first day. The red 747 is the company's second best-selling product, after the standard black one.</p>
+      <p><em>The staple is a closed problem. Its cultural life apparently is not.</em></p>
+    </s-page>
+    <!-- ============ PAGE 5 — TIMELINE ============ -->
+    <s-page>
+      <h2>One Hundred Twenty Years, Abridged</h2>
+      <p>The staple arrived gradually, through roughly two decades of patents and a fair number of lawsuits over who, exactly, had invented it. The essential beats:</p>
+      <div class="tl">
+        <div class="tl-row">
+          <span class="tl-year">1866</span>
+          <span class="tl-desc">George W. McGill patents a small bendable wire fastener, US&nbsp;56,587. The staple now exists.</span>
+        </div>
+        <div class="tl-row">
+          <span class="tl-year">1867</span>
+          <span class="tl-desc">McGill patents a press to drive that fastener through paper. The staple now has a home.</span>
+        </div>
+        <div class="tl-row">
+          <span class="tl-year">1876</span>
+          <span class="tl-desc">His fasteners win a first-prize medal at the Philadelphia Centennial Exhibition.</span>
+        </div>
+        <div class="tl-row">
+          <span class="tl-year">1877</span>
+          <span class="tl-desc">Henry R. Heyl patents the first machine to drive and clinch a staple in one stroke, US&nbsp;195,603. The trick is now complete.</span>
+        </div>
+        <div class="tl-row">
+          <span class="tl-year">1879</span>
+          <span class="tl-desc">The McGill Single-Stroke Staple Press reaches the market. The first stapler that truly sells.</span>
+        </div>
+        <div class="tl-row">
+          <span class="tl-year">1895</span>
+          <span class="tl-desc">E.&nbsp;H. Hotchkiss of Norwalk, Connecticut ships the No. 1 Paper Fastener, feeding staples from a connected strip. Reloading stops being an event.</span>
+        </div>
+        <div class="tl-row">
+          <span class="tl-year">1939</span>
+          <span class="tl-desc">Swingline's stapler opens at the top. Drop a row in, close it. No one has meaningfully improved on this since.</span>
+        </div>
+        <div class="tl-row">
+          <span class="tl-year">1999</span>
+          <span class="tl-desc">A red stapler appears in <em>Office Space</em> and quietly walks off with the film.</span>
+        </div>
+        <div class="tl-row">
+          <span class="tl-year">2002</span>
+          <span class="tl-desc">Swingline begins manufacturing red staplers to satisfy demand for a product it never made.</span>
+        </div>
+        <div class="tl-row is-now">
+          <span class="tl-year">TODAY</span>
+          <span class="tl-desc">Stapler.js. The staple stops being an object and becomes a script tag.</span>
+        </div>
+      </div>
+      <p>A century and change of refinement, and the job description never changed: hold the pages together, and ask for nothing in return.</p>
+    </s-page>
+    <!-- ============ PAGE 6 — ANATOMY ============ -->
+    <s-page>
+      <h2>Anatomy of a Solved Problem</h2>
+      <p>A staple has four parts. It has had four parts for well over a century, and no fifth is in development. No working group is considering one. The design is closed, in the good sense of the word.</p>
+      <div class="fig fig-anatomy">
+        <svg viewBox="0 0 400 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagram of a staple's anatomy and the three stages of a clinch">
+          <!-- the staple -->
+          <path d="M140 158 L140 84 Q140 70 154 70 L246 70 Q260 70 260 84 L260 158"
+                fill="none" stroke="#1a1a2e" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- leader lines -->
+          <g stroke="#c4cad3" stroke-width="1" fill="none">
+            <path d="M200 70 L200 44"/>
+            <path d="M260 116 L322 116"/>
+            <path d="M260 158 L308 182"/>
+            <path d="M140 122 L82 122"/>
+          </g>
+          <g fill="#1a1a2e">
+            <circle cx="200" cy="70" r="2.4"/>
+            <circle cx="260" cy="116" r="2.4"/>
+            <circle cx="260" cy="158" r="2.4"/>
+            <circle cx="140" cy="122" r="2.4"/>
+          </g>
+          <g fill="#5b6470" font-family="ui-monospace, Menlo, monospace" font-size="10.5" letter-spacing="1">
+            <text x="200" y="38" text-anchor="middle">CROWN</text>
+            <text x="328" y="120" text-anchor="start">LEG</text>
+            <text x="314" y="187" text-anchor="start">POINT</text>
+            <text x="76" y="126" text-anchor="end">WIRE GAUGE</text>
+          </g>
+          <!-- clinch sequence: sheets -->
+          <g fill="#ffffff" stroke="#1a1a2e" stroke-width="1">
+            <rect x="38"  y="255" width="84" height="7" rx="1.5"/>
+            <rect x="38"  y="264" width="84" height="7" rx="1.5"/>
+            <rect x="158" y="255" width="84" height="7" rx="1.5"/>
+            <rect x="158" y="264" width="84" height="7" rx="1.5"/>
+            <rect x="278" y="255" width="84" height="7" rx="1.5"/>
+            <rect x="278" y="264" width="84" height="7" rx="1.5"/>
+          </g>
+          <!-- clinch sequence: staples -->
+          <g fill="none" stroke="#1a1a2e" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M58 250 L58 235 Q58 230 63 230 L97 230 Q102 230 102 235 L102 250"/>
+            <path d="M178 290 L178 253 Q178 248 183 248 L217 248 Q222 248 222 253 L222 290"/>
+            <path d="M312 282 L304 282 Q298 282 298 276 L298 253 Q298 248 303 248 L337 248 Q342 248 342 253 L342 276 Q342 282 336 282 L328 282"/>
+          </g>
+          <g font-family="ui-monospace, Menlo, monospace" font-size="9" fill="#9aa0ac" letter-spacing="0.5" text-anchor="middle">
+            <text x="80"  y="318">1 — PRESENTED</text>
+            <text x="200" y="318">2 — DRIVEN</text>
+            <text x="320" y="318">3 — CLINCHED</text>
+          </g>
+        </svg>
+      </div>
+      <p class="fig-cap">Fig. 2 — The staple, and the three states of a clinch.</p>
+      <div class="spec-strip">
+        <div>
+          <div class="spec-v">26/6 · 24/6</div>
+          <div class="spec-l">the two standard sizes (digits are wire gauge and leg length in millimetres)</div>
+        </div>
+        <div>
+          <div class="spec-v">≈ 12.7 mm</div>
+          <div class="spec-l">standard crown width, effectively unchanged for a century</div>
+        </div>
+        <div>
+          <div class="spec-v">20–30</div>
+          <div class="spec-l">sheets a typical desk stapler binds without complaint</div>
+        </div>
+      </div>
+      <p>The staple's last genuinely new idea is Heyl's clinch, from 1877. Everything since (strip-loaded magazines, top-loading bodies, electric motors, full-strip jam clearance) is delivery, not design. The four-part shape and the three-step motion are the product. They have been the product for a hundred and fifty years.</p>
+      <p><em>The staple has no settings. In a century and a half, no one has filed that as a limitation.</em></p>
+    </s-page>
+    <!-- ============ PAGE 7 — SPECIFICATION SHEET ============ -->
+    <s-page>
+      <h2>The Specification Sheet</h2>
+      <p>The staple and the library were designed roughly a hundred and thirty years apart, by people who never met, to solve one problem in the same way. Set side by side, the resemblance is not subtle.</p>
+      <table class="cmp">
+        <thead>
+          <tr>
+            <th></th>
+            <th>The Staple · 1895</th>
+            <th>Stapler · this release</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="k">Form</td><td class="a">a loop of folded steel wire</td><td class="b">one <code>&lt;script&gt;</code> tag</td></tr>
+          <tr><td class="k">To install</td><td class="a">load the magazine</td><td class="b">drop the tag into the page</td></tr>
+          <tr><td class="k">Configuration</td><td class="a">none</td><td class="b">none</td></tr>
+          <tr><td class="k">Dependencies</td><td class="a">none</td><td class="b">none</td></tr>
+          <tr><td class="k">Runtime</td><td class="a">one human arm</td><td class="b">the browser, already open</td></tr>
+          <tr><td class="k">Unit of work</td><td class="a">the page</td><td class="b">the page</td></tr>
+          <tr><td class="k">On overflow</td><td class="a">the legs miss the anvil; nothing binds</td><td class="b">content past the edge is clipped</td></tr>
+          <tr><td class="k">Failure signal</td><td class="a">a hollow click</td><td class="b">content visibly missing</td></tr>
+          <tr><td class="k">Guesses made</td><td class="a"><span class="zero">0</span></td><td class="b"><span class="zero">0</span></td></tr>
+          <tr><td class="k">Settings</td><td class="a"><span class="zero">0</span></td><td class="b"><span class="zero">0</span></td></tr>
+        </tbody>
+      </table>
+      <p>There is no row in this table where the two genuinely disagree. One is folded steel and one is a line of markup; past the material, they are the same product, built on the same refusal to make a simple job complicated. Which brings us, at last, to the point.</p>
+    </s-page>
+    <!-- ============ PAGE 8 — THE LOGICAL CONCLUSION ============ -->
     <s-page>
       <h2>The Logical Conclusion</h2>
-      <p>We have perfected the physical staple. Its dimensions are fixed. Its mechanism is reliable. Its function — to join discrete sheets into a coherent document — is accomplished with a single downward stroke and no further thought required.</p>
+      <p>We have perfected the physical staple. The dimensions are fixed and the mechanism is reliable. The function, joining discrete sheets into a coherent document, is accomplished with a single downward stroke and no further thought required.</p>
       <p>The digital document, by contrast, remains unsolved. CSS <code>@media print</code> rules produce different results on different browsers. PDF generators require server-side runtimes. "Print-friendly" stylesheets are maintained as afterthoughts, updated only after a client reports that their quarterly report prints with the navigation bar across page three.</p>
       <p>Stapler is the binary staple. It applies the same logic that made the Hotchkiss No. 1 successful: fixed dimensions, explicit layout, zero ambiguity. A page is a page. Content either fits or it doesn't. The library does not guess.</p>
       <p>The stapler does not concern itself with the contents of the document. It holds things together. That is its entire mandate, and it executes that mandate without complaint, without configuration, without a 2&nbsp;GB installation footprint.</p>
       <p>We have built the digital equivalent. We offer it to you without ceremony.</p>
       <p><em>One script tag. Drop it in. Write pages.</em></p>
     </s-page>
-
   </stapled-doc>
-
 </body>
 </html>

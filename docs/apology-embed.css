@@ -52,7 +52,7 @@ page-footer {
 
 /* ── Page body ──────────────────────────────────────────────── */
 s-page-body {
-  padding: 1rem 2.5rem;
+  padding: 1rem 2rem;
   overflow-y: hidden;
   background: var(--parchment);
 }
@@ -293,7 +293,7 @@ ol.particulars p:last-child { margin: 0; }
 
 /* ── N.B. advertisement card ────────────────────────────────── */
 .nb-card {
-  margin: 40px 0;
+  margin: 2rem 0;
   padding: 0;
   background: var(--parchment-deep);
   border: 1px solid var(--rule);

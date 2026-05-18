@@ -311,7 +311,10 @@ doc.addEventListener('sp:ready', (e) =&gt; {
       <p>The <code>sp:ready</code> event fires after every build, including the initial build and every <code>refresh()</code> call. It bubbles.</p>
 
       <h2 id="print">Printing to PDF</h2>
-      <p>Open in Chrome or Edge, press <kbd>Cmd</kbd>/<kbd>Ctrl</kbd>+<kbd>P</kbd>, and set:</p>
+      <p>There are two scenarios, and they want different tools.</p>
+
+      <h3>Standalone documents</h3>
+      <p>When the stapler doc is the page (open directly in a browser, or the sole document inside an iframe), <code>window.print()</code> is the right call. Open in Chrome or Edge, press <kbd>Cmd</kbd>/<kbd>Ctrl</kbd>+<kbd>P</kbd>, and set:</p>
       <ul>
         <li>Paper size: match your <code>page-width</code> × <code>page-height</code></li>
         <li>Margins: None</li>
@@ -319,35 +322,33 @@ doc.addEventListener('sp:ready', (e) =&gt; {
       </ul>
       <p>Add this to your document to pin the page size for headless Chrome:</p>
       <pre><code>@page {
-  size: 8.5in 11in;   /* match page-width × page-height */
-  margin: 0;
-}</code></pre>
+        size: 8.5in 11in;   /* match page-width × page-height */
+        margin: 0;
+      }</code></pre>
       <p>For programmatic PDF generation:</p>
       <pre><code>chrome --headless --print-to-pdf=output.pdf --no-margins document.html</code></pre>
+      <p>If the stapler doc lives inside an iframe on a host page, have the parent post a message and let the iframe call <code>window.print()</code> on itself:</p>
+      <pre><code>// parent
+      iframe.contentWindow.postMessage({ type: 'print' }, '*');
 
-      <h2 id="css-properties">CSS Custom Properties</h2>
-      <p>Set these on the <code>&lt;stapled-doc&gt;</code> element to adjust the visual chrome:</p>
-      <table>
-        <thead>
-          <tr>
-            <th>Property</th>
-            <th>Default</th>
-            <th>Description</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><code>--sp-page-gap</code></td>
-            <td>from <code>page-gap</code></td>
-            <td>Gap between pages. Set this instead of the attribute when you need to control it dynamically.</td>
-          </tr>
-          <tr>
-            <td><code>--sp-frame-shadow</code></td>
-            <td><code>0 4px 20px rgba(0,0,0,.12)</code></td>
-            <td>Drop shadow on page frames. Set to <code>none</code> to remove.</td>
-          </tr>
-        </tbody>
-      </table>
+      // inside the iframe
+      window.addEventListener('message', (e) =&gt; {
+        if (e.data?.type === 'print') window.print();
+      });</code></pre>
+      <p>The iframe owns its <code>&lt;head&gt;</code>, its stylesheets, and its <code>@page</code> rules, so it has to be the one to drive the dialog.</p>
+
+      <h3>Embedded in a larger page</h3>
+      <p>When <code>&lt;stapled-doc&gt;</code> is one element inside a larger host page, <code>window.print()</code> prints the entire host page, which is rarely what you want. Use the companion <a href="https://github.com/rlnorthcutt/print-element-button"><code>&lt;print-element-button&gt;</code></a> custom element. It prints just the target element in an isolated iframe and clones the host document's <code>&lt;head&gt;</code> so the stapler's styles travel with it.</p>
+      <p>Drop in the script:</p>
+      <pre><code>&lt;script type="module" src="https://cdn.jsdelivr.net/gh/rlnorthcutt/print-element-button@main/dist/print-element-button.min.js"&gt;&lt;/script&gt;</code></pre>
+      <p>Then add a button targeting your stapler:</p>
+      <pre><code>&lt;print-element-button target="stapled-doc" page-size="8.5in 11in" margins="0"&gt;
+        Print Document
+      &lt;/print-element-button&gt;</code></pre>
+      <p>The <code>page-size</code> and <code>margins</code> attributes get written straight into the print iframe's <code>@page</code> rule, so the stapler doc prints at its declared dimensions without margin chrome.</p>
+
+      <h3>Why two tools?</h3>
+      <p>They solve different problems. <code>&lt;print-element-button&gt;</code> means "print this element from my document." It borrows the host page's styles and renders the target in isolation. Iframe-driven <code>window.print()</code> means "tell that document to print itself." The iframe already has its own head and styles, so it should drive its own dialog. Mixing the two either breaks on cross-origin iframes or strips the wrong styles.</p>
 
       <h2 id="ai">Using with AI</h2>
       <p>Stapler is designed to work well with LLMs. The markup is unambiguous, the attributes have explicit contracts, and there is no layout engine for the model to reason about — it just emits pages and the library handles the rest.</p>
