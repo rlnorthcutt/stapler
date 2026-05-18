@@ -429,14 +429,6 @@ body > footer.site-footer p {
   color: var(--color-link);
 }
 
-/* Stretched link — ::after covers the whole card via position:relative on .demo-card */
-.demo-card footer a[role="button"]::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-}
-
 /* =============================================================================
    INDIVIDUAL DEMO PAGE
    ============================================================================= */

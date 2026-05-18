@@ -1,0 +1,475 @@
+/* ── Design tokens ──────────────────────────────────────────── */
+:host {
+  --parchment: #f3e9d2;
+  --parchment-deep: #e8dcbe;
+  --parchment-shadow: #d9c9a3;
+  --ink: #1f1a14;
+  --ink-soft: #3a322a;
+  --ink-fade: #6b5e4f;
+  --oxblood: #7a1f1f;
+  --oxblood-deep: #5c1414;
+  --gilt: #a87b2c;
+  --rule: #b4a07a;
+}
+
+/* ── Base ───────────────────────────────────────────────────── */
+* { box-sizing: border-box; }
+
+:host {
+  color: var(--ink);
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: 17px;
+  line-height: 1.65;
+}
+
+/* ── Header / footer layout ──────────────────────────────────
+   Specificity matches CORE_CSS (s-page > page-header, 0,0,2)
+   so cascade order gives these rules the win.               */
+s-page > page-header,
+s-page > page-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1.75rem;
+  font-family: ui-monospace, monospace;
+  font-size: 11px;
+  color: #9ca3af;
+  letter-spacing: 0.03em;
+}
+
+s-page > page-header { border-bottom: 1px solid #e5e7eb; }
+s-page > page-footer { border-top: 1px solid #e5e7eb; }
+
+/* Document-specific header/footer overrides */
+page-header,
+page-footer {
+  background: #fdfcf8;
+  font-family: 'IM Fell DW Pica SC', serif;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: var(--ink-fade);
+}
+
+/* ── Page body ──────────────────────────────────────────────── */
+s-page-body {
+  padding: 1rem 2.5rem;
+  overflow-y: hidden;
+  background: var(--parchment);
+}
+
+section { padding: 0; }
+
+/* ── Typography ─────────────────────────────────────────────── */
+p {
+  margin: 0 0 1.1em;
+  hyphens: auto;
+}
+
+.dropcap::first-letter {
+  font-family: 'IM Fell English', serif;
+  font-size: 4.6em;
+  line-height: 0.85;
+  float: left;
+  padding: 6px 10px 0 0;
+  color: var(--oxblood);
+  font-style: normal;
+}
+
+.section-num {
+  display: block;
+  font-family: 'IM Fell DW Pica SC', serif;
+  letter-spacing: 0.3em;
+  font-size: 12px;
+  color: var(--ink-fade);
+  margin-bottom: 10px;
+}
+
+section > h2,
+.closing > h2,
+.fable > .fable__title {
+  font-family: 'IM Fell English', serif;
+  font-weight: 400;
+  font-size: 2.25rem;
+  line-height: 1.15;
+  margin: 0 0 28px;
+  color: var(--ink);
+  text-transform: none;
+  letter-spacing: normal;
+}
+section > h2 em { color: var(--oxblood); }
+
+/* ── Hero ───────────────────────────────────────────────────── */
+.hero {
+  text-align: center;
+  break-inside: avoid;
+}
+
+.hero__eyebrow {
+  font-family: 'IM Fell DW Pica SC', serif;
+  font-size: 12px;
+  letter-spacing: 0.35em;
+  color: var(--ink-fade);
+  margin-bottom: 18px;
+}
+
+.hero__title {
+  font-family: 'IM Fell English', serif;
+  font-weight: 400;
+  font-size: 3.5rem;
+  line-height: 1.0;
+  margin: 0 0 8px;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  font-style: normal;
+  text-align: center;
+  text-indent: 0;
+}
+
+.hero__title em {
+  font-style: italic;
+  color: var(--oxblood);
+}
+
+.hero__byline {
+  font-family: 'IM Fell DW Pica', serif;
+  font-style: italic;
+  font-size: 1.2rem;
+  color: var(--ink-soft);
+  margin: 24px 0 6px;
+}
+
+.hero__date {
+  font-family: 'IM Fell DW Pica SC', serif;
+  font-size: 12px;
+  letter-spacing: 0.3em;
+  color: var(--ink-fade);
+}
+
+.hero__art {
+  margin: 36px auto 0;
+  max-width: 320px;
+}
+
+/* ── Ornaments & rules ──────────────────────────────────────── */
+.ornament {
+  display: block;
+  margin: 40px auto;
+  max-width: 200px;
+  color: var(--oxblood);
+}
+
+.rule {
+  border: none;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--rule), transparent);
+  margin: 36px 0;
+}
+
+/* ── Table of contents ──────────────────────────────────────── */
+.toc {
+  margin: 32px auto 48px;
+  padding: 22px 26px;
+  border: 1px solid var(--rule);
+  background: rgba(255, 248, 230, 0.4);
+  break-inside: avoid;
+}
+
+.toc__title {
+  font-family: 'IM Fell DW Pica SC', serif;
+  font-size: 11px;
+  letter-spacing: 0.35em;
+  text-align: center;
+  color: var(--ink-fade);
+  margin: 0 0 14px;
+}
+
+.toc ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  counter-reset: tocitem;
+  display: block;
+}
+
+.toc li {
+  counter-increment: tocitem;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 5px 0;
+  font-family: 'IM Fell DW Pica', serif;
+  font-size: 16px;
+}
+
+.toc li::before {
+  content: counter(tocitem, upper-roman) ".";
+  font-style: italic;
+  color: var(--oxblood);
+  min-width: 32px;
+}
+
+.toc a {
+  color: var(--ink);
+  text-decoration: none;
+  flex: 1;
+  border-bottom: 1px dotted transparent;
+}
+
+.toc a:hover { border-bottom-color: var(--oxblood); }
+
+.toc__dots {
+  flex: 1;
+  border-bottom: 1px dotted var(--rule);
+  margin: 0 6px 4px;
+}
+
+.toc__pg {
+  font-style: italic;
+  color: var(--ink-fade);
+  font-size: 13px;
+}
+
+/* ── Numbered lists ─────────────────────────────────────────── */
+ol.particulars {
+  list-style: none;
+  padding: 0;
+  margin: 28px 0 36px;
+  counter-reset: pitem;
+}
+
+ol.particulars > li {
+  counter-increment: pitem;
+  position: relative;
+  padding: 14px 0 14px 70px;
+  border-top: 1px solid rgba(180, 160, 122, 0.5);
+  min-height: 50px;
+  break-inside: avoid;
+}
+
+ol.particulars > li:last-child {
+  border-bottom: 1px solid rgba(180, 160, 122, 0.5);
+}
+
+ol.particulars > li::before {
+  content: counter(pitem, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: 18px;
+  font-family: 'IM Fell English', serif;
+  font-size: 32px;
+  color: var(--oxblood);
+  line-height: 1;
+  width: 56px;
+  text-align: right;
+  font-style: italic;
+}
+
+ol.particulars p { margin: 0 0 0.5em; text-indent: 0; }
+ol.particulars p:last-child { margin: 0; }
+
+/* ── Pullquote ──────────────────────────────────────────────── */
+.pullquote {
+  margin: 36px 0;
+  padding: 24px 32px;
+  border-left: 3px solid var(--oxblood);
+  background: rgba(255, 248, 230, 0.5);
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: 1.3rem;
+  line-height: 1.4;
+  color: var(--ink-soft);
+  break-inside: avoid;
+}
+
+.pullquote cite {
+  display: block;
+  margin-top: 12px;
+  font-family: 'IM Fell DW Pica SC', serif;
+  font-style: normal;
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  color: var(--ink-fade);
+}
+
+/* ── N.B. advertisement card ────────────────────────────────── */
+.nb-card {
+  margin: 40px 0;
+  padding: 0;
+  background: var(--parchment-deep);
+  border: 1px solid var(--rule);
+  box-shadow:
+    0 1px 0 rgba(0,0,0,0.04),
+    0 12px 30px -18px rgba(31, 26, 20, 0.4);
+  break-inside: avoid;
+}
+
+.nb-card__header {
+  text-align: center;
+  padding: 20px 22px 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.nb-card__kicker {
+  font-family: 'IM Fell DW Pica SC', serif;
+  letter-spacing: 0.3em;
+  font-size: 10px;
+  color: var(--ink-fade);
+}
+
+.nb-card__body {
+  padding: 22px 28px 26px;
+  text-align: center;
+}
+
+.nb-card__ad-title {
+  font-family: 'IM Fell English', serif;
+  font-size: 1.5rem;
+  margin: 14px 0 12px;
+  font-weight: 400;
+  font-style: normal;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.nb-card__ad-text {
+  font-family: 'IM Fell DW Pica', serif;
+  font-style: italic;
+  font-size: 16px;
+  color: var(--ink-soft);
+  margin: 0 0 18px;
+  text-indent: 0;
+}
+
+.nb-card__nb {
+  display: inline-block;
+  padding: 12px 20px;
+  background: var(--ink);
+  color: var(--parchment);
+  font-family: 'IM Fell English', serif;
+  font-size: 16px;
+  letter-spacing: 0.02em;
+}
+
+.nb-card__nb strong {
+  color: var(--gilt);
+  font-weight: 400;
+  margin-right: 8px;
+}
+
+/* ── Side note / gloss ──────────────────────────────────────── */
+aside.gloss {
+  margin: 24px 0;
+  padding: 14px 20px;
+  border-left: 2px solid var(--gilt);
+  background: rgba(168, 123, 44, 0.07);
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  break-inside: avoid;
+}
+
+.gloss__label {
+  display: block;
+  font-family: 'IM Fell DW Pica SC', serif;
+  letter-spacing: 0.3em;
+  font-size: 9px;
+  color: var(--gilt);
+  margin-bottom: 5px;
+}
+
+/* ── Fable ──────────────────────────────────────────────────── */
+.fable {
+  margin: 56px 0 32px;
+  padding: 40px 0 0;
+  border-top: 1px double var(--rule);
+}
+
+.fable__label {
+  text-align: center;
+  font-family: 'IM Fell DW Pica SC', serif;
+  letter-spacing: 0.4em;
+  font-size: 11px;
+  color: var(--oxblood);
+  margin-bottom: 6px;
+}
+
+.fable__title {
+  text-align: center;
+  font-style: italic;
+  font-size: 1.875rem;
+  margin: 0 0 6px;
+}
+
+.fable__art {
+  margin: 28px auto;
+  max-width: 100%;
+  break-inside: avoid;
+}
+
+.fable__body {
+  font-family: 'EB Garamond', serif;
+  font-size: 17px;
+  line-height: 1.7;
+}
+
+.fable__body p:first-child::first-letter {
+  font-family: 'IM Fell English', serif;
+  font-size: 3.6em;
+  line-height: 0.85;
+  float: left;
+  padding: 5px 8px 0 0;
+  color: var(--oxblood);
+}
+
+/* ── Closing ────────────────────────────────────────────────── */
+.closing {
+  margin-top: 48px;
+  text-align: center;
+  break-inside: avoid;
+}
+
+.closing__line {
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: 1.7rem;
+  line-height: 1.3;
+  color: var(--oxblood);
+  margin: 24px auto 18px;
+  max-width: 480px;
+  text-indent: 0;
+}
+
+.colophon {
+  margin-top: 64px;
+  padding-top: 24px;
+  border-top: 1px solid var(--rule);
+  font-family: 'IM Fell DW Pica SC', serif;
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  color: var(--ink-fade);
+  text-align: center;
+  line-height: 2;
+  break-inside: avoid;
+}
+
+/* ── Utilities ──────────────────────────────────────────────── */
+.smallcaps {
+  font-family: 'IM Fell DW Pica SC', serif;
+  letter-spacing: 0.05em;
+}
+
+em.work { font-style: italic; }
+
+p.dropcap,
+ol.particulars p,
+aside.gloss p,
+.closing p,
+.colophon p {
+  text-indent: 0;
+}
+
+section { margin-bottom: 36px; }
+
+@media print {
+  :host { color: black; }
+}
