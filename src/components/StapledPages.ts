@@ -1,6 +1,6 @@
 import { parseToPx } from '../utils/parseToPx.js'
 import { measureHeight } from '../utils/measureHeight.js'
-import { waitForAssets, domReady } from '../utils/waitForAssets.js'
+import { waitForAssets } from '../utils/waitForAssets.js'
 import { CORE_CSS } from '../css.js'
 import { PageHeader } from './PageHeader.js'
 import { PageFooter } from './PageFooter.js'
@@ -44,27 +44,27 @@ export class Stapler extends HTMLElement {
   }
 
   connectedCallback(): void {
+    // For HTML-parser-created elements, connectedCallback fires as soon as the
+    // opening tag is inserted — before the parser has added this element's
+    // children. Attaching the shadow root is safe immediately (it doesn't
+    // touch children), but moving them into it has to wait until they exist.
     if (this.hasAttribute('embed')) {
-      // For HTML-parser-created elements, connectedCallback fires as soon as the
-      // opening tag is inserted — before the parser has added this element's
-      // children. Attaching the shadow root is safe immediately, but moving
-      // children must wait until the parser has actually added them.
-      // domReady (DOMContentLoaded-aware, not just one animation frame) is the
-      // same fence waitForAssets uses elsewhere, since a single frame isn't a
-      // reliable signal on slow/chunked initial parses.
       this._attachEmbedShadow()
-      domReady().then(() => {
-        this._moveChildrenIntoEmbedShadow()
-        this._startBuildPipeline()
-      })
-      return
     }
     this._startBuildPipeline()
   }
 
   private _startBuildPipeline(): void {
-    const assetRoot = this.shadowRoot ?? this
+    const embed = this.hasAttribute('embed')
+
+    // waitForAssets() already fences on domReady (DOMContentLoaded-aware, not
+    // just one animation frame) before checking fonts/images — reuse that
+    // same wait for the embed child-move instead of adding a second one.
+    // Until the move happens, embed content (including any <img>s to wait on)
+    // is still in light DOM, so that's the root to scan.
+    const assetRoot = embed ? this : this._contentRoot
     waitForAssets(assetRoot).then(() => {
+      if (embed) this._moveChildrenIntoEmbedShadow()
       requestAnimationFrame(() => this._build())
     })
   }

@@ -52,18 +52,16 @@ describe('Embed mode — HTML-parser timing', () => {
 
     expect(doc.shadowRoot).not.toBeNull()
 
-    // Let the domReady fence (a microtask in this environment) settle, which
-    // moves the children into the shadow root.
-    await Promise.resolve()
-    await Promise.resolve()
+    // Let waitForAssets settle — its resolution moves the children into the
+    // shadow root, then queues the frame that runs _build().
+    await new Promise((resolve) => setTimeout(resolve, 0))
 
     expect(doc.childNodes.length).toBe(0)
     const shadowPage = doc.shadowRoot!.querySelector('s-page')
     expect(shadowPage).not.toBeNull()
     expect(shadowPage!.querySelector('p')?.textContent).toBe('A')
 
-    // Let waitForAssets settle, then flush the frame that runs _build().
-    await new Promise((resolve) => setTimeout(resolve, 0))
+    // Flush the frame that runs _build().
     rafCallbacks.shift()?.(0)
 
     expect((shadowPage as HTMLElement).style.width).toBe('816px')
@@ -81,8 +79,8 @@ describe('Embed mode — HTML-parser timing', () => {
     const events: CustomEvent[] = []
     doc.addEventListener('sp:ready', (e) => events.push(e as CustomEvent))
 
-    // Call refresh() synchronously — before the domReady microtask has had a
-    // chance to move the parser-appended children into the shadow root.
+    // Call refresh() synchronously — before waitForAssets has resolved and
+    // moved the parser-appended children into the shadow root.
     doc.refresh()
     expect(events).toHaveLength(0)
 
