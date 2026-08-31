@@ -1,6 +1,6 @@
 import { parseToPx } from '../utils/parseToPx.js'
 import { measureHeight } from '../utils/measureHeight.js'
-import { waitForAssets } from '../utils/waitForAssets.js'
+import { waitForAssets, domReady } from '../utils/waitForAssets.js'
 import { CORE_CSS } from '../css.js'
 import { PageHeader } from './PageHeader.js'
 import { PageFooter } from './PageFooter.js'
@@ -34,6 +34,7 @@ export class Stapler extends HTMLElement {
   private _built = false
   private _pageStyleEl: HTMLStyleElement | null = null
   private _shadowInitialized = false
+  private _embedChildrenMoved = false
 
   // When embed mode is active, all authored content lives in the shadow root.
   // This getter lets build/teardown code operate on the right container without
@@ -44,19 +45,33 @@ export class Stapler extends HTMLElement {
 
   connectedCallback(): void {
     if (this.hasAttribute('embed')) {
-      this._initEmbedMode()
+      // For HTML-parser-created elements, connectedCallback fires as soon as the
+      // opening tag is inserted — before the parser has added this element's
+      // children. Attaching the shadow root is safe immediately, but moving
+      // children must wait until the parser has actually added them.
+      // domReady (DOMContentLoaded-aware, not just one animation frame) is the
+      // same fence waitForAssets uses elsewhere, since a single frame isn't a
+      // reliable signal on slow/chunked initial parses.
+      this._attachEmbedShadow()
+      domReady().then(() => {
+        this._moveChildrenIntoEmbedShadow()
+        this._startBuildPipeline()
+      })
+      return
     }
+    this._startBuildPipeline()
+  }
+
+  private _startBuildPipeline(): void {
     const assetRoot = this.shadowRoot ?? this
     waitForAssets(assetRoot).then(() => {
       requestAnimationFrame(() => this._build())
     })
   }
 
-  // Attaches a shadow root, injects structural CSS, injects any author-supplied
-  // stylesheets (via `stylesheet` attribute or <link>/<style> children), then
-  // moves all remaining light-DOM children into the shadow root so they are
-  // isolated from the parent page's CSS.
-  private _initEmbedMode(): void {
+  // Attaches a shadow root, injects structural CSS, and injects any
+  // author-supplied stylesheets (via the `stylesheet` attribute).
+  private _attachEmbedShadow(): void {
     if (this._shadowInitialized) return
 
     const shadow = this.attachShadow({ mode: 'open' })
@@ -77,16 +92,28 @@ export class Stapler extends HTMLElement {
       }
     }
 
-    // Move all light-DOM children (<style>, <link>, <page-header>, <s-page>, …)
-    // into the shadow root in document order.
-    while (this.firstChild) {
-      shadow.appendChild(this.firstChild)
-    }
-
     this._shadowInitialized = true
   }
 
+  // Moves all light-DOM children (<style>, <link>, <page-header>, <s-page>, …)
+  // into the shadow root, in document order, so they get shadow CSS isolation
+  // while keeping their HTML in the real DOM for crawlability.
+  private _moveChildrenIntoEmbedShadow(): void {
+    const shadow = this.shadowRoot
+    if (!shadow) return
+    while (this.firstChild) {
+      shadow.appendChild(this.firstChild)
+    }
+    this._embedChildrenMoved = true
+  }
+
   refresh(): void {
+    // In embed mode, the initial build is deferred until the parser-inserted
+    // children have been moved into the shadow root (see connectedCallback).
+    // Calling refresh() before that lands would tear down nothing (nothing has
+    // been built yet) and build against a shadow root that's still empty of
+    // real content — skip it and let the pending initial build run instead.
+    if (this.hasAttribute('embed') && !this._embedChildrenMoved) return
     this._teardown()
     this._build()
   }

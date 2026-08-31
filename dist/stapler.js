@@ -119,16 +119,19 @@ stapled-doc[preview="print"] s-page {
   }
 
   // src/utils/waitForAssets.ts
-  function waitForAssets(root) {
-    const domReady = new Promise((resolve) => {
+  function domReady() {
+    return new Promise((resolve) => {
       if (document.readyState !== "loading") {
         resolve();
       } else {
         document.addEventListener("DOMContentLoaded", () => resolve(), { once: true });
       }
     });
+  }
+  function waitForAssets(root) {
+    const domReadyPromise = domReady();
     const fontsReady = document.fonts?.ready ? document.fonts.ready.then(() => void 0) : Promise.resolve();
-    const imagesReady = domReady.then(() => {
+    const imagesReady = domReadyPromise.then(() => {
       const imgs = Array.from(root.querySelectorAll("img"));
       return Promise.all(
         imgs.map(
@@ -137,7 +140,7 @@ stapled-doc[preview="print"] s-page {
         )
       ).then(() => void 0);
     });
-    return Promise.all([domReady, fontsReady, imagesReady]).then(() => void 0);
+    return Promise.all([domReadyPromise, fontsReady, imagesReady]).then(() => void 0);
   }
 
   // src/components/StapledPages.ts
@@ -149,6 +152,7 @@ stapled-doc[preview="print"] s-page {
       this._built = false;
       this._pageStyleEl = null;
       this._shadowInitialized = false;
+      this._embedChildrenMoved = false;
     }
     static {
       this.TAG = "stapled-doc";
@@ -161,18 +165,24 @@ stapled-doc[preview="print"] s-page {
     }
     connectedCallback() {
       if (this.hasAttribute("embed")) {
-        this._initEmbedMode();
+        this._attachEmbedShadow();
+        domReady().then(() => {
+          this._moveChildrenIntoEmbedShadow();
+          this._startBuildPipeline();
+        });
+        return;
       }
+      this._startBuildPipeline();
+    }
+    _startBuildPipeline() {
       const assetRoot = this.shadowRoot ?? this;
       waitForAssets(assetRoot).then(() => {
         requestAnimationFrame(() => this._build());
       });
     }
-    // Attaches a shadow root, injects structural CSS, injects any author-supplied
-    // stylesheets (via `stylesheet` attribute or <link>/<style> children), then
-    // moves all remaining light-DOM children into the shadow root so they are
-    // isolated from the parent page's CSS.
-    _initEmbedMode() {
+    // Attaches a shadow root, injects structural CSS, and injects any
+    // author-supplied stylesheets (via the `stylesheet` attribute).
+    _attachEmbedShadow() {
       if (this._shadowInitialized) return;
       const shadow = this.attachShadow({ mode: "open" });
       const coreStyle = document.createElement("style");
@@ -187,12 +197,21 @@ stapled-doc[preview="print"] s-page {
           shadow.appendChild(link);
         }
       }
+      this._shadowInitialized = true;
+    }
+    // Moves all light-DOM children (<style>, <link>, <page-header>, <s-page>, …)
+    // into the shadow root, in document order, so they get shadow CSS isolation
+    // while keeping their HTML in the real DOM for crawlability.
+    _moveChildrenIntoEmbedShadow() {
+      const shadow = this.shadowRoot;
+      if (!shadow) return;
       while (this.firstChild) {
         shadow.appendChild(this.firstChild);
       }
-      this._shadowInitialized = true;
+      this._embedChildrenMoved = true;
     }
     refresh() {
+      if (this.hasAttribute("embed") && !this._embedChildrenMoved) return;
       this._teardown();
       this._build();
     }
