@@ -236,12 +236,14 @@ stapled-doc[preview="print"] s-page {
         return;
       }
       if (!this.getAttribute("page-width")) {
-        console.error('[stapler] <stapled-doc> requires a page-width attribute (e.g. page-width="8.5in").');
-        return;
+        console.error(
+          '[stapler] <stapled-doc> requires a page-width attribute (e.g. page-width="8.5in"). Falling back to 8.5in.'
+        );
       }
       if (!this.getAttribute("page-height")) {
-        console.error('[stapler] <stapled-doc> requires a page-height attribute (e.g. page-height="11in").');
-        return;
+        console.error(
+          '[stapler] <stapled-doc> requires a page-height attribute (e.g. page-height="11in"). Falling back to 11in.'
+        );
       }
       const pageW = this._pageWidth();
       const pageH = this._pageHeight();

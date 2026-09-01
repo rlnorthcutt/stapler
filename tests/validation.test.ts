@@ -34,7 +34,7 @@ function build(html: string): Stapler {
 // ── Required attributes ───────────────────────────────────────────────────────
 
 describe('required page-width attribute', () => {
-  it('logs console.error and does not dispatch sp:ready when page-width is missing', () => {
+  it('logs console.error and falls back to 8.5in when page-width is missing', () => {
     const errSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
     const events: CustomEvent[] = []
     const container = document.createElement('div')
@@ -45,12 +45,13 @@ describe('required page-width attribute', () => {
     ;(sp as unknown as { _build(): void })._build()
 
     expect(errSpy).toHaveBeenCalledWith(expect.stringContaining('page-width'))
-    expect(events).toHaveLength(0)
+    expect(events).toHaveLength(1)
+    expect(events[0]?.detail.pageWidth).toBe(816)
   })
 })
 
 describe('required page-height attribute', () => {
-  it('logs console.error and does not dispatch sp:ready when page-height is missing', () => {
+  it('logs console.error and falls back to 11in when page-height is missing', () => {
     const errSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
     const events: CustomEvent[] = []
     const container = document.createElement('div')
@@ -61,7 +62,8 @@ describe('required page-height attribute', () => {
     ;(sp as unknown as { _build(): void })._build()
 
     expect(errSpy).toHaveBeenCalledWith(expect.stringContaining('page-height'))
-    expect(events).toHaveLength(0)
+    expect(events).toHaveLength(1)
+    expect(events[0]?.detail.pageHeight).toBe(1056)
   })
 })
 

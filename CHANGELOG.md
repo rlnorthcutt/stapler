@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- **`page-width`/`page-height` no longer abort the build.** Omitting either still logs a `console.error`, but now falls back to `8.5in`/`11in` instead of preventing the document from rendering.
+- **`height` on `<page-header>`/`<page-footer>` no longer aborts the build.** Omitting it still logs a `console.error`, but now falls back to `24px` instead of preventing the document from rendering.
+
 ## [0.5.0] — 2026-04-27
 
 ### Breaking Changes

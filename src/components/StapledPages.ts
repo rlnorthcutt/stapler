@@ -21,8 +21,8 @@ interface StaplerReadyDetail {
  * builds the final DOM structure, and manages refresh lifecycle.
  *
  * Attributes:
- *   page-width   CSS length         (required)
- *   page-height  CSS length         (required)
+ *   page-width   CSS length         default: 8.5in
+ *   page-height  CSS length         default: 11in
  *   page-gap     CSS length         default: 2rem
  *   preview      "print"            optional: removes gap and shadows
  *   embed        boolean            optional: attaches a shadow root and moves children into it
@@ -155,14 +155,18 @@ export class Stapler extends HTMLElement {
       return
     }
 
-    // page-width and page-height are required
+    // page-width and page-height are strongly recommended; fall back rather than fail the build
     if (!this.getAttribute('page-width')) {
-      console.error('[stapler] <stapled-doc> requires a page-width attribute (e.g. page-width="8.5in").')
-      return
+      console.error(
+        '[stapler] <stapled-doc> requires a page-width attribute (e.g. page-width="8.5in"). ' +
+          'Falling back to 8.5in.'
+      )
     }
     if (!this.getAttribute('page-height')) {
-      console.error('[stapler] <stapled-doc> requires a page-height attribute (e.g. page-height="11in").')
-      return
+      console.error(
+        '[stapler] <stapled-doc> requires a page-height attribute (e.g. page-height="11in"). ' +
+          'Falling back to 11in.'
+      )
     }
 
     const pageW = this._pageWidth()
