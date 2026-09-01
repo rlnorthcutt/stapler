@@ -112,9 +112,10 @@ stapled-doc[preview="print"] s-page {
   }
 
   // src/utils/measureHeight.ts
+  var DEFAULT_TEMPLATE_HEIGHT_PX = 24;
   function measureHeight(template) {
     const heightAttr = template.getAttribute("height");
-    if (heightAttr === null) return 0;
+    if (heightAttr === null) return DEFAULT_TEMPLATE_HEIGHT_PX;
     return parseToPx(heightAttr, template);
   }
 
@@ -254,12 +255,14 @@ stapled-doc[preview="print"] s-page {
       this._headerTemplate = this._directChildren("page-header")[0] ?? null;
       this._footerTemplate = this._directChildren("page-footer")[0] ?? null;
       if (this._headerTemplate && !this._headerTemplate.heightAttr) {
-        console.error('[stapler] <page-header> requires a height attribute (e.g. height="48px").');
-        return;
+        console.error(
+          `[stapler] <page-header> requires a height attribute (e.g. height="48px"). Falling back to ${DEFAULT_TEMPLATE_HEIGHT_PX}px.`
+        );
       }
       if (this._footerTemplate && !this._footerTemplate.heightAttr) {
-        console.error('[stapler] <page-footer> requires a height attribute (e.g. height="32px").');
-        return;
+        console.error(
+          `[stapler] <page-footer> requires a height attribute (e.g. height="32px"). Falling back to ${DEFAULT_TEMPLATE_HEIGHT_PX}px.`
+        );
       }
       const headerH = this._headerTemplate ? measureHeight(this._headerTemplate) : 0;
       const footerH = this._footerTemplate ? measureHeight(this._footerTemplate) : 0;

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { measureHeight } from '../src/utils/measureHeight.js'
+import { measureHeight, DEFAULT_TEMPLATE_HEIGHT_PX } from '../src/utils/measureHeight.js'
 
 describe('measureHeight', () => {
   beforeEach(() => {
@@ -36,8 +36,8 @@ describe('measureHeight', () => {
     expect(measureHeight(el)).toBe(48)
   })
 
-  it('returns 0 when height attribute is absent', () => {
+  it('falls back to the default height when height attribute is absent', () => {
     const el = document.createElement('page-header')
-    expect(measureHeight(el)).toBe(0)
+    expect(measureHeight(el)).toBe(DEFAULT_TEMPLATE_HEIGHT_PX)
   })
 })

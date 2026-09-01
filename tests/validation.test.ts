@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeAll, afterEach, vi } from 'vitest'
 import { Stapler } from '../src/components/StapledPages.js'
+import { DEFAULT_TEMPLATE_HEIGHT_PX } from '../src/utils/measureHeight.js'
 import { PageHeader } from '../src/components/PageHeader.js'
 import { PageFooter } from '../src/components/PageFooter.js'
 import { SPage } from '../src/components/SPage.js'
@@ -85,7 +86,7 @@ describe('mode="flow" deprecation', () => {
 })
 
 describe('required height attribute', () => {
-  it('logs console.error and aborts when page-header has no height', () => {
+  it('logs console.error and falls back to the default height when page-header has no height', () => {
     const errSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
     const events: CustomEvent[] = []
     const container = document.createElement('div')
@@ -101,10 +102,12 @@ describe('required height attribute', () => {
     ;(sp as unknown as { _build(): void })._build()
 
     expect(errSpy).toHaveBeenCalledWith(expect.stringContaining('height'))
-    expect(events).toHaveLength(0)
+    expect(events).toHaveLength(1)
+    const header = sp.querySelector('page-header') as HTMLElement
+    expect(header.style.height).toBe(`${DEFAULT_TEMPLATE_HEIGHT_PX}px`)
   })
 
-  it('logs console.error and aborts when page-footer has no height', () => {
+  it('logs console.error and falls back to the default height when page-footer has no height', () => {
     const errSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
     const events: CustomEvent[] = []
     const container = document.createElement('div')
@@ -120,7 +123,9 @@ describe('required height attribute', () => {
     ;(sp as unknown as { _build(): void })._build()
 
     expect(errSpy).toHaveBeenCalledWith(expect.stringContaining('height'))
-    expect(events).toHaveLength(0)
+    expect(events).toHaveLength(1)
+    const footer = sp.querySelector('page-footer') as HTMLElement
+    expect(footer.style.height).toBe(`${DEFAULT_TEMPLATE_HEIGHT_PX}px`)
   })
 })
 

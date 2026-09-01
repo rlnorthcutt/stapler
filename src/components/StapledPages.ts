@@ -1,5 +1,5 @@
 import { parseToPx } from '../utils/parseToPx.js'
-import { measureHeight } from '../utils/measureHeight.js'
+import { measureHeight, DEFAULT_TEMPLATE_HEIGHT_PX } from '../utils/measureHeight.js'
 import { waitForAssets } from '../utils/waitForAssets.js'
 import { CORE_CSS } from '../css.js'
 import { PageHeader } from './PageHeader.js'
@@ -180,14 +180,18 @@ export class Stapler extends HTMLElement {
     this._headerTemplate = this._directChildren<PageHeader>('page-header')[0] ?? null
     this._footerTemplate = this._directChildren<PageFooter>('page-footer')[0] ?? null
 
-    // height is required on templates
+    // height is strongly recommended on templates; fall back rather than fail the build
     if (this._headerTemplate && !this._headerTemplate.heightAttr) {
-      console.error('[stapler] <page-header> requires a height attribute (e.g. height="48px").')
-      return
+      console.error(
+        `[stapler] <page-header> requires a height attribute (e.g. height="48px"). ` +
+          `Falling back to ${DEFAULT_TEMPLATE_HEIGHT_PX}px.`
+      )
     }
     if (this._footerTemplate && !this._footerTemplate.heightAttr) {
-      console.error('[stapler] <page-footer> requires a height attribute (e.g. height="32px").')
-      return
+      console.error(
+        `[stapler] <page-footer> requires a height attribute (e.g. height="32px"). ` +
+          `Falling back to ${DEFAULT_TEMPLATE_HEIGHT_PX}px.`
+      )
     }
 
     const headerH = this._headerTemplate ? measureHeight(this._headerTemplate) : 0
