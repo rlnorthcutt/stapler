@@ -1,6 +1,6 @@
-# CLAUDE.md — Stapler project guide
+# AGENT.md — Stapler project guide
 
-This file tells Claude Code how to work on this project. Read it before touching any code.
+This file tells AI Agents how to work on this project. Read it before touching any code.
 
 ---
 
