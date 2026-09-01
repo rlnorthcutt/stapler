@@ -21,10 +21,12 @@ interface StaplerReadyDetail {
  * builds the final DOM structure, and manages refresh lifecycle.
  *
  * Attributes:
- *   page-width   CSS length  (required)
- *   page-height  CSS length  (required)
- *   page-gap     CSS length  default: 2rem
- *   preview      "print"     optional: removes gap and shadows
+ *   page-width   CSS length         (required)
+ *   page-height  CSS length         (required)
+ *   page-gap     CSS length         default: 2rem
+ *   preview      "print"            optional: removes gap and shadows
+ *   embed        boolean            optional: attaches a shadow root and moves children into it
+ *   stylesheet   comma-sep. URLs    optional: with `embed`, stylesheets injected into the shadow root
  */
 export class Stapler extends HTMLElement {
   static readonly TAG = 'stapled-doc'
