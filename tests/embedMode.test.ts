@@ -68,6 +68,42 @@ describe('Embed mode — HTML-parser timing', () => {
     expect((shadowPage as HTMLElement).style.height).toBe('1056px')
   })
 
+  it('resolves <page-number> in header clones once reparented into the shadow root', async () => {
+    const rafCallbacks: FrameRequestCallback[] = []
+    vi.stubGlobal('requestAnimationFrame', (cb: FrameRequestCallback) => {
+      rafCallbacks.push(cb)
+      return rafCallbacks.length
+    })
+
+    const doc = document.createElement('stapled-doc') as Stapler
+    doc.setAttribute('embed', '')
+    doc.setAttribute('page-width', '816px')
+    doc.setAttribute('page-height', '1056px')
+    doc.setAttribute('page-gap', '0px')
+    document.body.appendChild(doc)
+
+    const header = document.createElement('page-header')
+    header.setAttribute('height', '48px')
+    header.innerHTML = 'Page <page-number format="n of total"></page-number>'
+    doc.appendChild(header)
+
+    const page1 = document.createElement('s-page')
+    page1.innerHTML = '<p>A</p>'
+    doc.appendChild(page1)
+
+    const page2 = document.createElement('s-page')
+    page2.innerHTML = '<p>B</p>'
+    doc.appendChild(page2)
+
+    // Let waitForAssets settle (moves children into the shadow root) and flush _build().
+    await new Promise((resolve) => setTimeout(resolve, 0))
+    rafCallbacks.shift()?.(0)
+
+    const headers = doc.shadowRoot!.querySelectorAll('s-page page-header')
+    expect(headers[0]!.querySelector('page-number')!.textContent).toBe('1 of 2')
+    expect(headers[1]!.querySelector('page-number')!.textContent).toBe('2 of 2')
+  })
+
   it('refresh() called before content has moved into the shadow root is a no-op, not a bogus 0-page build', async () => {
     const rafCallbacks: FrameRequestCallback[] = []
     vi.stubGlobal('requestAnimationFrame', (cb: FrameRequestCallback) => {

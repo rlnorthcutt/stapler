@@ -17,9 +17,20 @@ export class PageNumber extends HTMLElement {
 
   connectedCallback(): void {
     // Outside a stapled-doc context: show a fallback so authors see the placeholder
-    if (!this.closest('stapled-doc')) {
+    if (!this._insideStapledDoc()) {
       this.textContent = '?'
     }
+  }
+
+  /**
+   * closest('stapled-doc') doesn't cross the shadow boundary used by embed mode,
+   * so a <page-number> reparented into <stapled-doc>'s shadow root would otherwise
+   * look "orphaned" and get overwritten with the fallback after resolve() already ran.
+   */
+  private _insideStapledDoc(): boolean {
+    if (this.closest('stapled-doc')) return true
+    const root = this.getRootNode()
+    return root instanceof ShadowRoot && root.host.tagName === 'STAPLED-DOC'
   }
 
   /**
