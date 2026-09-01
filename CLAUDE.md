@@ -13,8 +13,6 @@ no build step on their end.
 The compiled output (`dist/stapler.js`) must always have zero runtime dependencies.
 If you find yourself reaching for a utility, write the 5-line version instead.
 
-Full technical spec is in `SPEC.md`. Read it before implementing anything non-trivial.
-
 ---
 
 ## Stack
@@ -50,7 +48,7 @@ The other components are data containers — they parse attributes and expose th
 **Light DOM by default.** Authors must be able to style headers and footers with their own CSS.
 Every component uses Light DOM in normal mode. The one exception is `embed` mode, which
 attaches a shadow root to `<stapled-doc>` specifically to isolate the document's CSS from
-the host page — see SPEC.md §4a. Do not add Shadow DOM anywhere else.
+the host page. Do not add Shadow DOM anywhere else.
 
 **Spacers, not masking.** In flow mode, invisible `<div class="sp-page-spacer">` elements
 are injected at page boundaries to physically push content clear of header/footer/gap zones.
