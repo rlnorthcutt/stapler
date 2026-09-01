@@ -67,6 +67,38 @@ Content that overflows is hidden — that's by design. Authors are responsible f
 
 ---
 
+## Embed mode
+
+Add the `embed` attribute to drop a `<stapled-doc>` into a larger page with real, bidirectional
+CSS isolation — no iframe required:
+
+```html
+<stapled-doc embed page-width="7in" page-height="9in" stylesheet="apology.css">
+  <page-header height="36px">...</page-header>
+  <page-footer height="28px">...</page-footer>
+  <s-page>...</s-page>
+</stapled-doc>
+```
+
+`embed` attaches a shadow root to `<stapled-doc>` and moves its children into it once the
+document's fonts and images have loaded. The host page's stylesheets never leak into the
+document, and the document's own styles — including anything injected via `stylesheet` —
+never leak out into the host page. This is the one place in the library that uses Shadow DOM;
+everywhere else is Light DOM by design, precisely so authors can style headers and footers
+directly. Embed mode exists for the opposite situation: you're placing someone else's
+carefully-styled document (or your own design system's) inside a page you don't fully control,
+and neither side should bleed into the other.
+
+The shadow root is `mode: 'open'`, so the content is still inspectable in devtools and present
+in the real DOM — it's just no longer reachable by the host page's CSS selectors. Printing
+works the same as any embedded doc; see [Embedded in a larger page](#embedded-in-a-larger-page)
+below.
+
+This is quickly becoming the more common way to use Stapler outside of standalone documents —
+worth reaching for by default any time a stapled doc is going to live inside a larger page.
+
+---
+
 ## Component reference
 
 ### `<stapled-doc>`

@@ -50,6 +50,7 @@
           <li><a href="#stamping">Stamping Headers &amp; Footers</a></li>
           <li><a href="#pagination">Pagination</a></li>
           <li><a href="#refresh">Dynamic Refresh</a></li>
+          <li><a href="#embed">Embed Mode</a></li>
           <li><a href="#print">Printing to PDF</a></li>
           <li><a href="#css-properties">CSS Properties</a></li>
           <li><a href="#ai">Using with AI</a></li>
@@ -327,6 +328,21 @@ doc.addEventListener('sp:ready', (e) =&gt; {
 })</code></pre>
 
       <p>The <code>sp:ready</code> event fires after every build, including the initial build and every <code>refresh()</code> call. It bubbles.</p>
+
+      <h2 id="embed">Embed Mode</h2>
+      <p>Add the <code>embed</code> attribute to drop a <code>&lt;stapled-doc&gt;</code> into a larger page with real, bidirectional CSS isolation — no iframe required.</p>
+
+      <pre><code>&lt;stapled-doc embed page-width="7in" page-height="9in" stylesheet="apology.css"&gt;
+  &lt;page-header height="36px"&gt;...&lt;/page-header&gt;
+  &lt;page-footer height="28px"&gt;...&lt;/page-footer&gt;
+  &lt;s-page&gt;...&lt;/s-page&gt;
+&lt;/stapled-doc&gt;</code></pre>
+
+      <p><code>embed</code> attaches a shadow root to <code>&lt;stapled-doc&gt;</code> and moves its children into it once the document's fonts and images have loaded. The host page's stylesheets never leak into the document, and the document's own styles — including anything injected via <code>stylesheet</code> — never leak out into the host page. This is the one place in the library that uses Shadow DOM; everywhere else is Light DOM by design, precisely so authors can style headers and footers directly. Embed mode exists for the opposite situation: you're placing a carefully-styled document inside a page you don't fully control, and neither side should bleed into the other.</p>
+
+      <p>The shadow root is <code>mode: 'open'</code>, so the content stays inspectable in devtools and present in the real DOM — it's just no longer reachable by the host page's CSS selectors. Printing works the same as any embedded doc; see <a href="#print">Printing to PDF</a> below.</p>
+
+      <p>This is quickly becoming the more common way to use Stapler outside of standalone documents — worth reaching for by default any time a stapled doc is going to live inside a larger page. See it in action in the <a href="demos.html">Apology for Printers demo</a>.</p>
 
       <h2 id="print">Printing to PDF</h2>
       <p>There are two scenarios, and they want different tools.</p>
