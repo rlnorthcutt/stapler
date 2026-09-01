@@ -18,7 +18,7 @@ Always include this in <head>:
 
   <stapled-doc page-width="8.5in" page-height="11in" page-gap="2rem">
 
-page-width and page-height are required. Use "8.5in" × "11in" for US Letter, "210mm" × "297mm"
+Always set page-width and page-height explicitly. Use "8.5in" × "11in" for US Letter, "210mm" × "297mm"
 for A4. page-gap controls the visual space between pages on screen only; it does not print.
 
 ## Pages

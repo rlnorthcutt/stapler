@@ -73,10 +73,12 @@ Content that overflows is hidden — that's by design. Authors are responsible f
 
 | Attribute    | Type            | Default  | Description |
 |--------------|-----------------|----------|-------------|
-| `page-width` | CSS length      | **required** | Page width |
-| `page-height`| CSS length      | **required** | Page height |
+| `page-width` | CSS length      | `8.5in`  | Page width. Strongly recommended; if omitted, logs a console error and falls back to `8.5in` |
+| `page-height`| CSS length      | `11in`   | Page height. Strongly recommended; if omitted, logs a console error and falls back to `11in` |
 | `page-gap`   | CSS length      | `2rem`   | Gap between pages on screen |
 | `preview`    | `"print"`       | —        | Preview mode — removes gap and shadows |
+| `embed`      | boolean         | —        | Attaches a shadow root and moves children into it, isolating the document's CSS from the host page |
+| `stylesheet` | comma-separated URLs | —  | With `embed`, stylesheet URLs to inject into the shadow root |
 
 ---
 
@@ -87,7 +89,7 @@ page automatically, then removes the originals from the DOM. Style them with you
 
 | Attribute    | Type       | Default | Description |
 |--------------|------------|---------|-------------|
-| `height`     | CSS length | **required** | Height of the header/footer |
+| `height`     | CSS length | `24px`  | Height of the header/footer. Strongly recommended; if omitted, logs a console error and falls back to `24px` |
 | `skip-first` | boolean    | false   | Suppress on page 1 |
 | `skip-pages` | `"1,3,5"` | —       | Comma-separated 1-indexed page numbers to suppress |
 

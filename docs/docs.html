@@ -378,7 +378,7 @@ doc.addEventListener('sp:ready', (e) =&gt; {
       <h3>Key rules for AI-generated documents</h3>
       <ul>
         <li>Always include the CDN <code>&lt;script&gt;</code> tag in <code>&lt;head&gt;</code>.</li>
-        <li><code>page-width</code> and <code>page-height</code> are required on <code>&lt;stapled-doc&gt;</code>.</li>
+        <li>Always set <code>page-width</code> and <code>page-height</code> explicitly on <code>&lt;stapled-doc&gt;</code>.</li>
         <li>Always set <code>height</code> explicitly on <code>&lt;page-header&gt;</code> and <code>&lt;page-footer&gt;</code> — this skips a measurement pass and is more reliable.</li>
         <li>Wrap page content in <code>&lt;s-page-body&gt;</code> and set padding via inline style.</li>
         <li>Content that overflows a page is clipped. The model must fit content within <code>page-height − header-height − footer-height</code>.</li>
