@@ -1,103 +1,268 @@
 /*!
- * stapled-doc-steel.css — Ivy.css custom palette theme
+ * stapler-press.css — the Stapler site theme, layered on Ivy.css + Lattice.css
  *
- * Light palette:  #1A1A2E (Navy) · #40405E (Muted) · #80CAFF (Sky) · #F3F4F6 (Steel)
- * Dark palette:   #1A1A2E (Deep) · #2D3748 (Slate) · #60A5FA (Blue) · #E5E7EB (Silver)
+ * Direction: paper and ink. The site is set in a serif, on a paper ground, with
+ * process cyan for anything interactive and magenta used once or twice as spot
+ * colour. No tinted-blue surfaces, no gradient slabs — contrast comes from
+ * full-strength ink bands and from whitespace.
  *
- * Mapping strategy:
- * 1st  → primary (the dark navy backbone)
- * 2nd  → secondary (muted professional tones)
- * 3rd  → links & interactive accents (the "highlight" blue)
- * 4th  → borders & surfaces (metallic silver/steel)
+ *   ink       #201e1d      paper     #f3f2f2
+ *   cyan      #0088b0      magenta   #d6006c
+ *
+ * Everything below either re-points an Ivy variable or adds a class the site's
+ * own markup asks for. Ivy and Lattice are untouched.
  */
 
+@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300..700;1,8..60,400;1,8..60,600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
 /* =============================================================================
-   LIGHT PALETTE (Navy · Muted · Sky · Steel)
+   1 · TOKENS
    ============================================================================= */
+
 :root {
+  /* Brand constants, mode-independent */
+  --press-cyan:    #0088b0;
+  --press-cyan-dk: #00708f;
+  --press-cyan-lt: #4fc3e8;
+  --press-magenta: #d6006c;
 
-  /* — Primary: Stapled Navy — 
-     The foundational color of the brand. Professional and heavy. */
-  --color-primary-light:        #1A1A2E;
-  --color-primary-text-light:   #ffffff;
-
-  /* — Secondary: Muted Slate — 
-     Softens the navy for UI components that shouldn't shout. */
-  --color-secondary-light:      #40405E;
+  /* — Light: paper ————————————————————————————————————————————— */
+  --color-bg-light:             #f3f2f2;
+  --color-text-light:           #201e1d;
+  --color-muted-light:          #6f6a65;
+  --color-link-light:           var(--press-cyan-dk);
+  --color-primary-light:        #201e1d;   /* ink — bands and solid buttons */
+  --color-primary-text-light:   #f7f6f4;
+  --color-secondary-light:      var(--press-cyan);
   --color-secondary-text-light: #ffffff;
+  --color-border-light:         #d9d5cf;
+  --color-surface-light:        #fbfaf9;   /* sheet white */
+  --surface-2-light:            #eae7e2;
+  --surface-3-light:            #e0dcd5;
+  --shadow-sm-light:            0 1px 0 rgba(32, 30, 29, .06);
+  --shadow-md-light:            0 10px 30px rgba(32, 30, 29, .10);
 
-  /* — Links: Sky Blue — 
-     Matches the "sheets" in the logo. Passes AA contrast on white. */
-  --color-link-light:           #1D70B8; /* Slightly darkened Sky for accessibility */
+  /* — Dark: ink ——————————————————————————————————————————————— */
+  --color-bg-dark:              #17161a;
+  --color-text-dark:            #e9e5df;
+  --color-muted-dark:           #9c958c;
+  --color-link-dark:            var(--press-cyan-lt);
+  --color-primary-dark:         #e9e5df;   /* inverted: paper buttons on ink */
+  --color-primary-text-dark:    #17161a;
+  --color-secondary-dark:       #0e94bd;
+  --color-secondary-text-dark:  #06161c;
+  --color-border-dark:          #35322e;
+  --color-surface-dark:         #1d1c20;
+  --surface-2-dark:             #232126;
+  --surface-3-dark:             #2b282c;
+  --shadow-sm-dark:             0 1px 0 rgba(0, 0, 0, .5);
+  --shadow-md-dark:             0 12px 34px rgba(0, 0, 0, .55);
 
-  /* — Muted: Steel Blue Blend — 
-     Helper text that feels like technical drafting notes. */
-  --color-muted-light:          color-mix(in oklab, #1A1A2E 40%, #6b7280);
+  /* Typography and metrics */
+  --font-sans: "Source Serif 4", "Iowan Old Style", Georgia, Cambria, serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --measure: 70rem;
+  --radius: 2px;
+  --radius-sm: 2px;
+  --m: 1rem;
 
-  /* — Border: Metallic Silver — 
-     Mimics the staple itself. Clean, thin lines. */
-  --color-border-light:          color-mix(in oklab, #1A1A2E 15%, #d1d5db);
+  --rule: 1px solid var(--color-border);
+  --rule-heavy: 3px solid var(--color-text);
+  --shell: 76rem;
 
-  /* — Surface: Blueprint Wash — 
-     A very faint cool-grey tint for cards and code blocks. */
-  --color-surface-light:        color-mix(in oklab, #80CAFF 6%, #ffffff);
-
-  /* — Surface 2 & 3: Elevation Tiers — */
-  --surface-2-light:            color-mix(in oklab, #80CAFF 12%, #ffffff);
-  --surface-3-light:            color-mix(in oklab, #1A1A2E 5%, #f3f4f6);
+  /* Lattice's fixed-width content column, tuned to match --shell/edge padding */
+  --lat-container-width: var(--shell);
+  --lat-space: 1.75rem;
 }
 
-/* =============================================================================
-   DARK PALETTE (Deep Navy · Slate · Bright Blue · Silver)
-   ============================================================================= */
+/* Semantic states, restated in the press palette */
 :root {
+  --info:    var(--press-cyan);
+  --success: #2f7d4f;
+  --warn:    #c98a00;
+  --danger:  #c02026;
 
-  /* — Primary: Deep Navy — 
-     The darkest brand color as the primary surface anchor. */
-  --color-primary-dark:          #1A1A2E;
-  --color-primary-text-dark:     #E5E7EB; /* Silver text */
+  /* The inverted band: explicit pair so it never depends on token inversion */
+  --band-bg: #201e1d;
+  --band-fg: #f3f2f2;
+  --spot: var(--press-magenta);
+}
 
-  /* — Secondary: Blueprint Blue — 
-     Used for buttons and active states in dark mode. */
-  --color-secondary-dark:        #2563EB;
-  --color-secondary-text-dark:   #ffffff;
+html.dark, html[data-theme="dark"] {
+  --band-bg: #e9e5df;
+  --band-fg: #17161a;
+  --spot: #ff5c9e;
+}
 
-  /* — Links: Electric Blue — 
-     High visibility against the dark navy background. */
-  --color-link-dark:             #60A5FA;
-
-  /* — Muted: Desaturated Navy — */
-  --color-muted-dark:            color-mix(in oklab, #60A5FA 30%, #94a3b8);
-
-  /* — Border: Silver Staple — 
-     Low-opacity metallic borders for a "contained" feel. */
-  --color-border-dark:           color-mix(in oklab, #E5E7EB 20%, transparent);
-
-  /* — Surface: Midnight Blue Floor — 
-     The Ivy dark base mixed with our brand navy. */
-  --color-surface-dark:          color-mix(in oklab, #1A1A2E 25%, #0f172a);
-
-  /* — Surface 2 & 3: Progressive Depth — */
-  --surface-2-dark:              color-mix(in oklab, #1A1A2E 40%, #1e293b);
-  --surface-3-dark:              color-mix(in oklab, #60A5FA 10%, #1e293b);
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme]) {
+    --band-bg: #e9e5df;
+    --band-fg: #17161a;
+    --spot: #ff5c9e;
+  }
 }
 
 /* =============================================================================
-   SEMANTIC STATE OVERRIDES
+   2 · BASE TYPE
    ============================================================================= */
-:root {
-  /* Info: Matches the Sky Blue "Pages" color */
-  --info:    #80CAFF;
-  /* Success: Forest green with a hint of navy */
-  --success: color-mix(in oklab, #1A1A2E 15%, #10b981);
-  /* Warn: Bright "Warning Tape" yellow */
-  --warn:    #facc15;
-  /* Danger: Industrial red */
-  --danger:  color-mix(in oklab, #1A1A2E 10%, #ef4444);
+
+html { background: var(--color-bg); }
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-optical-sizing: auto;
+  text-wrap: pretty;
+  -webkit-font-smoothing: antialiased;
 }
 
+h1, h2, h3, h4 {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  letter-spacing: -0.012em;
+  text-wrap: balance;
+}
+
+h1 { font-size: clamp(2.4rem, 5.2vw, 4rem); line-height: 1.05; }
+h2 { font-size: clamp(1.7rem, 3vw, 2.3rem); line-height: 1.12; }
+h3 { font-size: 1.2rem; line-height: 1.25; }
+
+em, blockquote { font-style: italic; }
+strong { font-weight: 600; }
+
+::selection {
+  background: color-mix(in oklab, var(--press-cyan) 22%, transparent);
+}
+
+:focus-visible {
+  outline: 2px solid var(--press-cyan);
+  outline-offset: 2px;
+}
+
+a {
+  color: var(--color-link);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+a:hover { color: var(--spot); }
+
+/* Kicker — the one piece of mono chrome, used as a dateline label */
+.kicker {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--press-cyan-dk);
+  margin: 0 0 0.5rem;
+}
+
+html.dark .kicker,
+html[data-theme="dark"] .kicker { color: var(--press-cyan-lt); }
+
+.muted { color: var(--color-muted); }
+
 /* =============================================================================
-   SITE CHROME — sticky nav header
+   3 · CODE
+   Code sits on the sheet, ruled top and bottom, with an optional label in the
+   margin. No tinted panels, no rounded boxes.
+   ============================================================================= */
+
+pre {
+  position: relative;
+  max-width: 100%;
+  background: var(--color-surface);
+  border: var(--rule);
+  border-radius: var(--radius);
+  padding: 1.15rem 1.25rem;
+  margin: 1.5rem 0;
+  overflow-x: auto;
+  box-shadow: none;
+  font-size: 0.83rem;
+  line-height: 1.65;
+  tab-size: 2;
+}
+
+pre code, code, kbd {
+  font-family: var(--font-mono);
+  font-variant-ligatures: none;
+}
+
+:not(pre) > code {
+  background: color-mix(in oklab, var(--press-cyan) 9%, transparent);
+  color: inherit;
+  border: none;
+  border-radius: var(--radius);
+  padding: 0.08em 0.34em;
+  font-size: 0.86em;
+}
+
+pre[data-label]::before {
+  content: attr(data-label);
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0.3rem 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  background: var(--color-surface);
+  border-left: var(--rule);
+  border-bottom: var(--rule);
+}
+
+/* Install line — the one code block that reads as a headline */
+.install {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  max-width: 48rem;
+  margin: 2rem auto;
+  border: var(--rule);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  text-align: left;
+  overflow: hidden;
+}
+
+.install code {
+  flex: 1;
+  min-width: 0;
+  padding: 0.85rem 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  line-height: 1.5;
+  background: none;
+  white-space: nowrap;
+  overflow-x: auto;
+  color: var(--color-text);
+}
+
+.install button {
+  flex: none;
+  border: none;
+  border-left: var(--rule);
+  border-radius: 0;
+  background: var(--surface-2);
+  color: var(--color-text);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0 1rem;
+  box-shadow: none;
+  cursor: pointer;
+}
+
+.install button:hover { background: var(--press-cyan); color: #fff; }
+.install button:active { transform: none; background: var(--press-cyan-dk); }
+
+/* =============================================================================
+   4 · SITE CHROME
    ============================================================================= */
 
 body > header.site-header {
@@ -105,51 +270,72 @@ body > header.site-header {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: color-mix(in oklab, var(--color-bg) 94%, transparent);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--color-border);
+  background: color-mix(in oklab, var(--color-bg) 92%, transparent);
+  backdrop-filter: blur(8px) saturate(1.2);
+  -webkit-backdrop-filter: blur(8px) saturate(1.2);
+  border-bottom: var(--rule);
 }
 
 .site-header nav {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  max-width: 72rem;
+  gap: 1.5rem;
+  max-width: var(--shell);
   margin: 0 auto;
-  padding: 0.65rem 1.5rem;
-  margin-bottom: 0;
+  padding: 0.55rem 1.75rem;
 }
 
 .site-header nav ul {
-  gap: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin: 0 0 0 auto;
+  padding: 0;
+  list-style: none;
+}
+
+.site-header nav a {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text);
+  text-decoration: none;
+  padding: 0.35rem 0;
+  border-bottom: 2px solid transparent;
+}
+
+.site-header nav a:hover {
+  color: var(--press-cyan-dk);
+  border-bottom-color: var(--color-border);
+}
+
+.site-header nav a[aria-current="page"] {
+  border-bottom-color: var(--spot);
 }
 
 .nav-brand {
-  font-weight: 700;
-  font-size: 1rem;
-  text-decoration: none;
-  color: var(--color-text);
-  letter-spacing: -0.02em;
-  white-space: nowrap;
   display: flex;
   align-items: center;
-  gap: 0.4rem;
-}
-
-.nav-brand:hover {
+  gap: 0.5rem;
+  font-family: var(--font-sans) !important;
+  font-size: 1.1rem !important;
+  font-weight: 600;
+  letter-spacing: -0.02em !important;
+  text-transform: none !important;
+  color: var(--color-text);
   text-decoration: none;
+  white-space: nowrap;
+  border-bottom: none !important;
 }
 
-.nav-brand img {
-  width: 1.25rem;
-  height: 1.25rem;
-  flex-shrink: 0;
-}
+.nav-brand:hover { color: var(--color-text); }
+.nav-brand img { width: 1.15rem; height: 1.15rem; flex-shrink: 0; }
 
-/* =============================================================================
-   SITE MAIN — remove ivy's max-width on the homepage wrapper
-   ============================================================================= */
+dark-mode-toggle {
+  --dark-mode-toggle-icon-size: 1rem;
+  flex: none;
+}
 
 body > main.site-main {
   max-width: none;
@@ -157,403 +343,699 @@ body > main.site-main {
   padding: 0;
 }
 
+/* Lattice's own row span (the default direct-child rule, and its .container
+   class) is `grid-column: m 1 / m 2` — that omits the closing margin gutter,
+   so rows hug the left edge and leave a stray gutter-width gap on the right.
+   Span column-line to margin-line instead: symmetric at every width, and it
+   makes every direct child of <main class="site-main lattice"> a fixed-width,
+   centered row with no per-row max-width/margin declaration needed. */
+.lattice > *, .lattice .container { grid-column: c 1 / m 2; }
+
+body > footer.site-footer {
+  border-top: var(--rule);
+  margin-top: 0;
+  padding: 2.5rem 1.75rem 3rem;
+  text-align: center;
+  color: var(--color-muted);
+  font-size: var(--fs-sm);
+}
+
+body > footer.site-footer p { margin: 0; }
+body > footer.site-footer p + p { margin-top: 0.4rem; }
+
 /* =============================================================================
-   HERO
+   5 · MASTHEAD / HERO
+   Front-page furniture: a thick–thin rule pair around a mono dateline rail.
    ============================================================================= */
 
 .hero {
-  padding: 6rem 1.5rem 5rem;
+  max-width: var(--shell);
+  margin: 0 auto;
+  padding: 3.5rem 1.75rem 4.5rem;
   text-align: center;
-  background: var(--color-primary);
-  color: var(--color-primary-text);
+  background: none;
+  color: inherit;
 }
 
-.hero h1,
-.hero h2,
-.hero h3 {
-  color: var(--color-primary-text);
+.rail {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem 1.6rem;
+  border-top: var(--rule-heavy);
+  border-bottom: var(--rule);
+  padding: 0.5rem 0;
+  margin-bottom: 3rem;
+  font-family: var(--font-mono);
+  font-size: 0.67rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.rail span { white-space: nowrap; }
+.rail .rail-mark { color: var(--spot); }
+
+.hero-logo {
+  display: block;
+  width: 104px;
+  height: 104px;
+  margin: 0 auto 1.75rem;
+}
+
+.hero h1 { margin: 0 auto; max-width: 38rem; }
+
+/* Left-aligned page heads (docs, demos, about) */
+.page-head {
+  max-width: var(--shell);
+  margin: 0 auto;
+  padding: 3rem 1.75rem 1.5rem;
+  text-align: left;
+}
+
+.page-head .rail,
+.about-hero .rail { justify-content: flex-start; }
+
+.page-head h1 {
+  margin: 0;
+  max-width: 30rem;
+  font-size: clamp(2rem, 3.6vw, 2.9rem);
+}
+
+.page-head .hero-sub {
+  margin: 1.1rem 0 0;
+  text-align: left;
+  max-width: 38rem;
 }
 
 .hero-sub {
-  font-size: clamp(1rem, 1.5vw, 1.2rem);
-  max-width: 44rem;
-  margin: 0 auto var(--space-xl);
-  opacity: 0.85;
+  font-size: clamp(1.05rem, 1.6vw, 1.3rem);
+  line-height: 1.55;
+  max-width: 40rem;
+  margin: 1.25rem auto 0;
+  color: var(--color-muted);
 }
 
 .hero .btn-group {
+  display: flex;
+  flex-wrap: wrap;
   justify-content: center;
-  margin-bottom: 0;
+  gap: 0.75rem;
+  margin: 0;
 }
 
-.hero [data-variant="outline"] {
+/* Buttons — squared, ruled, no gloss */
+[role="button"], button, [type="button"], [type="submit"] {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-radius: var(--radius);
+  box-shadow: none;
+}
+
+[data-variant="primary"] {
+  background: var(--color-primary);
   color: var(--color-primary-text);
-  border-color: color-mix(in oklab, var(--color-primary-text) 50%, transparent);
+  border-color: var(--color-primary);
 }
 
-.hero [data-variant="outline"]:hover {
-  background: color-mix(in oklab, var(--color-primary-text) 12%, transparent);
-  border-color: color-mix(in oklab, var(--color-primary-text) 70%, transparent);
+[data-variant="primary"]:hover {
+  background: var(--press-cyan);
+  border-color: var(--press-cyan);
+  color: #fff;
+  filter: none;
+}
+
+[data-variant="secondary"] {
+  background: var(--color-text);
+  color: var(--color-bg);
+  border-color: var(--color-text);
+}
+
+[data-variant="secondary"]:hover {
+  background: var(--press-cyan);
+  border-color: var(--press-cyan);
+  color: #fff;
+  filter: none;
+}
+
+[data-variant="outline"] {
+  background: transparent;
+  color: var(--color-text);
+  border: 1px solid var(--color-text);
+}
+
+[data-variant="outline"]:hover {
+  background: var(--color-text);
+  color: var(--color-bg);
 }
 
 /* =============================================================================
-   FULL-BLEED CONTENT SECTIONS
+   6 · SECTIONS
+   Separated by whitespace. One hairline where the page genuinely turns.
    ============================================================================= */
 
-.section-full {
-  padding: 5rem 1.5rem;
-}
+.section-full { padding: 4.5rem 1.75rem; }
 
 .section-inner {
-  max-width: 72rem;
+  max-width: var(--shell);
   margin: 0 auto;
 }
 
+.section-full.ruled .section-inner { border-top: var(--rule); padding-top: 4rem; }
+
 .section-header {
-  text-align: center;
-  max-width: 44rem;
-  margin: 0 auto 3rem;
+  max-width: 46rem;
+  margin: 0 0 2.75rem;
 }
 
-.section-header h2 {
-  margin-top: 0;
-}
+.section-header.centered { margin-inline: auto; text-align: center; }
+.section-header h2 { margin: 0; }
 
 .section-header p {
   color: var(--color-muted);
   font-size: 1.05rem;
-}
-
-/* =============================================================================
-   PROBLEM SECTION — the hook
-   ============================================================================= */
-
-.problem-statement {
-  font-size: clamp(1.1rem, 2vw, 1.4rem);
-  line-height: 1.7;
+  margin: 0.9rem 0 0;
   max-width: 42rem;
-  margin: 0 auto;
-  text-align: center;
+}
+
+/* The pull-quote hook */
+.problem-statement {
+  font-family: var(--font-sans);
+  font-style: italic;
+  font-size: clamp(1.35rem, 2.6vw, 2rem);
+  line-height: 1.45;
+  max-width: 40rem;
+  margin: 0;
+  padding: 0;
+  border: none;
   color: var(--color-text);
-  border-left: none;
-  padding-left: 0;
-  font-style: normal;
 }
 
-/* =============================================================================
-   THREE PILLARS
-   ============================================================================= */
+.problem-statement + .attrib {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  margin-top: 1.5rem;
+}
 
-.pillar-icon {
+/* — Pillars: numbered columns, no card boxes ——————————————————————— */
+
+.pillars {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 2.5rem 3rem;
+}
+
+.pillar h3 { margin: 0.75rem 0 0.5rem; }
+.pillar p { margin: 0 0 0.6rem; color: var(--color-muted); }
+
+.pillar-num {
   display: block;
-  font-size: 2rem;
-  margin-bottom: 0.75rem;
-  line-height: 1;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  color: var(--press-cyan-dk);
+  padding-bottom: 0.6rem;
+  border-bottom: var(--rule);
 }
 
+html.dark .pillar-num,
+html[data-theme="dark"] .pillar-num { color: var(--press-cyan-lt); }
+
+/* — Elements reference strip ————————————————————————————————— */
+
+.elements {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 0;
+  border-top: var(--rule);
+}
+
+.element {
+  padding: 1.25rem 1.5rem 1.4rem 0;
+  border-bottom: var(--rule);
+}
+
+.element code {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  background: none;
+  padding: 0;
+  color: var(--color-text);
+  font-weight: 500;
+}
+
+.element p {
+  margin: 0.4rem 0 0;
+  font-size: 0.92rem;
+  color: var(--color-muted);
+  max-width: 24rem;
+}
+
+/* — Comparison table ————————————————————————————————————————— */
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.95rem;
+}
+
+/* Scroll instead of bleed when a table's content is wider than its column */
+.table-scroll {
+  max-width: 100%;
+  margin: 1.25rem 0 2rem;
+  overflow-x: auto;
+}
+
+.table-scroll table { margin: 0; }
+
+.compare { table-layout: fixed; }
+.compare col.c-approach { width: 32%; }
+.compare col.c-mid { width: 20%; }
+
+table th {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  text-align: left;
+  padding: 0.7rem 1rem 0.7rem 0;
+  border-bottom: 2px solid var(--color-text);
+  background: none;
+}
+
+table td {
+  padding: 0.85rem 1rem 0.85rem 0;
+  border-bottom: var(--rule);
+  vertical-align: top;
+}
+
+table tbody tr:hover { background: var(--surface-2); }
+
+.compare td:first-child { font-weight: 600; }
+.compare .yes { color: var(--press-cyan-dk); }
+.compare .no  { color: var(--color-muted); }
+
+html.dark .compare .yes,
+html[data-theme="dark"] .compare .yes { color: var(--press-cyan-lt); }
+
+/* — Who it's for ————————————————————————————————————————————— */
+
+.audience {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 2rem 3rem;
+}
+
+.audience h3 { margin: 0 0 0.4rem; font-size: 1.05rem; }
+.audience p { margin: 0; color: var(--color-muted); font-size: 0.95rem; }
+
 /* =============================================================================
-   CTA SECTION
+   7 · CTA BAND — full-strength ink, the only inverted surface on the site
    ============================================================================= */
 
 .cta-section {
-  background: var(--color-primary);
-  color: var(--color-primary-text);
+  background: var(--band-bg);
+  color: var(--band-fg);
   text-align: center;
+  padding: 4.5rem 1.75rem 5rem;
 }
 
-.cta-section h2 {
-  color: var(--color-primary-text);
-  margin-top: 0;
-}
+.cta-section h2 { color: inherit; margin: 0 auto; max-width: 32rem; }
 
 .cta-section p {
-  opacity: 0.8;
-  max-width: 42rem;
-  margin: 0 auto var(--space-xl);
+  color: color-mix(in oklab, var(--band-fg) 76%, transparent);
+  max-width: 38rem;
+  margin: 1rem auto 2rem;
 }
 
 .cta-section .btn-group {
+  display: flex;
+  flex-wrap: wrap;
   justify-content: center;
-  margin-bottom: 0;
-}
-
-.cta-section [data-variant="outline"] {
-  color: var(--color-primary-text);
-  border-color: color-mix(in oklab, var(--color-primary-text) 50%, transparent);
-}
-
-.cta-section [data-variant="outline"]:hover {
-  background: color-mix(in oklab, var(--color-primary-text) 12%, transparent);
-  border-color: color-mix(in oklab, var(--color-primary-text) 70%, transparent);
-}
-
-/* =============================================================================
-   SITE FOOTER
-   ============================================================================= */
-
-body > footer.site-footer {
-  border-top: 1px solid var(--color-border);
-  text-align: center;
-  color: var(--color-muted);
-  font-size: var(--fs-sm);
-}
-
-body > footer.site-footer p {
+  gap: 0.75rem;
   margin: 0;
 }
 
+.cta-section [data-variant="secondary"] {
+  background: var(--band-fg);
+  color: var(--band-bg);
+  border-color: var(--band-fg);
+}
+
+.cta-section [data-variant="secondary"]:hover {
+  background: var(--press-cyan);
+  border-color: var(--press-cyan);
+  color: #fff;
+}
+
+.cta-section [data-variant="outline"] {
+  color: var(--band-fg);
+  border-color: color-mix(in oklab, var(--band-fg) 45%, transparent);
+  background: transparent;
+}
+
+.cta-section [data-variant="outline"]:hover {
+  background: color-mix(in oklab, var(--band-fg) 14%, transparent);
+  border-color: var(--band-fg);
+  color: var(--band-fg);
+}
+
 /* =============================================================================
-   DOCS PAGE — sidebar layout
+   8 · DOCS — sidebar, measure-limited prose
    ============================================================================= */
 
 .docs-layout {
   display: grid;
-  grid-template-columns: 14rem 1fr;
-  gap: 3rem;
-  max-width: 72rem;
+  grid-template-columns: 13rem minmax(0, 1fr);
+  gap: 3.5rem;
+  max-width: var(--shell);
   margin: 0 auto;
-  padding: 2.5rem 1.5rem;
+  padding: 3rem 1.75rem 4rem;
   align-items: start;
 }
 
 @media (max-width: 48rem) {
-  .docs-layout {
-    grid-template-columns: 1fr;
-  }
-
-  .docs-sidebar {
-    display: none;
-  }
+  .docs-layout { grid-template-columns: 1fr; gap: 2rem; }
+  .docs-sidebar { position: static; }
 }
 
-.docs-sidebar {
-  position: sticky;
-  top: 4.5rem;
-}
+.docs-sidebar { position: sticky; top: 4.25rem; }
+.docs-sidebar nav { margin: 0; }
 
-.docs-sidebar nav {
-  margin: 0;
-}
-
-.docs-sidebar nav ul {
+.docs-sidebar ul {
+  list-style: none;
+  margin: 0 0 1.25rem;
+  padding: 0;
+  display: flex;
   flex-direction: column;
+  align-items: stretch;
   gap: 0;
 }
 
-.docs-sidebar nav ul {
-  align-items: start;
-  margin-left: 1rem;
-}
+.docs-sidebar li { display: block; align-items: initial; }
 
-.docs-sidebar nav a {
+.docs-sidebar a {
   display: block;
-  padding: 0.3rem 0.6rem;
-  border-radius: var(--radius-sm);
-  font-size: var(--fs-sm);
+  padding: 0.32rem 0 0.32rem 0.85rem;
+  margin-left: -1px;
+  border-left: 1px solid var(--color-border);
+  font-size: 0.93rem;
   color: var(--color-text);
-}
-
-.docs-sidebar nav a:hover {
-  background: var(--surface-2);
   text-decoration: none;
 }
 
-.docs-sidebar .sidebar-label {
-  display: block;
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--color-muted);
-  padding: 0.85rem 0.6rem 0.2rem;
+.docs-sidebar a:hover {
+  color: var(--press-cyan-dk);
+  border-left-color: var(--press-cyan);
 }
 
-.docs-content {
-  min-width: 0;
+.docs-sidebar a.is-current {
+  color: var(--press-cyan-dk);
+  border-left: 2px solid var(--spot);
+  font-weight: 600;
 }
+
+html.dark .docs-sidebar a:hover,
+html.dark .docs-sidebar a.is-current,
+html[data-theme="dark"] .docs-sidebar a:hover,
+html[data-theme="dark"] .docs-sidebar a.is-current { color: var(--press-cyan-lt); }
+
+.sidebar-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.63rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  padding: 0 0 0.5rem;
+  margin-top: 1.25rem;
+}
+
+.sidebar-label:first-child { margin-top: 0; }
+
+/* Ivy's classless `article, main { max-width: var(--measure); margin: 0 auto }`
+   default fights the grid track here — an auto margin on a grid item cancels
+   the default stretch alignment, so the article sizes itself up to --measure
+   instead of the track. Neutralize it the same way .site-main is neutralized. */
+.docs-content { min-width: 0; max-width: none; margin: 0; padding: 0; }
+.docs-content > p, .docs-content > ul, .docs-content > ol { max-width: 40rem; }
+.docs-content > p { line-height: 1.65; }
 
 .docs-content h2 {
-  padding-top: 2.5rem;
-  margin-top: 2.5rem;
-  border-top: 1px solid var(--color-border);
+  margin: 4rem 0 1.25rem;
+  padding-top: 1.75rem;
+  border-top: var(--rule);
+  scroll-margin-top: 5rem;
 }
 
-.docs-content h2:first-child {
-  padding-top: 0;
-  margin-top: 0;
-  border-top: none;
+.docs-content h2:first-child { margin-top: 0; padding-top: 0; border-top: none; }
+
+.docs-content h3 {
+  margin: 2.5rem 0 0.75rem;
+  scroll-margin-top: 5rem;
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0;
 }
+
+.docs-content h3 code { background: none; padding: 0; font-size: 1em; }
+.docs-content kbd {
+  border: var(--rule);
+  border-bottom-width: 2px;
+  border-radius: var(--radius);
+  padding: 0.05em 0.35em;
+  font-size: 0.8em;
+  background: var(--color-surface);
+}
+
+/* Callout — ruled, not a tinted tray */
+.callout {
+  border: var(--rule);
+  border-top: 2px solid var(--spot);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  padding: 1.1rem 1.25rem;
+  margin: 2rem 0;
+  font-size: 0.95rem;
+  max-width: 40rem;
+}
+
+.callout strong { font-family: var(--font-mono); font-size: 0.8rem; letter-spacing: 0.06em; text-transform: uppercase; }
+.callout[data-tone="info"] { border-top-color: var(--press-cyan); }
 
 /* =============================================================================
-   HERO LOGO
+   9 · DEMOS
    ============================================================================= */
 
-.hero-logo {
-  width: 120px;
-  height: 120px;
-  margin-bottom: 2rem;
+.demo-index {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  gap: 1.5rem;
 }
 
-/* =============================================================================
-   DEMOS LISTING PAGE
-   ============================================================================= */
+.demo-entry {
+  display: block;
+  padding: 2rem 2rem 2.25rem;
+  border: var(--rule);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  color: inherit;
+  text-decoration: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+}
 
-.demo-card-list {
+.demo-entry:hover {
+  color: inherit;
+  border-color: var(--press-cyan);
+  box-shadow: 0 3px 8px color-mix(in oklab, var(--color-text) 10%, transparent);
+  transform: translateY(-2px);
+}
+.demo-entry h3 { margin: 0.5rem 0 0.35rem; font-size: 1.45rem; }
+.demo-entry:hover h3 { color: var(--press-cyan-dk); }
+
+html.dark .demo-entry:hover h3,
+html[data-theme="dark"] .demo-entry:hover h3 { color: var(--press-cyan-lt); }
+
+.demo-entry .byline { color: var(--color-muted); font-style: italic; margin: 0 0 0.9rem; }
+.demo-entry p { color: var(--color-muted); font-size: 0.95rem; max-width: 26rem; }
+
+.demo-spec {
   list-style: none;
+  margin: 1.1rem 0 1.4rem;
   padding: 0;
-  margin: 0.5rem 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  color: var(--color-text);
 }
 
-.demo-card-list li {
-  padding: 0.2rem 0;
-  font-size: 0.875rem;
+.demo-spec li { display: flex; gap: 0.6rem; }
+.demo-spec li::before { content: "—"; color: var(--press-cyan); }
+
+.demo-more {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--press-cyan-dk);
 }
 
-/* ── Demo listing cards — interactive, whole-card click ─────────────────── */
+.demo-entry:hover .demo-more { color: var(--spot); }
 
-.demo-card {
-  position: relative;
-  cursor: pointer;
-  transition: transform 0.18s ease, box-shadow 0.18s ease;
-}
-
-.demo-card h3 {
-  transition: color 0.18s ease;
-}
-
-.demo-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 16px 40px rgba(26, 26, 46, 0.14);
-}
-
-.demo-card:hover h3 {
-  color: var(--color-link);
-}
-
-/* =============================================================================
-   INDIVIDUAL DEMO PAGE
-   ============================================================================= */
+/* — Individual demo page —————————————————————————————————————— */
 
 .demo-header {
-  max-width: 52rem;
+  max-width: var(--shell);
   margin: 0 auto;
-  padding: 3rem 2rem 1.5rem;
+  padding: 2.75rem 1.75rem 1.5rem;
 }
 
+.demo-header h1 { font-size: clamp(1.9rem, 3.4vw, 2.75rem); max-width: 32rem; }
+.demo-header > p { max-width: 40rem; color: var(--color-muted); }
+
 .demo-breadcrumb {
-  margin-bottom: 1rem;
-  font-size: 0.875rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin: 0 0 1.25rem;
 }
+
+.demo-breadcrumb a { text-decoration: none; }
 
 .demo-controls {
   display: flex;
-  justify-content: flex-end;
-  max-width: 52rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  max-width: var(--shell);
   margin: 0 auto;
-  padding: 0 2rem 1rem;
+  padding: 0 1.75rem 1.25rem;
 }
 
+.demo-controls .specline {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.print-btn {
+  background: var(--color-text);
+  color: var(--color-bg);
+  border: 1px solid var(--color-text);
+  border-radius: var(--radius);
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.print-btn:hover { background: var(--press-cyan); border-color: var(--press-cyan); color: #fff; }
+
+/* The work surface the pages sit on — always paper-grey, in both modes:
+   the document itself is always printed light, so the surround stays light. */
 .demo-stage {
-  background: var(--surface-2);
-  border-top: 1px solid var(--color-border);
-  border-bottom: 1px solid var(--color-border);
-  padding: 2rem 1rem 3rem;
+  background: #eae7e2;
+  border-top: var(--rule);
+  border-bottom: var(--rule);
+  padding: 2.5rem 1rem 3.5rem;
   overflow-x: auto;
 }
 
 .demo-iframe {
   display: block;
   width: 100%;
-  max-width: 52rem;
+  max-width: 54rem;
   margin: 0 auto;
   border: none;
   min-height: 900px;
+  background: none;
+}
+
+/* Embed-mode documents rendered straight into the stage */
+.demo-stage stapled-doc { display: block; margin: 0 auto; }
+
+.demo-stage s-page {
+  background: #fff;
+  box-shadow: 0 2px 3px rgba(32, 30, 29, .10), 0 14px 34px rgba(32, 30, 29, .14);
 }
 
 /* =============================================================================
-   SAMPLES PAGE
-   ============================================================================= */
-
-.sample-wrapper {
-  padding-bottom: 4rem;
-  margin-bottom: 4rem;
-  border-bottom: 1px solid var(--color-border);
-}
-
-.sample-wrapper:last-child {
-  border-bottom: none;
-  margin-bottom: 0;
-  padding-bottom: 0;
-}
-
-.sample-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 1.5rem;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-.sample-meta h2 {
-  margin: 0;
-}
-
-.sample-meta p {
-  margin: 0.25rem 0 0;
-}
-
-.sample-preview {
-  overflow-x: auto;
-  padding-bottom: 0.5rem;
-}
-
-.sample-blueprint {
-  display: none;
-}
-
-.sample-wrapper.show-blueprint .sample-blueprint {
-  display: block;
-}
-
-.sample-wrapper.show-blueprint .sample-preview {
-  display: none;
-}
-
-.sample-blueprint pre {
-  max-height: 40rem;
-  overflow-y: auto;
-  font-size: 0.78rem;
-}
-
-/* =============================================================================
-   ABOUT PAGE
+   10 · ABOUT
    ============================================================================= */
 
 .about-hero {
-  padding: 5rem 1.5rem 4rem;
-  text-align: center;
-  background: var(--surface-2);
-  border-bottom: 1px solid var(--color-border);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 2.5rem 3rem;
+  padding: 3rem 0 1rem;
+  text-align: left;
+  background: none;
+  border: none;
 }
 
+.about-hero .rail { grid-column: 1 / -1; }
+
+@media (max-width: 52rem) {
+  .about-hero { grid-template-columns: 1fr; align-items: start; }
+}
+
+.about-hero h1 { margin: 0; }
+
 .stapler-display {
-  width: 14rem;
+  width: 16rem;
   height: auto;
-  margin: 0 auto 1.5rem;
-  color: var(--color-link);
-  opacity: 0.8;
+  margin: 0;
+  color: var(--press-cyan);
+  fill: currentColor;
+}
+
+.about-hero figure { margin: 0; text-align: left; }
+
+.about-hero figcaption {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  text-align: left;
+  color: var(--color-muted);
+  margin-top: 0.7rem;
+  max-width: 16rem;
 }
 
 .about-content {
-  max-width: 42rem;
-  margin: 0 auto;
-  padding: 3rem 1.5rem;
+  margin: 0;
+  padding: 2.5rem 0 4rem;
 }
 
 .about-content h2 {
-  margin-top: 2rem;
+  margin: 3rem 0 1rem;
+  padding-top: 1.75rem;
+  border-top: var(--rule);
+  font-size: 1.5rem;
 }
 
-.about-content h2:first-child {
-  margin-top: 0;
+.about-content h2:first-child { margin-top: 0; padding-top: 0; border-top: none; }
+.about-content p { line-height: 1.7; }
+
+/* =============================================================================
+   11 · PRINT
+   ============================================================================= */
+
+@media print {
+  .site-header, .site-footer, .demo-controls, .btn-group { display: none !important; }
+  body { background: #fff; }
 }

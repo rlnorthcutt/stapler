@@ -33,102 +33,131 @@
 
   <main class="site-main">
 
-    <!-- =====================================================================
-         HERO
-         ===================================================================== -->
+    <!-- ===================================================================
+         MASTHEAD
+         =================================================================== -->
     <section class="hero">
-      <img src="logo-512x512.png" alt="Stapler" class="hero-logo mx-auto">
+      <div class="rail">
+        <span>Zero dependencies</span>
+        <span>Six custom elements</span>
+        <span>One script tag</span>
+        <span class="rail-mark">MIT</span>
+      </div>
+
+      <img src="logo-512x512.png" alt="Stapler" class="hero-logo">
       <h1>Finally, a way to hold it all together.</h1>
       <p class="hero-sub">The zero-dependency web component library for people who just need their HTML to act like a simple piece of paper.</p>
-      <pre><code>&lt;script src="https://cdn.jsdelivr.net/gh/rlnorthcutt/stapler@main/dist/stapler.min.js"&gt;&lt;/script&gt;</code></pre>
+
+      <div class="install">
+        <code id="install-line">&lt;script src="https://cdn.jsdelivr.net/gh/rlnorthcutt/stapler@main/dist/stapler.min.js"&gt;&lt;/script&gt;</code>
+        <button type="button" id="copy-install" aria-label="Copy the script tag">Copy</button>
+      </div>
+
       <div class="btn-group">
-        <a href="https://github.com/rlnorthcutt/stapler" role="button" data-variant="secondary" data-size="lg">Check the repo</a>
-          <a href="demos.html" role="button" data-variant="outline" data-size="lg">See It Working</a>
+        <a href="demos.html" role="button" data-variant="secondary" data-size="lg">See it working</a>
+        <a href="https://github.com/rlnorthcutt/stapler" role="button" data-variant="outline" data-size="lg">Check the repo</a>
       </div>
     </section>
 
-    <!-- =====================================================================
+    <!-- ===================================================================
          THE PROBLEM
-         ===================================================================== -->
-    <section class="section-full">
+         =================================================================== -->
+    <section class="section-full ruled">
       <div class="section-inner">
         <div class="section-header">
-          <p class="kicker">The Problem</p>
+          <p class="kicker">The problem</p>
           <h2>Browsers weren't built for staples.</h2>
         </div>
         <blockquote class="problem-statement">
-          "Web browsers were built for infinite scrolling. Business reports were built for staples. Between the two lies a graveyard of broken CSS <code>@media print</code> rules and overlapping footers."
+          Web browsers were built for infinite scrolling. Business reports were built for staples. Between the two lies a graveyard of broken <code>@media print</code> rules and overlapping footers.
         </blockquote>
+        <p class="attrib">Every developer who has shipped a PDF on a deadline</p>
       </div>
     </section>
 
-    <!-- =====================================================================
-         THREE PILLARS
-         ===================================================================== -->
-    <section class="section-full surface-2">
+    <!-- ===================================================================
+         THREE REASONS
+         =================================================================== -->
+    <section class="section-full ruled">
       <div class="section-inner">
         <div class="section-header">
-          <p class="kicker">The Mechanism</p>
+          <p class="kicker">The mechanism</p>
           <h2>Three reasons it actually works.</h2>
         </div>
-        <div class="grid col-3 gap-4">
 
-          <div class="card">
-            <header>
-              <span class="pillar-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
-                  <path d="M4 4h16v2H4zm0 4h16v2H4zm0 4h10v2H4zm0 4h10v2H4z" opacity="0.3"/>
-                  <rect x="14" y="12" width="8" height="8" rx="1"/>
-                  <path d="M16 14h4M16 17h4" stroke="white" stroke-width="1.5" fill="none"/>
-                </svg>
-              </span>
-              <h3>Hard-Clipped Precision</h3>
-            </header>
+        <div class="pillars">
+          <div class="pillar">
+            <span class="pillar-num">01</span>
+            <h3>Hard-clipped precision</h3>
             <p>We don't guess. If it doesn't fit on the page, it's gone — cleanly, intentionally, with <code>overflow: hidden</code> instead of a prayer. Build documents like an engineer, not a typesetter.</p>
           </div>
-
-          <div class="card">
-            <header>
-              <span class="pillar-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" opacity="0.4"/>
-                  <path d="M9 17l-4-4 1.4-1.4L9 14.2l8.6-8.6L19 7z"/>
-                </svg>
-              </span>
-              <h3>AI-Native</h3>
-            </header>
-            <p>LLMs are exceptional at writing structured content. They are terrible at calculating millimeter margins. Stapler is designed so an AI can emit valid, predictable markup without understanding CSS layout.</p>
+          <div class="pillar">
+            <span class="pillar-num">02</span>
+            <h3>AI-native markup</h3>
+            <p>LLMs are exceptional at writing structured content. They are terrible at calculating millimeter margins. Stapler is designed so a model can emit valid, predictable markup without understanding CSS layout.</p>
             <p><a href="docs.html#ai">Get the AI prompt →</a></p>
           </div>
-
-          <div class="card">
-            <header>
-              <span class="pillar-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
-                  <path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                </svg>
-              </span>
-              <h3>Zero Drama</h3>
-            </header>
+          <div class="pillar">
+            <span class="pillar-num">03</span>
+            <h3>Zero drama</h3>
             <p>No NPM. No build step. No 2&nbsp;GB <code>node_modules</code> folder having an existential crisis in your project root. One <code>&lt;script&gt;</code> tag. Six custom elements. Done.</p>
           </div>
-
         </div>
       </div>
     </section>
 
-    <!-- =====================================================================
-         QUICK EXAMPLE
-         ===================================================================== -->
-    <section class="section-full">
+    <!-- ===================================================================
+         THE SIX ELEMENTS
+         =================================================================== -->
+    <section class="section-full ruled">
       <div class="section-inner">
         <div class="section-header">
-          <p class="kicker">5-Second Setup</p>
+          <p class="kicker">The whole API</p>
+          <h2>Six elements. That's the library.</h2>
+          <p>No configuration object, no plugin registry. If you can read HTML, you already know how to use it.</p>
+        </div>
+
+        <div class="elements">
+          <div class="element">
+            <code>&lt;stapled-doc&gt;</code>
+            <p>The root. Sets page dimensions, measures, builds. The stapler itself.</p>
+          </div>
+          <div class="element">
+            <code>&lt;s-page&gt;</code>
+            <p>One page — a fixed-size, hard-clipped container.</p>
+          </div>
+          <div class="element">
+            <code>&lt;s-page-body&gt;</code>
+            <p>The content area inside a page. Your padding goes here.</p>
+          </div>
+          <div class="element">
+            <code>&lt;page-header&gt;</code>
+            <p>Declared once, stamped into every page. Skippable per page.</p>
+          </div>
+          <div class="element">
+            <code>&lt;page-footer&gt;</code>
+            <p>Same deal, at the bottom of the sheet.</p>
+          </div>
+          <div class="element">
+            <code>&lt;page-number&gt;</code>
+            <p>Resolves to <code>3</code>, <code>3 / 8</code>, or <code>3 of 8</code> when stamped.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         QUICK EXAMPLE
+         =================================================================== -->
+    <section class="section-full ruled">
+      <div class="section-inner">
+        <div class="section-header">
+          <p class="kicker">5-second setup</p>
           <h2>From zero to page one.</h2>
           <p>Drop in the script tag and start writing pages. Each <code>&lt;s-page&gt;</code> is a hard-clipped container — the library handles headers, footers, and page numbers automatically.</p>
         </div>
 
-        <pre><code>&lt;stapled-doc page-width="8.5in" page-height="11in" page-gap="2rem"&gt;
+        <pre data-label="report.html"><code>&lt;stapled-doc page-width="8.5in" page-height="11in" page-gap="2rem"&gt;
 
   &lt;page-header height="36px" skip-first&gt;
     My Report · &lt;page-number format="n of total"&gt;&lt;/page-number&gt;
@@ -140,31 +169,115 @@
 
   &lt;s-page skip-header skip-footer&gt;
     &lt;!-- Cover page — no header or footer --&gt;
+    &lt;s-page-body style="padding: 3rem;"&gt;
       &lt;h1&gt;My Report&lt;/h1&gt;
+    &lt;/s-page-body&gt;
   &lt;/s-page&gt;
 
   &lt;s-page&gt;
     &lt;!-- Page 2 — header and footer stamped automatically --&gt;
+    &lt;s-page-body style="padding: 2rem;"&gt;
       &lt;p&gt;Content here.&lt;/p&gt;
+    &lt;/s-page-body&gt;
   &lt;/s-page&gt;
 
 &lt;/stapled-doc&gt;</code></pre>
-
       </div>
     </section>
 
-    <!-- =====================================================================
-         CTA
-         ===================================================================== -->
-    <section class="section-full cta-section">
+    <!-- ===================================================================
+         COMPARISON
+         =================================================================== -->
+    <section class="section-full ruled">
       <div class="section-inner">
-        <h2>Ready to stop fighting the browser?</h2>
-        <p>Download the library. Drop it in. Write documents that respect the concept of a page.</p>
-        <div class="btn-group">
-          <a href="https://github.com/rlnorthcutt/stapler" role="button" data-variant="secondary" data-size="lg">Check the repo</a>
-          <a href="docs.html" role="button" data-variant="outline" data-size="lg">Read the Manual</a>
-          <a href="demos.html" role="button" data-variant="outline" data-size="lg">See It Working</a>
+        <div class="section-header">
+          <p class="kicker">Where it sits</p>
+          <h2>Compared with the usual options.</h2>
+          <p>Stapler isn't trying to replace a PDF pipeline. It removes the need for one when the document is already HTML.</p>
         </div>
+
+        <table class="compare">
+          <colgroup>
+            <col class="c-approach">
+            <col class="c-mid">
+            <col class="c-mid">
+            <col>
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Approach</th>
+              <th>Runs where</th>
+              <th>Setup</th>
+              <th>What you give up</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Stapler</td>
+              <td class="yes">Browser</td>
+              <td class="yes">One script tag</td>
+              <td>You decide what fits on each page</td>
+            </tr>
+            <tr>
+              <td>Server-side PDF (wkhtmltopdf, Puppeteer)</td>
+              <td class="no">Node or a binary</td>
+              <td class="no">Runtime, deploy, security review</td>
+              <td>Preview parity, iteration speed</td>
+            </tr>
+            <tr>
+              <td>JS layout engines (paged.js and friends)</td>
+              <td>Browser</td>
+              <td class="no">Polyfilled layout, page-break CSS</td>
+              <td>Predictability on complex content</td>
+            </tr>
+            <tr>
+              <td>Raw <code>@media print</code></td>
+              <td>Browser</td>
+              <td class="yes">Nothing to install</td>
+              <td>Consistency across browsers and OSes</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         WHO IT'S FOR
+         =================================================================== -->
+    <section class="section-full ruled">
+      <div class="section-inner">
+        <div class="section-header">
+          <p class="kicker">Who it's for</p>
+          <h2>People with a deadline and a printer.</h2>
+        </div>
+
+        <div class="audience">
+          <div>
+            <h3>App developers shipping reports</h3>
+            <p>Invoices, statements, briefs — generated from data your app already has, printed straight from the page the user is looking at.</p>
+          </div>
+          <div>
+            <h3>Anyone piping an LLM into a document</h3>
+            <p>The model writes the words, the library handles the pages. Paste the prompt, get valid markup back.</p>
+          </div>
+          <div>
+            <h3>Teams tired of a PDF service</h3>
+            <p>One file, no runtime, nothing to keep patched. Delete the microservice.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         CTA
+         =================================================================== -->
+    <section class="cta-section">
+      <h2>Ready to stop fighting the browser?</h2>
+      <p>Drop it in. Write documents that respect the concept of a page.</p>
+      <div class="btn-group">
+        <a href="https://github.com/rlnorthcutt/stapler" role="button" data-variant="secondary" data-size="lg">Check the repo</a>
+        <a href="docs.html" role="button" data-variant="outline" data-size="lg">Read the manual</a>
+        <a href="demos.html" role="button" data-variant="outline" data-size="lg">See it working</a>
       </div>
     </section>
 
@@ -172,8 +285,18 @@
 
   <footer class="site-footer">
     <p>Built with 💚 in Vermont. No trees were harmed in the rendering of these PDFs.</p>
-    <p class="mt-1"><a href="https://github.com/rlnorthcutt/stapler">GitHub</a> · MIT License</p>
+    <p><a href="https://github.com/rlnorthcutt/stapler">GitHub</a> · MIT License</p>
   </footer>
+
+  <script>
+    document.getElementById('copy-install').addEventListener('click', function () {
+      var btn = this;
+      navigator.clipboard.writeText(document.getElementById('install-line').textContent).then(function () {
+        btn.textContent = 'Copied';
+        setTimeout(function () { btn.textContent = 'Copy'; }, 1600);
+      });
+    });
+  </script>
 
 </body>
 </html>

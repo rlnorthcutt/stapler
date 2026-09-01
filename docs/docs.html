@@ -31,36 +31,40 @@
     </nav>
   </header>
 
+  <section class="page-head">
+    <div class="rail">
+      <span>Six elements</span>
+      <span>Explicit and embed modes</span>
+      <span>Print via CSS only</span>
+      <span class="rail-mark">v1</span>
+    </div>
+    <p class="kicker">The manual</p>
+    <h1>Everything the library does.</h1>
+    <p class="hero-sub">Attributes, stamping rules, pagination formats, print settings, and the prompt to hand an LLM. No configuration to memorise.</p>
+  </section>
+
   <div class="docs-layout">
 
-    <!-- =====================================================================
-         SIDEBAR
-         ===================================================================== -->
     <aside class="docs-sidebar">
       <nav aria-label="Documentation sections">
-        <span class="sidebar-label">The Basics</span>
+        <span class="sidebar-label">The basics</span>
         <ul>
           <li><a href="#getting-started">Getting Started</a></li>
           <li><a href="#anatomy">Anatomy of a Staple</a></li>
-          <li><a href="#how-it-works">How It Works</a></li>
           <li><a href="#attributes">Attributes Reference</a></li>
+          <li><a href="#how-it-works">How It Works</a></li>
         </ul>
         <span class="sidebar-label">Advanced</span>
         <ul>
           <li><a href="#stamping">Stamping Headers &amp; Footers</a></li>
           <li><a href="#pagination">Pagination</a></li>
           <li><a href="#refresh">Dynamic Refresh</a></li>
-          <li><a href="#embed">Embed Mode</a></li>
           <li><a href="#print">Printing to PDF</a></li>
-          <li><a href="#css-properties">CSS Properties</a></li>
           <li><a href="#ai">Using with AI</a></li>
         </ul>
       </nav>
     </aside>
 
-    <!-- =====================================================================
-         DOCS CONTENT
-         ===================================================================== -->
     <article class="docs-content">
 
       <!-- THE BASICS -->
@@ -91,6 +95,7 @@
       <h2 id="attributes">Attributes Reference</h2>
 
       <h3><code>&lt;stapled-doc&gt;</code></h3>
+      <div class="table-scroll">
       <table>
         <thead>
           <tr>
@@ -139,9 +144,11 @@
           </tr>
         </tbody>
       </table>
+      </div>
 
       <h3><code>&lt;page-header&gt;</code> and <code>&lt;page-footer&gt;</code></h3>
       <p>Defined once as direct children of <code>&lt;stapled-doc&gt;</code>. Cloned into every page automatically. Style them with your own CSS — the library adds no visual styles.</p>
+      <div class="table-scroll">
       <table>
         <thead>
           <tr>
@@ -172,8 +179,10 @@
           </tr>
         </tbody>
       </table>
+      </div>
 
       <h3><code>&lt;s-page&gt;</code></h3>
+      <div class="table-scroll">
       <table>
         <thead>
           <tr>
@@ -210,6 +219,7 @@
           </tr>
         </tbody>
       </table>
+      </div>
 
       <!-- HOW IT WORKS -->
 
@@ -281,6 +291,7 @@ page-footer {
       <h2 id="pagination">Pagination</h2>
       <p>Use <code>&lt;page-number&gt;</code> inside any header or footer template. The library resolves it when the template is stamped — each clone gets the correct page number.</p>
 
+      <div class="table-scroll">
       <table>
         <thead>
           <tr>
@@ -307,6 +318,7 @@ page-footer {
           </tr>
         </tbody>
       </table>
+      </div>
 
       <pre><code>&lt;page-header height="36px"&gt;
   &lt;span&gt;My Report&lt;/span&gt;
@@ -328,21 +340,6 @@ doc.addEventListener('sp:ready', (e) =&gt; {
 })</code></pre>
 
       <p>The <code>sp:ready</code> event fires after every build, including the initial build and every <code>refresh()</code> call. It bubbles.</p>
-
-      <h2 id="embed">Embed Mode</h2>
-      <p>Add the <code>embed</code> attribute to drop a <code>&lt;stapled-doc&gt;</code> into a larger page with real, bidirectional CSS isolation — no iframe required.</p>
-
-      <pre><code>&lt;stapled-doc embed page-width="7in" page-height="9in" stylesheet="apology.css"&gt;
-  &lt;page-header height="36px"&gt;...&lt;/page-header&gt;
-  &lt;page-footer height="28px"&gt;...&lt;/page-footer&gt;
-  &lt;s-page&gt;...&lt;/s-page&gt;
-&lt;/stapled-doc&gt;</code></pre>
-
-      <p><code>embed</code> attaches a shadow root to <code>&lt;stapled-doc&gt;</code> and moves its children into it once the document's fonts and images have loaded. The host page's stylesheets never leak into the document, and the document's own styles — including anything injected via <code>stylesheet</code> — never leak out into the host page. This is the one place in the library that uses Shadow DOM; everywhere else is Light DOM by design, precisely so authors can style headers and footers directly. Embed mode exists for the opposite situation: you're placing a carefully-styled document inside a page you don't fully control, and neither side should bleed into the other.</p>
-
-      <p>The shadow root is <code>mode: 'open'</code>, so the content stays inspectable in devtools and present in the real DOM — it's just no longer reachable by the host page's CSS selectors. Printing works the same as any embedded doc; see <a href="#print">Printing to PDF</a> below.</p>
-
-      <p>This is quickly becoming the more common way to use Stapler outside of standalone documents — worth reaching for by default any time a stapled doc is going to live inside a larger page. See it in action in the <a href="demos.html">Apology for Printers demo</a>.</p>
 
       <h2 id="print">Printing to PDF</h2>
       <p>There are two scenarios, and they want different tools.</p>
@@ -394,7 +391,7 @@ doc.addEventListener('sp:ready', (e) =&gt; {
       <h3>Key rules for AI-generated documents</h3>
       <ul>
         <li>Always include the CDN <code>&lt;script&gt;</code> tag in <code>&lt;head&gt;</code>.</li>
-        <li>Always set <code>page-width</code> and <code>page-height</code> explicitly on <code>&lt;stapled-doc&gt;</code>.</li>
+        <li><code>page-width</code> and <code>page-height</code> are required on <code>&lt;stapled-doc&gt;</code>.</li>
         <li>Always set <code>height</code> explicitly on <code>&lt;page-header&gt;</code> and <code>&lt;page-footer&gt;</code> — this skips a measurement pass and is more reliable.</li>
         <li>Wrap page content in <code>&lt;s-page-body&gt;</code> and set padding via inline style.</li>
         <li>Content that overflows a page is clipped. The model must fit content within <code>page-height − header-height − footer-height</code>.</li>
@@ -416,12 +413,37 @@ Add @page { size: 8.5in 11in; margin: 0; } to the stylesheet.
 Content that overflows a page is clipped — fit all content within each page.</code></pre>
 
     </article>
+
   </div>
 
   <footer class="site-footer">
     <p>Built with 💚 in Vermont. No trees were harmed in the rendering of these PDFs.</p>
-    <p class="mt-1"><a href="https://github.com/rlnorthcutt/stapler">GitHub</a> · MIT License</p>
+    <p><a href="https://github.com/rlnorthcutt/stapler">GitHub</a> · MIT License</p>
   </footer>
 
+
+  <script>
+    (function () {
+      var content = document.querySelector('.docs-content');
+      var sideLinks = Array.prototype.slice.call(document.querySelectorAll('.docs-sidebar a'));
+      var h2s = Array.prototype.slice.call(content.querySelectorAll('h2'));
+
+      function setCurrent(h2) {
+        var id = h2.id;
+        sideLinks.forEach(function (a) {
+          a.classList.toggle('is-current', a.getAttribute('href') === '#' + id);
+        });
+      }
+
+      var active = null;
+      function onScroll() {
+        var y = window.scrollY + 140, found = h2s[0];
+        h2s.forEach(function (h2) { if (h2.offsetTop <= y) found = h2; });
+        if (found !== active) { active = found; setCurrent(found); }
+      }
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+    }());
+  </script>
 </body>
 </html>

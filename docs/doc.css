@@ -1,6 +1,7 @@
 /* =============================================================================
    DOCUMENT FRAME STYLES
    Loaded only inside demo iframes — not on the main site.
+   Matches the site's press palette: paper surround, ink hairlines, mono chrome.
    ============================================================================= */
 
 /* Print dimensions — must match page-width × page-height on <stapled-doc> */
@@ -9,17 +10,16 @@
   margin: 0;
 }
 
-/* Force light mode — document frames always look like printed paper */
-:root {
-  color-scheme: light;
-}
+/* Document frames always look like printed paper */
+:root { color-scheme: light; }
 
-/* Grey surround so white pages read as pages */
+html { background: #eae7e2 !important; }
+
 body {
   margin: 0;
-  padding: 2rem 0;
-  background: #e5e7eb;
-  color: #111827;
+  padding: 0 0 2rem;
+  background: #eae7e2;
+  color: #201e1d;
 }
 
 /* Default header/footer layout for all demo documents */
@@ -28,11 +28,12 @@ stapled-doc page-header {
   justify-content: space-between;
   align-items: center;
   padding: 0 1.75rem;
-  border-bottom: 1px solid #e5e7eb;
-  font-size: 11px;
-  color: #9ca3af;
-  letter-spacing: 0.03em;
-  font-family: ui-monospace, monospace;
+  border-bottom: 1px solid #d9d5cf;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #6f6a65;
 }
 
 stapled-doc page-footer {
@@ -40,36 +41,34 @@ stapled-doc page-footer {
   justify-content: space-between;
   align-items: center;
   padding: 0 1.75rem;
-  border-top: 1px solid #e5e7eb;
-  font-size: 11px;
-  color: #9ca3af;
+  border-top: 1px solid #d9d5cf;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: #6f6a65;
 }
 
 /* ── Explicit mode ─────────────────────────────────────────────────────────── */
 
-/* Stronger shadow on each hard-clipped page */
 .sample-staple {
-  --sp-frame-shadow: 0 4px 24px rgba(0, 0, 0, 0.18), 0 0 0 1px rgba(0, 0, 0, 0.06);
+  --sp-frame-shadow: 0 2px 3px rgba(32, 30, 29, .10), 0 14px 34px rgba(32, 30, 29, .14);
 }
 
-.sample-staple s-page {
-  background: white;
-}
+.sample-staple s-page { background: #fff; }
 
 /* ── Flow modes ────────────────────────────────────────────────────────────── */
 
-/* Entire document as one bordered white block */
 .sample-papyrus,
 .sample-flatland {
-  background: white;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.18), 0 0 0 1px rgba(0, 0, 0, 0.06);
+  background: #fff;
+  box-shadow: 0 2px 3px rgba(32, 30, 29, .10), 0 14px 34px rgba(32, 30, 29, .14);
 }
 
 /* ── Print overrides ───────────────────────────────────────────────────────── */
 
 @media print {
   body {
-    background: white !important;
+    background: #fff !important;
     padding: 0 !important;
   }
 }
